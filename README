@@ -9,21 +9,21 @@ The module is a generic object orientated astronomical catalogue object.
 Version 4.x.x
 -------------
 
-This release is the first V4 releae and breaks the existing V3.* API in 
+This release is the first V4 releae and breaks the existing V3.* API in
 a similiar manner than the V3 release broke the exisint V2.* and V1.* API.
-The new V4 code also now depends on the Astro::Flux, Number::Uncertainty 
+The new V4 code also now depends on the Astro::Flux, Number::Uncertainty
 and Misc::Quality packages which can be downloaded from CPAN.
 
 However to make up for these inconveniences V4 has a host of new features,
 including better support for error handling using Number::Uncertainty,
 auto-generation of colours from existing magnitude data, better quality
-flags and time series support. 
+flags and time series support.
 
 Requirements
 ------------
 
 The madatory requirement of the Astro::Catalog package are,
- 
+
   Astro::Coords
   Astro::Telescope
   Astro::SLA
@@ -52,11 +52,11 @@ The package provides the following user level classes
 
   Astro::Catalog
     A generic catalogue object, includes pluggable I/O support.
-  
+
   Astro::Catalog::Item
     A generic catalogue item.
-    
-NB: Astro::Catalog::Star is maintained for backwards compatibility.    
+
+NB: Astro::Catalog::Star is maintained for backwards compatibility.
 
 The following classes can be used to query various online databases
 for astronomical objects. They all return an Astro::Catalog object
@@ -128,7 +128,7 @@ Astrom does not currently provide a _read_catalog() function.
 Where can I get it?
 -------------------
 
-The package is availabe from CPAN <http://www.cpan.org/> and from the 
+The package is availabe from CPAN <http://www.cpan.org/> and from the
 eSTAR Project at http://www.estar.org.uk/
 
 Installation
@@ -145,12 +145,12 @@ Authors
 -------
 
 The module was originally written by Alasdair Allan <aa@astro.ex.ac.uk>,
-of the University of Exeter Astrophysics Group (http://www.astro.ex.ac.uk/)  
+of the University of Exeter Astrophysics Group (http://www.astro.ex.ac.uk/)
 as part of his work for the eSTAR project.
 
-The internal architecture of the module was extensively rewritten for v3.0 
-by Tim Jenness <t.jenness@jach.hawaii.edu> of the Joint Astronomy Centre 
-in Hawaii and Alasdair Allan <aa@astro.ex.ac.uk>, of the University of 
+The internal architecture of the module was extensively rewritten for v3.0
+by Tim Jenness <t.jenness@jach.hawaii.edu> of the Joint Astronomy Centre
+in Hawaii and Alasdair Allan <aa@astro.ex.ac.uk>, of the University of
 Exeter Astrophysics Group. Then rewritten again by Alasdair Allan <aa@astro.ex.ac.uk> for the v4.0 release.
 
 This version also includes patches supplied by Stephen Quinney
@@ -158,15 +158,15 @@ This version also includes patches supplied by Stephen Quinney
 <b.cavanagh@jach.hawaii.edu> of the Joint Astronomy Centre in Hawaii.
 
 License
-------- 
-This package is free software; you can redistribute it and/or modify it 
-under the terms of the GNU General Public License as published by the 
-Free Software Foundation; either version 2 of the License, or (at your 
+-------
+This package is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2 of the License, or (at your
 option) any later version.
 
 This program is distributed in the hope that it will be useful, but
-WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
-or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License 
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
 for more details.
 
 You should have received a copy of the GNU General Public License along
