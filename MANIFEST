@@ -4,7 +4,7 @@ MANIFEST
 TODO
 Build.PL
 GPL
-ChangeLog
+Changes
 lib/Tk/AstroCatalog.pm
 lib/Astro/Catalog/Star.pm
 lib/Astro/Catalog/Star/Morphology.pm
