@@ -6,19 +6,6 @@ What is it?
 
 The module is a generic object orientated astronomical catalogue object.
 
-Version 4.x.x
--------------
-
-This release is the first V4 releae and breaks the existing V3.* API in
-a similiar manner than the V3 release broke the exisint V2.* and V1.* API.
-The new V4 code also now depends on the Astro::Flux, Number::Uncertainty
-and Misc::Quality packages which can be downloaded from CPAN.
-
-However to make up for these inconveniences V4 has a host of new features,
-including better support for error handling using Number::Uncertainty,
-auto-generation of colours from existing magnitude data, better quality
-flags and time series support.
-
 Requirements
 ------------
 
@@ -26,7 +13,6 @@ The madatory requirement of the Astro::Catalog package are,
 
   Astro::Coords
   Astro::Telescope
-  Astro::SLA
   Time::Piece
   File::Spec
   Math::Libm
@@ -101,16 +87,23 @@ need to concern yourself with, unless you want to write your own I/O or
 query plugins, these are
 
   Astro::Catalog::IO::Astrom     (write only)
+  Astro::Catalog::IO::ASSM       (read only)
+  Astro::Catalog::IO::Binary     (read only)
   Astro::Catalog::IO::Cluster
   Astro::Catalog::IO::FINDOFF
+  Astro::Catalog::IO::FITSTable
   Astro::Catalog::IO::GaiaPick   (read only)
   Astro::Catalog::IO::JCMT
+  Astro::Catalog::IO::LCOGFITSTable
+  Astro::Catalog::IO::Northstar  (read only)
+  Astro::Catalog::IO::RITMatch
   Astro::Catalog::IO::SExtractor (read only)
   Astro::Catalog::IO::STL        (read only)
   Astro::Catalog::IO::Simple
   Astro::Catalog::IO::TST        (read only)
   Astro::Catalog::IO::UKIRTBS    (read only)
   Astro::Catalog::IO::VOTable
+  Astro::Catalog::IO::XY
   Astro::Catalog::Transport::REST
   Astro::Catalog::Transport::WebService
   Astro::Catalog::Query
@@ -128,8 +121,8 @@ Astrom does not currently provide a _read_catalog() function.
 Where can I get it?
 -------------------
 
-The package is availabe from CPAN <http://www.cpan.org/> and from the
-eSTAR Project at http://www.estar.org.uk/
+The package is available from CPAN <http://www.cpan.org/> and from github
+at https://github.com/timj/perl-Astro-Catalog
 
 Installation
 ------------
@@ -154,7 +147,9 @@ in Hawaii and Alasdair Allan <aa@astro.ex.ac.uk>, of the University of
 Exeter Astrophysics Group. Then rewritten again by Alasdair Allan <aa@astro.ex.ac.uk> for the v4.0 release.
 
 This version also includes patches supplied by Stephen Quinney
-<S.J.Quinney@durham.ac.uk> of Durham University, and Brad Cavanagh
+<S.J.Quinney@durham.ac.uk> of Durham University, Tim Lister
+<tlister@lcogt.net> of Las Cumbres Observatory, and Luca Rizzi
+<l.rizzi@jach.hawaii.edu> and Brad Cavanagh
 <b.cavanagh@jach.hawaii.edu> of the Joint Astronomy Centre in Hawaii.
 
 License
