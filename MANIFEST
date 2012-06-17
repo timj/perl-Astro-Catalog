@@ -51,6 +51,7 @@ t/2_fitstable.t
 t/2_gaiapick.t
 t/2_jcmt.t
 t/2_jcmt_loose.t
+t/2_northstar.t
 t/2_ritmatch.t
 t/2_sextractor.t
 t/2_simple.t
@@ -58,7 +59,10 @@ t/2_stl.t
 t/2_tst.t
 t/2_ukirtbs.t
 t/2_votable.t
+t/2_xy.t
 t/3_catalog.t
+t/3_item.t
+t/3_morphology.t
 t/3_star.t
 t/4_cmc.t
 t/4_gsc.t
