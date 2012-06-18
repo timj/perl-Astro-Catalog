@@ -1,3 +1,4 @@
+#!perl
 
 # This test simply loads all the modules
 # it does this by scanning the directory for .pm files
@@ -11,7 +12,7 @@ use warnings;
 # Test module only used for planning
 # Note that we can not use Test::More since Test::More
 # will lose count of its tests and complain (through the fork)
-use Test;
+use Test::More;
 
 use File::Find;
 
@@ -35,10 +36,12 @@ find({ wanted => \&wanted,
 # Start the tests
 plan tests => (scalar(@modules));
 
-
 # Loop through each module and try to run it
 
 $| = 1;
+my $counter = 0;
+
+my $tempfile = "results.dat";
 
 for my $module (@modules) {
 
@@ -49,7 +52,7 @@ for my $module (@modules) {
   if ($pid = fork) {
     # parent
 
-    # wait for the forked process to complet
+    # wait for the forked process to complete
     waitpid($pid, 0);
 
     # Control now back with parent.
@@ -58,44 +61,48 @@ for my $module (@modules) {
     # Child
     die "cannot fork: $!" unless defined $pid;
 
-    my $not = '';
-    #if ( $module eq "Astro::Catalog::Query::SuperCOSMOS" ) {
-    #   eval "use Astro::Aladin";
-    #   if ($@) {
-    #     print "ok # Skip $module (Astro::Aladin module not available)\n";
-    #     exit;
-    #   } else {
-    #     eval "use $module ();";
-    #     if( $@ ) {
-    #      warn "require failed with '$@'\n";
-    #      $not = 'not ';
-    #     }
-    #   }
-    #} else {
-      eval "use $module ();";
-      if( $@ ) {
-        warn "require failed with '$@'\n";
-	$not = 'not ';
+    my $isok = 1;
+    my $skip = '';
+    eval "use $module ();";
+    if( $@ ) {
+      if ($@ =~ /Can't locate (.*\.pm) in/) {
+        my $missing = $1;
+        diag( "$module can not locate $missing" );
+        $skip = "missing module $missing from $module";
+      } else {
+        diag( "require failed with '$@'\n" );
+        $isok = 0;
       }
-    #}
-    # Combine $not with the single print since some OSes do
-    # insert automatic new lines
-    print $not ."ok - $module\n";
-    # Must remember to exit from the fork
+    }
+
+    # Open the temp file
+    open( my $fh, "> $tempfile") || die "Could not open $tempfile: $!";
+    print $fh "$isok $skip\n";
+    close($fh);
+
     exit;
   }
+
+  if (open( my $fh, "< $tempfile")) {
+    my $line = <$fh>;
+    close($fh);
+    if (defined $line) {
+      chomp($line);
+      my ($status, $skip) = split(/\s+/, $line, 2);
+    SKIP: {
+        skip( $skip, 1) if $skip;
+        ok( $status, "Load $module");
+      }
+    } else {
+      ok( 0, "Could not get results from loading module $module");
+    }
+  } else {
+    # did not get the temp file
+    ok(0, "Could not get results from loading module $module");
+  }
+  unlink($tempfile);
+
 }
-
-
-
-# We do this as a separate process else we'll blow the hell
-# out of our namespace.
-sub compile_module {
-    my ($module) = $_[0];
-    return scalar `$^X "-Ilib" t/lib/compmod.pl $module` =~ /^ok/;
-}
-
-
 
 # This determines whether we are interested in the module
 # and then stores it in the array @modules
