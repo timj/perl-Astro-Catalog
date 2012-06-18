@@ -103,7 +103,8 @@ print "# Connecting to MPC Minor Planet Checker\n";
 my $catalog_byname;
 eval { $catalog_byname = $mpc_byname->querydb() };
 SKIP: {
-  skip "Cannot connect to MPC website", 199 unless ! $@;
+  diag($@) if $@;
+  skip "Cannot connect to MPC website", 199 if $@;
   skip "No asteroids returned from MPC", 199 if ( $catalog_byname->sizeof() == 0 );
   print "# Continuing tests\n";
 
