@@ -1,10 +1,17 @@
 #!perl
 
-# Astro::Catalog test harness
-use Test::More tests => 133;
-
-# strict
 use strict;
+use Test::More;
+
+# Astro::VO::VOTable is optional
+BEGIN {
+  eval { require Astro::VO::VOTable; };
+  if ($@) {
+    plan skip_all => "Astro::VO::VOTable not installed";
+  } else {
+    plan tests => 134;
+  }
+}
 
 #load test
 use File::Spec;
@@ -13,17 +20,7 @@ use Data::Dumper;
 # load modules
 require_ok("Astro::Catalog");
 require_ok("Astro::Catalog::Star");
-
-if( $@ ) {
-  exit "Fatal Error: $@\n";
-}  
-
-
-# Do a private require so that we can skip the tests if VOTable is missing
-eval {
-  require Astro::VO::VOTable;
-};
-my $hasvo = ($@ ? 0 : 1);
+require_ok("Astro::VO::VOTable");
 
 # Load the generic test code
 my $p = ( -d "t" ?  "t/" : "");
@@ -116,9 +113,6 @@ my $catalog = new Astro::Catalog( RA     => '01 10 12.9',
 isa_ok($catalog, "Astro::Catalog");
 
 my $tempfile; # for cleanup
-SKIP: {
-
-  skip "VOTable module not found", 128 unless $hasvo;
 
 # WRITE IT OUT TO DISK USING THE VOTABLE WRITER
 # =============================================
@@ -227,8 +221,6 @@ isa_ok($catalog2, "Astro::Catalog");
 
 #print Dumper( $read_catalog, $catalog2 );
 compare_catalog( $read_catalog, $catalog2 );
-
-};
 
 # L A S T   O R D E R S   A T   T H E   B A R --------------------------------
 
