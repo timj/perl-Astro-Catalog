@@ -52,15 +52,20 @@ my $build = Module::Build->new
                 'SOAP::Lite'          => 0.00,
                 'Carp'                => 1.01,
                 'Data::Dumper'        => 2.12,
-                'Astro::VO::VOTable'  => 0.01,
                 'Scalar::Util'        => 1.14,
                 'Astro::FITS::CFITSIO'=> 1.03,
                 'File::Temp'          => 0.14,
                 'Class::Struct'       => 0.63,
                 'Number::Uncertainty' => 0.01,
                 'Misc::Quality'       => 0.01,
+                'DateTime'            => 0,
+                'DateTime::Format::ISO8601' => 0,
                 'Astro::Flux'         => 0.01
                },
+   recommends => {
+                  'Astro::VO::VOTable' => 0.90,
+                  'Tk' => 804.029,
+                 },
    configure_requires => {
                           "Module::Build" => 0.30,
                          },
