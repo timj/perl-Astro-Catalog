@@ -34,7 +34,7 @@ use Carp;
 use Astro::Catalog;
 use Astro::Catalog::Star;
 
-'$Revision: 1.7 $ ' =~ /.*:\s(.*)\s\$/ && ($VERSION = $1);
+$VERSION = "2.00";
 
 =head1 REVISION
 

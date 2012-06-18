@@ -42,7 +42,7 @@ use base qw/ Astro::Catalog::IO::ASCII /;
 
 use Data::Dumper;
 
-'$Revision: 1.19 $ ' =~ /.*:\s(.*)\s\$/ && ($VERSION = $1);
+$VERSION = "2.00";
 
 
 # C O N S T R U C T O R ----------------------------------------------------

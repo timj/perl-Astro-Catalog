@@ -51,7 +51,7 @@ use Astro::Fluxes;
 use Astro::FluxColor;
 use Number::Uncertainty;
 
-'$Revision: 1.8 $ ' =~ /.*:\s(.*)\s\$/ && ($VERSION = $1);
+$VERSION = "2.00";
 
 =head1 REVISION
 

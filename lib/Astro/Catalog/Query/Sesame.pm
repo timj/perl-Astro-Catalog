@@ -31,7 +31,7 @@ use Astro::Coords;
 use Astro::Catalog;
 use Astro::Catalog::Star;
 
-'$Revision: 1.9 $ ' =~ /.*:\s(.*)\s\$/ && ($VERSION = $1);
+$VERSION = "2.00";
 
 =head1 REVISION
 

@@ -72,7 +72,7 @@ use Astro::Catalog::Item;
 use Time::Piece qw/ :override /;
 use Carp;
 
-'$Revision: 1.59 $ ' =~ /.*:\s(.*)\s\$/ && ($VERSION = $1);
+$VERSION = "2.00";
 $DEBUG = 0;
 
 

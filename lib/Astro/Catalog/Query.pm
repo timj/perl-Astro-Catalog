@@ -29,7 +29,7 @@ use Carp;
 use Astro::Coords;
 use Astro::Catalog;
 use Astro::Catalog::Star;
-'$Revision: 1.8 $ ' =~ /.*:\s(.*)\s\$/ && ($VERSION = $1);
+$VERSION = "2.00";
 
 # C O N S T R U C T O R ----------------------------------------------------
 

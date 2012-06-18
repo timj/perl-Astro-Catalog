@@ -4,7 +4,7 @@ use Astro::Catalog::Item;
 
 use base qw/ Astro::Catalog::Item /;
 use vars qw/ $VERSION /;
-'$Revision: 1.25 $ ' =~ /.*:\s(.*)\s\$/ && ($VERSION = $1);
+$VERSION = "2.00";
 
 =head1 NAME
 

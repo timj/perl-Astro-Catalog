@@ -4,7 +4,7 @@ use Astro::Catalog::Item::Morphology;
 
 use base qw / Astro::Catalog::Item::Morphology /;
 use vars qw/ $VERSION /;
-'$Revision: 1.4 $ ' =~ /.*:\s(.*)\s\$/ && ($VERSION = $1);
+$VERSION = "2.00";
 
 =head1 NAME
 
