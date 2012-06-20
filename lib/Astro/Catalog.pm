@@ -145,16 +145,17 @@ pluggable IO, see the C<Astro::Catalog::IO> classes
           File => $file_name, Format => $file_type, [%opts] )
      or die $catalog->errstr;
 
-returns zero on sucess and non-zero if the write failed (the reason
+returns true on sucess and false if the write failed (the reason
 can be obtained using the C<errstr> method). The C<%opts> are optional
 arguments and are dependant on the output format chosen.  Current
 valid output formats are 'Simple', 'Cluster', 'JCMT' and 'VOTable'.
 
 The File argument can refer to a file name on disk (simple scalar),
-a glob (eg \*STDOUT), a reference to a scalar (\$content) or reference
-to an array. For the last two options, the contents of the catalogue
-file are stored in the scalar or in the array (a line per array entry
-with no new lines).
+a glob (eg \*STDOUT), an IO::Handle object (for example something
+returned by the File::Temp construcotr) a reference to a scalar
+(\$content) or reference to an array. For the last two options,
+the contents of the catalogue file are stored in the scalar or in
+the array (a line per array entry with no new lines).
 
 =cut
 
@@ -201,6 +202,7 @@ sub write_catalog {
   # Probably better than creating a large scalar for the one time
   # when we do not need it.
 
+  my $retval = 1;
   if (ref($file)) {
     # If we are storing in a reference to a scalar or reference
     # to an array, just do the copy and return early. We do not
@@ -210,9 +212,10 @@ sub write_catalog {
     } elsif (ref($file) eq 'ARRAY') {
       # Just copy the lines into the output array
       @$file = @$lines;
-    } elsif (ref($file) eq 'GLOB') {
-      # GLOB - so print the full string to the file handle
-      print $file join("\n", @$lines) ."\n";
+    } elsif (ref($file) eq 'GLOB' || $file->can("print") ) {
+      # GLOB - so print the full string to the file handle and flush
+      $retval = print $file join("\n", @$lines) ."\n";
+      autoflush $file 1; # We need to make sure we write the lines
     } else {
       croak "Can not write catalogue to reference of type ".
 	ref($file)."\n";
@@ -227,7 +230,7 @@ sub write_catalog {
     }
 
     # write to file
-    print $fh join("\n", @$lines) ."\n";
+    $retval = print $fh join("\n", @$lines) ."\n";
 
     # close file
     $status = close($fh);
@@ -238,7 +241,7 @@ sub write_catalog {
   }
 
   # everything okay
-  return 1;
+  return $retval;
 }
 
 # A C C E S S O R  --------------------------------------------------------
