@@ -24,7 +24,7 @@ use strict;
 
 use vars qw/ $VERSION $DEBUG /;
 
-$VERSION = '0.02';
+$VERSION = '0.03';
 $DEBUG = 0;
 
 =head1 METHODS
