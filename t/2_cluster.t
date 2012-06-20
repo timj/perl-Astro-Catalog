@@ -2,6 +2,7 @@
 
 use Test::More tests => 72;
 use strict;
+use File::Temp;
 
 BEGIN {
   use_ok( "Astro::Catalog" );
@@ -18,7 +19,7 @@ my $cat = new Astro::Catalog( Format => 'Cluster', Data => \*DATA );
 isa_ok( $cat, "Astro::Catalog" );
 
 # Write the catalogue out to disk.
-my $tempfile = File::Spec->catfile( File::Spec->tmpdir, "catalog.test" );
+my $tempfile = File::Temp->new();
 ok( $cat->write_catalog( Format => 'Cluster',
                          File   => $tempfile,
                        ),

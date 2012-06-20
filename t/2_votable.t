@@ -14,7 +14,7 @@ BEGIN {
 }
 
 #load test
-use File::Spec;
+use File::Temp;
 use Data::Dumper;
 
 # load modules
@@ -116,7 +116,7 @@ my $tempfile; # for cleanup
 
 # WRITE IT OUT TO DISK USING THE VOTABLE WRITER
 # =============================================
-$tempfile = File::Spec->catfile( File::Spec->tmpdir(), "catalog.test" );
+$tempfile = File::Temp->new();
 
 ok( $catalog->write_catalog( Format => 'VOTable', File => $tempfile ),
   "Check catalog write");
@@ -221,13 +221,6 @@ isa_ok($catalog2, "Astro::Catalog");
 
 #print Dumper( $read_catalog, $catalog2 );
 compare_catalog( $read_catalog, $catalog2 );
-
-# L A S T   O R D E R S   A T   T H E   B A R --------------------------------
-
-END {
-  #unlink "$tempfile" if defined $tempfile;
-}
-
 
 # T I M E   A T   T H E   B A R ---------------------------------------------
 

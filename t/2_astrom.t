@@ -4,7 +4,7 @@
 use Test::More tests => 16;
 
 use strict;
-use File::Spec;
+use File::Temp;
 
 require_ok( "Astro::Catalog" );
 require_ok( "Astro::Catalog::Star" );
@@ -52,7 +52,7 @@ $catalog->fieldcentre( Coords => new Astro::Coords( ra => '19:04:00.0',
 isa_ok( $catalog, "Astro::Catalog" );
 
 # Create a temporary file to hold the written catalogue.
-my $tempfile = File::Spec->catfile( File::Spec->tmpdir(), "catalog.test" );
+my $tempfile = File::Temp->new();
 ok( $catalog->write_catalog( Format => 'Astrom', File => $tempfile ),
     "Check catalog write" );
 
@@ -71,9 +71,6 @@ chomp @data_cat;
 for( my $i = 0; $i < @written_cat; $i++ ) {
   ok( $written_cat[$i] eq $data_cat[$i], "Compare written catalog line $i" );
 }
-
-# Don't forget to remove the catalogue file from disk.
-unlink $tempfile;
 
 __DATA__
 ~ GENE 0.0

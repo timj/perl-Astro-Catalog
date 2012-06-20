@@ -4,14 +4,14 @@
 use Test::More tests => 11;
 
 use strict;
-use File::Spec;
+use File::Temp;
 use Data::Dumper;
 
 # Load modules.
 require_ok( "Astro::Catalog" );
 require_ok( "Astro::Catalog::Star" );
 
-my $tempfile = File::Spec->catfile( File::Spec->tmpdir(), "catalog.test" );
+my $tempfile = File::Temp->new();
 
 my $cat = new Astro::Catalog( Format => 'FINDOFF', Data => \*DATA );
 
@@ -38,10 +38,6 @@ my $newcat = new Astro::Catalog( Format => 'FINDOFF', File => $tempfile );
 isa_ok( $newcat, "Astro::Catalog" );
 
 is( $newcat->sizeof, 5, "Confirm star count" );
-
-END {
-  unlink $tempfile;
-}
 
 __DATA__
 1 10 23 comment

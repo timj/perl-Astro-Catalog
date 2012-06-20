@@ -7,7 +7,7 @@ use strict;
 
 #load test
 use Test::More tests => 9;
-use File::Spec;
+use File::Temp;
 use Data::Dumper;
 
 # load modules
@@ -19,7 +19,6 @@ BEGIN {
 # T E S T   H A R N E S S --------------------------------------------------
 
 # setup environemt
-my $dir = File::Spec->tmpdir();
 
 my @star;
 
@@ -102,7 +101,7 @@ isa_ok($catalog, "Astro::Catalog");
 # Write Catalog to Cluster File
 # -----------------------------
 
-my $file_name = File::Spec->catfile( $dir, "temporary.cat" );
+my $file_name = File::Temp->new();
 
 # write it to /tmp/temporary.cat under UNIX
 $catalog->write_catalog( Format => 'Cluster', File => $file_name );
@@ -123,20 +122,6 @@ close(FILE);
 for my $i (0 .. $#buffer) {
    is( $file[$i], $buffer[$i], "compare buffer" );
 }
-
-# L A S T   O R D E R S   A T   T H E   B A R --------------------------------
-
-# Dump catalog object to screen
-#print Dumper($catalog);
-#print Dumper($cluster);
-
-#END {
-  # clean up after ourselves
-#  print "# Cleaning up temporary files\n";
-#  print "# Deleting: $file_name\n";
-#  my @list = ( $file_name );
-#  unlink(@list); 
-#}        
 
 
 # T I M E   A T   T H E   B A R ---------------------------------------------
