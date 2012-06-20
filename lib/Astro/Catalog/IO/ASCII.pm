@@ -73,7 +73,7 @@ sub read_catalog {
       # must be a scalar
       @lines = split /\n/, $args{data};
     } else {
-      if (ref($args{data}) eq 'GLOB' || $args{data}->isa("IO::Handle") ) {
+      if (ref($args{data}) eq 'GLOB' || UNIVERSAL::isa($args{data},"IO::Handle") ) {
         # A file handle
         local $/ = "\n";
         # For some reason <$args{data}> does not do the right thing
