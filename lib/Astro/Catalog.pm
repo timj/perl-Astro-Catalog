@@ -43,8 +43,8 @@ Astro::Catalog - A generic API for stellar catalogues
 =head1 DESCRIPTION
 
 Stores generic meta-data about an astronomical catalogue. Takes a hash
-with an array refernce as an argument. The array should contain a list
-of Astro::Catalog::Item objects. Alternatively it takes a catalog
+with an array reference as an argument. The array should contain a list
+of Astro::Catalog::Item objects. Alternatively it takes a catalogue
 format and either the name of a catalogue file or a reference to a
 scalar, glob or array.
 
@@ -78,10 +78,6 @@ $DEBUG = 0;
 
 # C O N S T R U C T O R ----------------------------------------------------
 
-=head1 REVISION
-
-$Id: Catalog.pm,v 1.59 2007/10/31 22:10:48 cavanagh Exp $
-
 =head1 METHODS
 
 =head2 Constructor
@@ -96,8 +92,8 @@ Create a new instance from a hash of options
   $catalog = new Astro::Catalog( Format => 'Cluster', File => $file_name );
   $catalog = new Astro::Catalog( Format => 'JCMT', Data => $scalar );
 
-returns a reference to an C<Astro::Catalog> object. See C<configure> method
-for list of allowed arguments.
+returns a reference to an C<Astro::Catalog> object. See the C<configure> method
+for a list of allowed arguments.
 
 =cut
 
@@ -147,12 +143,12 @@ pluggable IO, see the C<Astro::Catalog::IO> classes
 
 returns true on sucess and false if the write failed (the reason
 can be obtained using the C<errstr> method). The C<%opts> are optional
-arguments and are dependant on the output format chosen.  Current
+arguments and are dependent on the output format chosen.  Current
 valid output formats are 'Simple', 'Cluster', 'JCMT' and 'VOTable'.
 
 The File argument can refer to a file name on disk (simple scalar),
 a glob (eg \*STDOUT), an IO::Handle object (for example something
-returned by the File::Temp construcotr) a reference to a scalar
+returned by the File::Temp constructor) a reference to a scalar
 (\$content) or reference to an array. For the last two options,
 the contents of the catalogue file are stored in the scalar or in
 the array (a line per array entry with no new lines).
@@ -320,7 +316,7 @@ sub sizeof {
 
 =item B<sizeoffull>
 
-Retursn the total number of stars in the catalogue without filtering.
+Returns the total number of stars in the catalogue without filtering.
 
 =cut
 
@@ -404,7 +400,7 @@ version is unchanged).
   @stars = $catalog->popstarbyid( $id );
 
 The method deletes the stars and returns the deleted C<Astro::Catalog::Item>
-objects. If no star exists with the given ID, the method returns empty list.
+objects. If no star exists with the given ID, the method returns an empty list.
 
 If called in scalar context this method returns an array reference, and if
 called in list context returns an array of C<Astro::Catalog::Item> objects.
