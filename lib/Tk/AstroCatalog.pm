@@ -34,7 +34,7 @@ my $COLOR_INDEX = 0;
 
 use vars qw/$VERSION $FORMAT/;
 
-$VERSION = '0.11';
+$VERSION = '0.12';
 
 # Kluge - this is the format of the catalog to be read
 # Needs to be given as an option on the FileSelect widget.
@@ -646,14 +646,13 @@ sub makeCatalog
 
 =item destroy
 
-Remove the widget from display. Calls the Reset handler.
+Remove the widget from display. Leaves calling the
+Reset handler to the DESTROY method.
 
 =cut
 
 sub destroy {
   my $self = shift;
-  my $callback = $self->Reset;
-  $callback->() if defined $callback;
   my $Top = $self->Toplevel;
   $Top->destroy() if defined $Top && Exists($Top);
 }
@@ -661,13 +660,15 @@ sub destroy {
 =item DESTROY
 
 Object destructor. Triggers when the object is destroyed.
-Guarantees to destroy the Toplevel widget but does not trigger
+Guarantees to destroy the Toplevel widget and does trigger
 the onDestroy callback.
 
 =cut
 
 sub DESTROY {
   my $self = shift;
+  my $callback = $self->Reset;
+  $callback->() if defined $callback;
   my $Top = $self->Toplevel;
   $Top->destroy() if defined $Top && Exists($Top);
 }
