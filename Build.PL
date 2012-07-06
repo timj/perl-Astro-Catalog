@@ -34,7 +34,7 @@ my $build = Module::Build->new
               'Alasdair Allan <aa@astro.ex.ac.uk>',
               'Tim Jenness <tjenness@cpan.org>',
              ],
-   dist_version => '4.23',
+   dist_version => '4.24',
    meta_merge => {
                resources =>  {
                               repository => "git://github.com/timj/perl-Astro-Catalog.git",
@@ -53,7 +53,6 @@ my $build = Module::Build->new
                 'Carp'                => 1.01,
                 'Data::Dumper'        => 2.12,
                 'Scalar::Util'        => 1.14,
-                'Astro::FITS::CFITSIO'=> 1.03,
                 'File::Temp'          => 0.14,
                 'Class::Struct'       => 0.63,
                 'Number::Uncertainty' => 0.01,
@@ -63,6 +62,7 @@ my $build = Module::Build->new
                 'Astro::Flux'         => 0.01
                },
    recommends => {
+                  'Astro::FITS::CFITSIO'=> 1.03,
                   'Astro::VO::VOTable' => 0.90,
                   'Tk' => 804.029,
                  },
