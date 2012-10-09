@@ -34,7 +34,7 @@ my $COLOR_INDEX = 0;
 
 use vars qw/$VERSION $FORMAT/;
 
-$VERSION = '0.12';
+$VERSION = '0.13';
 
 # Kluge - this is the format of the catalog to be read
 # Needs to be given as an option on the FileSelect widget.
@@ -85,6 +85,20 @@ It makes more sense for this widget to work like Tk::FileSelect
 when used in transient mode since we want to get the answer back
 rather than enter an event loop.
 
+The "-customColumns" method can be used to add additional columns
+to the display.  This is an array of hashes specifying the
+title, width and generator function for each column.  This generating
+function will be called with an Astro::Catalog::Item and must
+return a string of the given width.
+
+  -customColumns => [{title     => 'Example',
+                      width     => 7,
+                      generator => sub {
+                                     my $item = shift;
+                                     return sprintf('%7s', 'test');
+                                   }},
+                    ]
+
 =cut
 
 ###############################################################
@@ -127,6 +141,28 @@ sub new {
   $self->{File} = 'default';
   $self->{Transient} = $defaults{'-transient'};
   $self->{RefLabel} = '';
+
+  if (exists $defaults{'-customColumns'}) {
+    # Store whole hash rather than just generator function
+    # in case we want to add other ways of specifying custom columns.
+    my $cols = $self->{CustomColumns} = $defaults{'-customColumns'};
+    croak "Tk::AstroCatalog -customColumns must be an array ref"
+        unless 'ARRAY' eq ref $cols;
+
+    my $headings = '';
+    foreach my $col (@$cols) {
+      $headings .= sprintf('%-'.$col->{'width'}.'s ', $col->{'title'});
+    }
+
+    $self->{CustomHeadings} = $headings;
+    $self->{CustomWidth} = length($headings);
+  }
+  else {
+    $self->{CustomColumns} = undef;
+    $self->{CustomHeadings} = '';
+    $self->{CustomWidth} = 0;
+  }
+
 
   bless $self, $class;
   $self->Reset($defaults{'-onDestroy'}) if exists $defaults{'-onDestroy'};
@@ -428,12 +464,14 @@ sub makeCatalog
       -wrap       => 'none',
       -relief     => 'flat',
       -foreground => 'midnightblue',
-      -width      => 90,
+      -width      => 90 + $self->{'CustomWidth'},
       -height     => 1,
       -font       => '-*-Courier-Medium-R-Normal--*-120-*-*-*-*-*-*',
       -takefocus  => 0
   )->grid (-sticky=>'ew', -row =>0);
-  my $title = sprintf "%5s  %-16s  %-12s  %-13s  %-4s %-3s %-3s %-5s %s", 'Index', 'Name', 'Ra', 'Dec', 'Epoc', 'Az', 'El', 'Dist', "Comment";
+  my $title = sprintf "%5s  %-16s  %-12s  %-13s  %-4s %-3s %-3s %-5s %s%s",
+                      'Index', 'Name', 'Ra', 'Dec', 'Epoc', 'Az', 'El', 'Dist',
+                      $self->{'CustomHeadings'}, "Comment";
   $head->insert ('end', $title);
   $head->configure(-state=>'disabled');
 
@@ -443,7 +481,7 @@ sub makeCatalog
   my $T = $topFrame->Scrolled('Text',
 			      -scrollbars => 'e',
 			      -wrap       => 'none',
-			      -width      => 100,
+			      -width      => 100 + $self->{'CustomWidth'},
 			      -height     => 15,
 			      -font       => '-*-Courier-Medium-R-Normal--*-120-*-*-*-*-*-*',
 			      -setgrid    => 1,
@@ -771,10 +809,16 @@ sub fillWithSourceList {
 	  $distance = "  Inf";
 	}
       }
-      $line = sprintf("%-4d  %s %3.0f %3.0f %s %s",$index, $source->summary(),
+      my $custom = '';
+      if ($self->{'CustomColumns'}) {
+        $custom = join(' ', map {$_->{'generator'}->($stars[$index])}
+                                @{$self->{'CustomColumns'}}) . ' ';
+      }
+      $line = sprintf("%-4d  %s %3.0f %3.0f %s %s%s",$index, $source->summary(),
 		      $source->az(format=>'d'),
 		      $source->el(format=>'d'),
 		      $distance,
+                      $custom,
 		      $source->comment
 		     );
       if ($self->isWithin ($source, @$selected)) {
