@@ -179,10 +179,10 @@ sub new {
 
 =item Catalog
 
-returns and sets the name of the Astro::Catalog
+Returns and sets the Astro::Catalog object.
 
   $catalog = $cat->Catalog();
-  $cat->Catalog('Default');
+  $cat->Catalog(new Astro::Catalog(...));
 
 =cut
 
