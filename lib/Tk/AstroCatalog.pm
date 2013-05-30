@@ -1059,9 +1059,9 @@ sub getSource {
   $buttonF->Button(
 		   -text         => 'Ok',
 		   -command      => sub{
-		     $self->Catalog->search_catalog(name => $nameEnt->get,
-					       ra   => $raEnt->get,
-					       dec  => $decEnt->get);
+                     my $name = $nameEnt->get(); undef $name if $name eq '';
+                     $self->Catalog()->filter_by_id($name) if defined $name;
+
 		     $self->fillWithSourceList ('full');
 		     $Top->destroy();
 		   }
