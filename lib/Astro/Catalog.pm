@@ -405,7 +405,7 @@ objects. If no star exists with the given ID, the method returns an empty list.
 If called in scalar context this method returns an array reference, and if
 called in list context returns an array of C<Astro::Catalog::Item> objects.
 
-This is effectively an inverse filter (see C<search_by_id> for complementary
+This is effectively an inverse filter (see C<filter_by_id> for complementary
 method).
 
 =cut
