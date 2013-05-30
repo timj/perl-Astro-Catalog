@@ -1003,22 +1003,15 @@ sub inswt {
 =item getSource
 
 getSource prompts the user to enter source coords and name
-Can specify previous source object to edit.
+and filters the catalog based on the input provided.
 
-Returns void.
+Takes the new top level widget to use, and the search button
+to be re-activated when this window closes.
 
-   $obj = $cat->getSource();
-   $obj = $cat->getSource($source);
+   $obj = $cat->getSource($toplevel, $search_button);
 
 =cut
 
-############################################################
-#
-#  getSource prompts the user to enter source coords and name
-#  Can specify previous source object to edit.
-#
-#  Returns a Source object
-#
 sub getSource {
   my $self = shift;
   my $Top = shift;
