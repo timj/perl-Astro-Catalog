@@ -1062,17 +1062,22 @@ sub getSource {
 					       ra   => $raEnt->get,
 					       dec  => $decEnt->get);
 		     $self->fillWithSourceList ('full');
-		     destroy $Top;
-		     $searchButton->configure(-state =>'normal');
+		     $Top->destroy();
 		   }
 		  )->pack(-side=>'right');
   $buttonF->Button(
 		   -text         => 'Cancel',
 		   -command      => sub{
 		     $Top->destroy();
-		     $searchButton->configure(-state =>'normal');
 		   }
 		  )->pack(-side=>'right');
+
+  $Top->bind('<Destroy>', sub {
+      my $widget = shift;
+      return unless $widget == $Top;
+      $searchButton->configure(-state =>'normal');
+  });
+
   $Top->update;
   $Top->grab;
   return;
