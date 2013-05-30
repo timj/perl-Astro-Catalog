@@ -1044,8 +1044,9 @@ sub getSource {
   $topFrame->Label (
 		    -text => "Epoc:"
 		   )->grid(-column=>0, -row=>3, -padx =>5, -pady=>5);
-  my $epocEnt;
-  my $epocB = $topFrame->Menubutton(-relief => 'raised', -width => 15);
+  my $epocEnt = 'RJ';
+  my $epocB = $topFrame->Menubutton(-text => $epocEnt, -relief => 'raised',
+                                    -width => 15);
   foreach $name (@Epocs) {
     $epocB->command(-label =>$name, -command=> sub{
 		   $epocB->configure( -text => $name );
