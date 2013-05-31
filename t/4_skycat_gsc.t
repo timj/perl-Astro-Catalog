@@ -121,7 +121,7 @@ my $gsc_byname = new Astro::Catalog::Query::SkyCat( # Target => 'HT Cas',
 						    RA => '01 10 12.9',
 						   Dec => '+60 04 35.9',
 						    Radius => '5',
-						    Catalog => 'gsc',
+						    Catalog => 'gsc@eso',
 						  );
 print "# Reseting \$cfg_file to local copy in ./etc \n";
 my $file = File::Spec->catfile( '.', 'etc', 'skycat.cfg' );
