@@ -19,6 +19,7 @@ sources from a default catalog or user-selected catalog file.
 
 use 5.004;
 use strict;
+use Math::Trig qw/pi/;
 use Carp;
 use Astro::Catalog;
 use Astro::Catalog::Star;
@@ -1017,6 +1018,19 @@ sub getSource {
   my $Top = shift;
   my $searchButton = shift;
   my @Epocs = ('RJ', 'RB');
+  my %distances = (
+      '15 degrees' => 15.0,
+      '5 degrees'  => 5.0,
+      '1 degree'   => 1.0,
+      '30\''       => 0.5,
+      '15\''       => 0.25,
+      '5\''        => 1.0 / 12,
+      '1\''        => 1.0 / 60,
+      '30\'\''     => 0.5 / 60,
+      '15\'\''     => 0.25 / 60,
+      '5\'\''      => 1.0 / 12 / 60,
+      '1\'\''      => 1.0 / 3600,
+  );
   my $name;
 
   $Top->title('Source Plot');
@@ -1041,9 +1055,21 @@ sub getSource {
   my $decEnt = $topFrame->Entry(-relief=>'sunken',
 				-width=>15)->grid(-column=>1, -row=>2, -padx =>10, -pady=>3);
 
+  $topFrame->Label(-text => 'Distance:')->grid(-column => 0, -row => 3);
+  my $distEnt = '1\'';
+  my $distB = $topFrame->Menubutton(-text => $distEnt, -relief => 'raised',
+                                    -width => 15);
+  foreach my $dist (sort {$distances{$b} <=> $distances{$a}} keys %distances) {
+      $distB->command(-label => $dist, -command => sub {
+          $distB->configure(-text => $dist);
+          $distEnt = $dist;
+      });
+  }
+  $distB->grid(-column => 1, -row => 3, -padx => 10, -pady => 5, -sticky => 'w');
+
   $topFrame->Label (
 		    -text => "Epoc:"
-		   )->grid(-column=>0, -row=>3, -padx =>5, -pady=>5);
+		   )->grid(-column=>0, -row=>4, -padx =>5, -pady=>5);
   my $epocEnt = 'RJ';
   my $epocB = $topFrame->Menubutton(-text => $epocEnt, -relief => 'raised',
                                     -width => 15);
@@ -1053,14 +1079,57 @@ sub getSource {
 		   $epocEnt = $name;
 		 });
   }
-  $epocB->grid(-column=>1, -row=>3, -padx =>10, -pady=>5, -sticky=>'w');
+  $epocB->grid(-column=>1, -row=>4, -padx =>10, -pady=>5, -sticky=>'w');
 
   my $buttonF = $Top->Frame->pack(-padx=>10, -pady=>10);
   $buttonF->Button(
 		   -text         => 'Ok',
 		   -command      => sub{
                      my $name = $nameEnt->get(); undef $name if $name eq '';
+                     my $ra   = $raEnt->get();   undef $ra   if $ra   eq '';
+                     my $dec  = $decEnt->get();  undef $dec  if $dec  eq '';
+
+                     my $dec_tol = pi * $distances{$distEnt} / 180;
+                     my $ra_tol = $dec_tol * 15;
+
+                     # Filter by name if a name was specified.
+
                      $self->Catalog()->filter_by_id($name) if defined $name;
+
+                     # Use Astro::Catalog's coordinate filter by distance
+                     # if possible.
+
+                     if (defined $ra and defined $dec) {
+
+                         my $coord = new Astro::Coords(ra => $ra, dec => $dec,
+                             type => $epocEnt eq 'RB' ? 'B1950' : 'J2000');
+
+                         $self->Catalog()->filter_by_distance($dec_tol,
+                                                              $coord);
+                     }
+                     elsif (defined $ra or defined $dec) {
+                         # Searching by RA or Dec alone isn't implemented
+                         # by Astro::Catalog, so use a callback filter.
+
+                         $ra = Astro::Coords::Angle::Hour->new(
+                                 $ra, range => '2PI')->radians()
+                             if defined $ra;
+                         $dec = Astro::Coords::Angle->new($dec)->radians()
+                             if defined $dec;
+
+                         $self->Catalog()->filter_by_cb(sub {
+                             my $item = shift;
+                             my $coord = $item->coords();
+                             my ($item_ra, $item_dec) = map {$_->radians()}
+                                 $epocEnt eq 'RB' ? $coord->radec1950()
+                                                  : $coord->radec();
+
+                             return ((! defined $ra or
+                                        abs($item_ra - $ra) <= $ra_tol)
+                                and  (! defined $dec or
+                                        abs($item_dec - $dec) <= $dec_tol));
+                         });
+                     }
 
 		     $self->fillWithSourceList ('full');
 		     $Top->destroy();
