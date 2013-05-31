@@ -267,9 +267,13 @@ sub _write_catalog {
   # define varaibles for output filters and colours
   my ( @out_mags, @out_cols );
 
+  # Filter the output magnitudes and colours for uniqueness.
+
   # if we want fewer magnitudes than we have in the object
   # to be written to the cluster file
+  my %seen_mag;
   foreach my $m ( 0 .. $#{$mags} ) {
+    next if $seen_mag{$mags->[$m]} ++;
     foreach my $n ( 0 .. $num_mags-1 ) {
       if ( ${$mags}[$m] eq $filters[$n] ) {
         push( @out_mags, ${$mags}[$m] );
@@ -279,7 +283,9 @@ sub _write_catalog {
   }
 
   # same for colours
+  my %seen_col;
   foreach my $k ( 0 .. $#{$cols} ) {
+    next if $seen_col{$cols->[$k]} ++;
     foreach my $l ( 0 .. $num_cols-1 ) {
       if ( ${$cols}[$k] eq $colours[$l] ) {
         push( @out_cols, ${$cols}[$k] );
@@ -287,19 +293,6 @@ sub _write_catalog {
       }
     }
   }
-
-  # Filter the output magnitudes and colours for uniqueness.
-  my %seen_mag;
-  foreach my $mag ( @out_mags ) {
-    $seen_mag{$mag}++;
-  }
-  @out_mags = keys %seen_mag;
-
-  my %seen_col;
-  foreach my $col ( @out_cols ) {
-    $seen_col{$col}++;
-  }
-  @out_cols = keys %seen_col;
 
   # write header
   # ------------
