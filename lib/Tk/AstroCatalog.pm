@@ -35,7 +35,7 @@ my $COLOR_INDEX = 0;
 
 use vars qw/$VERSION $FORMAT/;
 
-$VERSION = '0.13';
+$VERSION = '0.14';
 
 # Kluge - this is the format of the catalog to be read
 # Needs to be given as an option on the FileSelect widget.
@@ -1213,6 +1213,7 @@ L<Astro::Catalog>, L<Astro::Catalog::Star>, L<Astro::Coords>
 
 =head1 COPYRIGHT
 
+Copyright (C) 2013 Science & Technology Facilities Council.
 Copyright (C) 1999-2002,2004 Particle Physics and Astronomy Research Council.
 All Rights Reserved.
 

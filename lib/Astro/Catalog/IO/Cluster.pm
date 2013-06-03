@@ -42,7 +42,7 @@ use base qw/ Astro::Catalog::IO::ASCII /;
 
 use Data::Dumper;
 
-$VERSION = "2.00";
+$VERSION = "2.01";
 
 
 # C O N S T R U C T O R ----------------------------------------------------
@@ -453,7 +453,9 @@ sub _default_file {
 
 Copyright (C) 2001-2003 University of Exeter. All Rights Reserved.
 Some modificiations Copyright (C) 2003-2005 Particle Physics and
-Astronomy Research Council. All Rights Reserved.
+Astronomy Research Council.
+Some modifications Copyright (C) 2013 Science & Technology Facilities Council.
+All Rights Reserved.
 
 This module was written as part of the eSTAR project in collaboration
 with the Joint Astronomy Centre (JAC) in Hawaii and is free software;

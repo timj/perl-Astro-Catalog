@@ -6,7 +6,7 @@ use Module::Build;
 use File::Spec;
 use Config;
 
-# Copyright (C) 2012 Science and Technology Facilities Council.
+# Copyright (C) 2012-2013 Science and Technology Facilities Council.
 # All Rights Reserved.
 
 # This program is free software; you can redistribute it and/or modify
@@ -29,12 +29,12 @@ my $build = Module::Build->new
   (
    module_name => 'Astro::Catalog',
    dist_abstract => "A generic astronomical catalogue class",
-   license  => 'gpl',
+   license  => 'gpl2',
    author => [
               'Alasdair Allan <aa@astro.ex.ac.uk>',
               'Tim Jenness <tjenness@cpan.org>',
              ],
-   dist_version => '4.25',
+   dist_version => '4.26',
    meta_merge => {
                resources =>  {
                               repository => "git://github.com/timj/perl-Astro-Catalog.git",

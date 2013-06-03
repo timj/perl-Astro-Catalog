@@ -6,6 +6,12 @@ For more detail please see the commit log at
 
   https://github.com/timj/perl-Astro-Catalog
 
+v4.26
+
+  + The search button in Tk::AstroCatalog is now operational.
+  + Minor updates to documentation.
+  + Fixes for SkyCat GSC test due to hash key randomization.
+
 v4.25
 
   + Tk::AstroCatalog can now be told to display additional columns
