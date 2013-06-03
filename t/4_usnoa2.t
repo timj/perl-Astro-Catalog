@@ -168,21 +168,36 @@ $catalog_data->fieldcentre( RA => '01 10 13.1', Dec => '+60 04 35.4', Radius => 
 my $usno_byname = new Astro::Catalog::Query::USNOA2( Target => 'HT Cas',
                                                      Radius => '1' );
 
-print "# Connecting to ESO/ST-ECF USNO-A2 Catalogue\n";
-my $catalog_byname = $usno_byname->querydb();
-print "# Continuing tests\n";
+SKIP: {
+    print "# Connecting to ESO/ST-ECF USNO-A2 Catalogue\n";
+    my $catalog_byname = eval {
+        $usno_byname->querydb();
+    };
 
-# C O M P A R I S O N ------------------------------------------------------
+    unless (defined $catalog_byname) {
+        diag('Cannot connect to USNO-A2: ' . $@);
+        skip 'Cannot connect', 348
+    }
 
-# check sizes
-print "# DAT has " . $catalog_data->sizeof() . " stars\n";
-print "# NET has " . $catalog_byname->sizeof() . " stars\n";
+    unless ($catalog_byname->sizeof() > 0) {
+        diag('No items retrieved from USNO-A2');
+        skip 'No items retrieved', 348
+    }
 
-# Now compare the stars in the catalogues in order
-#-------------------------------------------------
-compare_catalog( $catalog_byname, $catalog_data);
+    print "# Continuing tests\n";
 
-#print join("\n",$usno_byname->_dump_raw)."\n";
+    # C O M P A R I S O N ------------------------------------------------------
+
+    # check sizes
+    print "# DAT has " . $catalog_data->sizeof() . " stars\n";
+    print "# NET has " . $catalog_byname->sizeof() . " stars\n";
+
+    # Now compare the stars in the catalogues in order
+    #-------------------------------------------------
+    compare_catalog( $catalog_byname, $catalog_data);
+
+    #print join("\n",$usno_byname->_dump_raw)."\n";
+}
 
 exit;
 
