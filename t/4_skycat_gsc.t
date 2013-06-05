@@ -126,22 +126,37 @@ my $gsc_byname = new Astro::Catalog::Query::SkyCat( # Target => 'HT Cas',
 print "# Reseting \$cfg_file to local copy in ./etc \n";
 my $file = File::Spec->catfile( '.', 'etc', 'skycat.cfg' );
 $gsc_byname->cfg_file( $file ); 
-                                                               
-print "# Connecting to ESO/ST-ECF GSC Catalogue\n";
-my $catalog_byname = $gsc_byname->querydb();
-print "# Continuing tests\n";
 
-# sort by RA
-$catalog_byname->sort_catalog( "ra" );
+SKIP: {
+    print "# Connecting to ESO/ST-ECF GSC Catalogue\n";
+    my $catalog_byname = eval {
+        $gsc_byname->querydb();
+    };
 
-# C O M P A R I S O N ------------------------------------------------------
+    unless (defined $catalog_byname) {
+        diag('Cannot connect to ESO GSC: ' . $@);
+        skip 'Cannot connect', 147
+    }
 
-# check sizes
-print "# DAT has " . $catalog_data->sizeof() . " stars\n";
-print "# NET has " . $catalog_byname->sizeof() . " stars\n";
+    unless ($catalog_byname->sizeof() > 0) {
+        diag('No items retrieved from ESO GSC');
+        skip 'No items retrieved', 147
+    }
 
-# and compare content
-compare_catalog( $catalog_byname, $catalog_data );
+    print "# Continuing tests\n";
+
+    # sort by RA
+    $catalog_byname->sort_catalog( "ra" );
+
+    # C O M P A R I S O N ------------------------------------------------------
+
+    # check sizes
+    print "# DAT has " . $catalog_data->sizeof() . " stars\n";
+    print "# NET has " . $catalog_byname->sizeof() . " stars\n";
+
+    # and compare content
+    compare_catalog( $catalog_byname, $catalog_data );
+}
 
 # quitting time
 exit;

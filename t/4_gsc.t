@@ -121,19 +121,34 @@ $catalog_data->fieldcentre( RA => '01 10 12.9',
 my $gsc_byname = new Astro::Catalog::Query::GSC(  RA => "01 10 12.9",
                                                   Dec => "+60 04 35.9",
                                                   Radius => '5' );
-                                                     
-print "# Connecting to ESO/ST-ECF GSC Catalogue\n";
-my $catalog_byname = $gsc_byname->querydb();
-print "# Continuing tests\n";
 
-# C O M P A R I S O N ------------------------------------------------------
+SKIP: {
+    print "# Connecting to ESO/ST-ECF GSC Catalogue\n";
+    my $catalog_byname = eval {
+        $gsc_byname->querydb();
+    };
 
-# check sizes
-print "# DAT has " . $catalog_data->sizeof() . " stars\n";
-print "# NET has " . $catalog_byname->sizeof() . " stars\n";
+    unless (defined $catalog_byname) {
+        diag('Cannot connect to ESO GSC: ' . $@);
+        skip 'Cannot connect', 156
+    }
 
-# Compare catalogues
-compare_catalog( $catalog_byname, $catalog_data);
+    unless ($catalog_byname->sizeof() > 0) {
+        diag('No items retrieved from ESO GSC');
+        skip 'No items retrieved', 156
+    }
+
+    print "# Continuing tests\n";
+
+    # C O M P A R I S O N ------------------------------------------------------
+
+    # check sizes
+    print "# DAT has " . $catalog_data->sizeof() . " stars\n";
+    print "# NET has " . $catalog_byname->sizeof() . " stars\n";
+
+    # Compare catalogues
+    compare_catalog( $catalog_byname, $catalog_data);
+}
 
 #print join("\n",$gsc_byname->_dump_raw)."\n";
 
