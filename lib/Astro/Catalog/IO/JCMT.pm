@@ -44,7 +44,7 @@ use constant MAX_SRC_LENGTH => 15;
 my $defaultCatalog = "/local/progs/etc/poi.dat";
 
 # Planets appended to the catalogue
-my @PLANETS = qw/ mars uranus saturn jupiter venus neptune /;
+my @PLANETS = qw/ mercury mars uranus saturn jupiter venus neptune /;
 
 =over 4
 
