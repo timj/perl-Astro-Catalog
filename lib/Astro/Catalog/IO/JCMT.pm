@@ -34,7 +34,7 @@ use base qw/ Astro::Catalog::IO::ASCII /;
 
 use vars qw/$VERSION $DEBUG /;
 
-$VERSION = '0.16';
+$VERSION = '0.17';
 $DEBUG   = 0;
 
 # Name must be limited to 15 characters on write
