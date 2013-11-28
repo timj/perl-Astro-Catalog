@@ -8,7 +8,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 1768;
+use Test::More tests => 1772;
 
 require_ok( 'Astro::Catalog::Star' );
 require_ok( 'Astro::Catalog' );
@@ -18,7 +18,7 @@ my $cat = new Astro::Catalog(Format => 'JCMT', Data => \*DATA );
 
 isa_ok( $cat, "Astro::Catalog");
 
-my $total = 352;
+my $total = 353;
 is( $cat->sizeof, $total, "count number of sources [inc planets]");
 
 # check that we are using Astro::Coords and Astro::Catalog::Star
