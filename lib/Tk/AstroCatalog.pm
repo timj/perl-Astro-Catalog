@@ -585,6 +585,10 @@ sub makeCatalog
 			 $self->Catalog->sort_catalog('distance');
 			 $self->fillWithSourceList ('full');
 		       });
+    $sortmenu->command(-label=>'Distance in Az', -command=> sub {
+			 $self->Catalog->sort_catalog('distance_az');
+			 $self->fillWithSourceList ('full');
+		       });
   }
 
 

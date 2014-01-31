@@ -1218,6 +1218,7 @@ where mode can be one of
 and
 
  "distance"
+ "distance_az"
 
 if a reference position is available. "az" and "el" require that the
 star coordinates have an associated telescope and that the reference
@@ -1293,6 +1294,16 @@ sub sort_catalog {
         $calc{distance} = $ref->distance( $c );
         $calc{distance} = "Inf" unless defined $calc{distance};
       }
+      if ($ref && $sort eq 'distance_az') {
+        my $az = $c->az(format => 'deg');
+        my $ref_az = $ref->az(format => 'deg');
+        if (defined $az and defined $ref_az) {
+          $calc{'distance'} = abs($az - $ref_az);
+        }
+        else {
+          $calc{'distance'} = 'Inf';
+        }
+      }
       \%calc;
     } @$stars;
 
@@ -1306,7 +1317,10 @@ sub sort_catalog {
       @rSources = sort by_ra @unsorted;
     } elsif ($sort =~ /dec/) {
       @rSources = sort by_dec @unsorted;
-    } elsif ($sort =~ /az/) {
+    } elsif ($sort =~ /az/ and $sort !~ /dist/) { # Avoid accidentally
+                                                  # matching in distance_az
+                                                  # mode but why are these
+                                                  # regexps anyway?
       @rSources = sort { $a->{az} <=> $b->{az} } @unsorted;
     } elsif ($sort =~ /el/) {
       # reverse sort
