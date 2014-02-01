@@ -34,7 +34,7 @@ my $build = Module::Build->new
               'Alasdair Allan <aa@astro.ex.ac.uk>',
               'Tim Jenness <tjenness@cpan.org>',
              ],
-   dist_version => '4.29',
+   dist_version => '4.30',
    meta_merge => {
                resources =>  {
                               repository => "git://github.com/timj/perl-Astro-Catalog.git",
