@@ -41,6 +41,8 @@ $Id: Sesame.pm,v 1.9 2005/07/25 07:45:49 aa Exp $
 
 =head2 Constructor
 
+=over 4
+
 =item B<new>
 
 Create a new instance from a hash of options
@@ -92,6 +94,8 @@ sub querydb {
   my $catalog = $self->_parse_query();
   return $catalog;
 }
+
+=back
 
 =begin __PRIVATE_METHODS__
 

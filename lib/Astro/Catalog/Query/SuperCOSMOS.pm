@@ -95,6 +95,8 @@ $Id: SuperCOSMOS.pm,v 1.11 2005/06/16 03:11:11 aa Exp $
 
 =head2 Constructor
 
+=over 4
+
 =item B<new>
 
 Simple constructor, handles the 'Colour' option, e.g.
@@ -130,6 +132,8 @@ sub new {
   return $block;
 }
 
+=back
+
 =head2 Accessor methods
 
 =over 4
@@ -154,6 +158,7 @@ sub _selected_catalog {
   return $self->{SKYCAT_CATALOG};
 }
 
+=back
 
 =head2 General methods
 
@@ -517,9 +522,13 @@ sub _get_supported_init {
   croak "xxx - get supported init";
 }
 
+=back
+
 =head2 Class methods
 
 These methods are not associated with any particular object.
+
+=over 4
 
 =item B<cfg_file>
 
@@ -562,6 +571,8 @@ sub cfg_file {
   print "SuperCOSMOS.pm: \$cfg_file in cfg_file() is $cfg_file\n" if $DEBUG;
   return $cfg_file;
 }
+
+=back
 
 =begin __PRIVATE_METHODS__
 

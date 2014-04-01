@@ -49,6 +49,8 @@ my %CONFIG;
 
 =head2 Constructor
 
+=over 4
+
 =item B<new>
 
 Simple constructor. Forces read of config file if one can be found and
@@ -89,6 +91,8 @@ sub new {
 
   return $block;
 }
+
+=back
 
 =head2 Accessor methods
 
@@ -343,6 +347,8 @@ sub _get_supported_init {
 
 These methods are not associated with any particular object.
 
+=over 4
+
 =item B<cfg_file>
 
 Location of the skycat config file. Default location is
@@ -407,6 +413,8 @@ sub cfg_file {
   }
   return $class->{CFG_FILE};
 }
+
+=back
 
 =begin __PRIVATE_METHODS__
 

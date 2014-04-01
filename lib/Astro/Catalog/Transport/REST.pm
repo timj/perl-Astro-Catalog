@@ -85,8 +85,6 @@ sub new {
 
 }
 
-=over 4
-
 =item B<useragent>
 
 The LWP user agent mediating the web transaction.
@@ -289,15 +287,6 @@ sub agent {
   my $self = shift;
   return $self->useragent->agent();
 }
-
-=back
-
-=head2 General Methods
-
-=over 4
-
-
-# T I M E   A T   T H E   B A R  --------------------------------------------
 
 =back
 

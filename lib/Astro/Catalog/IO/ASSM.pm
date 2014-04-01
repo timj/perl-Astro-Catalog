@@ -181,6 +181,8 @@ sub _read_catalog {
 
 }
 
+=back
+
 =head1 REVISION
 
  $Id: ASSM.pm 5702 2012-05-19 00:45:23Z tlister $

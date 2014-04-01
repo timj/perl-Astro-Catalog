@@ -283,6 +283,8 @@ sub _configure {
   }
 }
 
+=back
+
 =head1 REVISION
 
  $Id: Morphology.pm,v 1.4 2006/06/05 21:03:23 cavanagh Exp $

@@ -206,6 +206,7 @@ sub _write_catalog {
 
 }
 
+=back
 
 =head1 REVISION
 

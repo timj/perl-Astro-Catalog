@@ -94,6 +94,8 @@ sub _read_catalog {
 
 }
 
+=back
+
 =head1 FORMAT
 
 The catalog format uses fixed formatting (first column is column 1):

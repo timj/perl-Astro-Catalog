@@ -85,8 +85,6 @@ sub new {
 
 }
 
-=over 4
-
 =item B<querydb>
 
 Unlike C<Astro::Transport::REST> a default C<querydb()> method is not
