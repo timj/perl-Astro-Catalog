@@ -1,5 +1,7 @@
 package Astro::Catalog::Star::Morphology;
 
+use strict;
+
 use Astro::Catalog::Item::Morphology;
 
 use base qw / Astro::Catalog::Item::Morphology /;

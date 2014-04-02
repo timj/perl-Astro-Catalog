@@ -1,5 +1,7 @@
 package Astro::Catalog::Star;
 
+use strict;
+
 use Astro::Catalog::Item;
 
 use base qw/ Astro::Catalog::Item /;
