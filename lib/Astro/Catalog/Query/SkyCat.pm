@@ -399,19 +399,19 @@ sub cfg_file {
   my $cfg_file;
   if (@_) {
     $cfg_file = shift;
-    if( ( defined( $class->{CFG_FILE} ) &&
-          $cfg_file ne $class->{CFG_FILE} ) ||
-        ! defined( $class->{CFG_FILE} ) ) {
+    if( ( defined( $CFG_FILE ) &&
+          $cfg_file ne $CFG_FILE ) ||
+        ! defined( $CFG_FILE ) ) {
 
       # We were given a new config file, so load it.
       $class->_load_config($cfg_file);
-      $class->{CFG_FILE} = $cfg_file;
+      $CFG_FILE = $cfg_file;
     }
   }
-  if( ! defined( $class->{CFG_FILE} ) ) {
-    $class->{CFG_FILE} = _set_cfg_file;
+  if( ! defined( $CFG_FILE ) ) {
+    $CFG_FILE = _set_cfg_file;
   }
-  return $class->{CFG_FILE};
+  return $CFG_FILE;
 }
 
 =back
