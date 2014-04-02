@@ -42,7 +42,7 @@ use base qw/ Astro::Catalog::IO::ASCII /;
 
 use Data::Dumper;
 
-$VERSION = "2.01";
+$VERSION = "4.31";
 
 
 # C O N S T R U C T O R ----------------------------------------------------

@@ -4,9 +4,9 @@ use strict;
 
 use Astro::Catalog::Item::Morphology;
 
-use base qw / Astro::Catalog::Item::Morphology /;
+use base qw/ Astro::Catalog::Item::Morphology /;
 use vars qw/ $VERSION /;
-$VERSION = "2.00";
+$VERSION = "4.31";
 
 =head1 NAME
 

@@ -34,7 +34,7 @@ use base qw/ Astro::Catalog::IO::Binary /;
 
 use vars qw/ $VERSION $DEBUG /;
 
-$VERSION = '0.01';
+$VERSION = '4.31';
 $DEBUG = 0;
 
 =begin __PUBLIC_METHODS__

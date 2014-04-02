@@ -6,6 +6,11 @@ For more detail please see the commit log at
 
   https://github.com/timj/perl-Astro-Catalog
 
+v4.31
+
+  + Fix test 4_skycat_gsc.t for users who have a SkyCat configuration
+    file which does not include "gsc@eso".
+
 v4.30
 
   + Catalogs can now be sorted by distance in azimuth.

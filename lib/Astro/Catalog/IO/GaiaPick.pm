@@ -34,7 +34,7 @@ use Astro::Coords;
 use base qw/ Astro::Catalog::IO::ASCII /;
 
 $DEBUG = 0;
-$VERSION = '0.01';
+$VERSION = '4.31';
 
 # Named Constants for column positions
 use constant NAME => 0;

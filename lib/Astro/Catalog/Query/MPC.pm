@@ -52,7 +52,7 @@ use Astro::Flux;
 use Astro::Fluxes;
 use Number::Uncertainty;
 
-$VERSION = "2.00";
+$VERSION = "4.31";
 
 =head1 REVISION
 
