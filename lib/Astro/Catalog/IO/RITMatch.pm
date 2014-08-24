@@ -143,6 +143,10 @@ Optional arguments are:
 =item mag_type - the magnitude type to write out to the file. Defaults
 to 'mag'.
 
+=item waveband - reference waveband to select from catalogue. See flux()
+      method in Astro::Flux. This allows a specific filter to be selected
+      for output.
+
 The output format has the ID in column 1, X coordinate in column 2, Y
 coordinate in column 3, magnitude value in column 4, and any comments
 in column 5.
@@ -164,11 +168,20 @@ sub _write_catalog {
     $mag_type = $options{'mag_type'};
   }
 
+  my $refwb;
+  $refwb = $options{waveband}
+    if exists $options{waveband};
+
   # Set up variables for output.
   my @output;
   my $output_line;
 
   my $newid = 1;
+
+  # Astro::Fluxes can not guarantee that the Astro::Flux
+  # order will be in a particular order so we can not simply
+  # grab the first one. We might get a "J" this time but previously
+  # got "R".
 
   # Loop through the items in the catalogue.
   foreach my $item ( $catalog->stars ) {
@@ -183,17 +196,32 @@ sub _write_catalog {
               ! defined( $y ) ||
               ! defined( $fluxes ) );
 
-    # Grab the Astro::Flux objects. We'll use the first one.
-    my @flux = $fluxes->allfluxes;
-    my $flux = $flux[0];
+    my $flux;
+    if (!$refwb) {
+      # If no external selection of waveband and this is first time
+      # through loop we select the first waveband as a reference
+      my @allflux = $fluxes->allfluxes;
+      $flux = $allflux[0];
+      $refwb = $flux->waveband->natural;
+    } else {
+      $flux = $fluxes->flux( type => $mag_type, waveband => $refwb );
+    }
 
+    next unless defined $flux;
     next if ( uc( $flux->type ) ne uc( $mag_type ) );
+
+    my $magval = $flux->quantity($mag_type);
+
+    # Sometimes we get a missing value
+    next if !defined $magval;
+    next unless length($magval);
 
     # Create the output string.
     $output_line = join ' ', $newid,
                              $x,
                              $y,
-                             $flux->quantity($mag_type);
+                             $magval,
+                             $item->id;
 
     # And push this string to the output array.
     push @output, $output_line;
