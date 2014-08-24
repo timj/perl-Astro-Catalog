@@ -143,9 +143,9 @@ Optional arguments are:
 =item mag_type - the magnitude type to write out to the file. Defaults
 to 'mag'.
 
-=item waveband - reference waveband to select from catalogue. See flux()
+=item filter - reference filter to select from catalogue. See flux()
       method in Astro::Flux. This allows a specific filter to be selected
-      for output.
+      for output. Argument can be a string or Astro::Waveband object.
 
 The output format has the ID in column 1, X coordinate in column 2, Y
 coordinate in column 3, magnitude value in column 4, and any comments
@@ -169,8 +169,8 @@ sub _write_catalog {
   }
 
   my $refwb;
-  $refwb = $options{waveband}
-    if exists $options{waveband};
+  $refwb = $options{filter}
+    if exists $options{filter};
 
   # Set up variables for output.
   my @output;
@@ -236,10 +236,6 @@ sub _write_catalog {
 
 =back
 
-=head1 REVISION
-
- $Id: RITMatch.pm,v 1.2 2007/05/31 01:45:07 cavanagh Exp $
-
 =head1 SEE ALSO
 
 L<Astro::Catalog>, L<Astro::Catalog::IO::Simple>
@@ -248,6 +244,7 @@ http://spiff.rit.edu/match/
 
 =head1 COPYRIGHT
 
+Copyright (C) 2014 Tim Jenness
 Copyright (C) 2006 Particle Physics and Astronomy Research
 Council. All Rights Reserved.
 
@@ -257,6 +254,7 @@ under the terms of the GNU Public License.
 =head1 AUTHORS
 
 Brad Cavanagh E<lt>b.cavanagh@jach.hawaii.eduE<gt>
+Tim Jenness E<lt>tjenness@cpan.orgE<gt>
 
 =cut
 
