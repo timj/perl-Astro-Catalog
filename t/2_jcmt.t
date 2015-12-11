@@ -92,8 +92,11 @@ for my $id (keys %hash1) {
   my $s2 = $hash2{$id};
 
   if (defined $s1 && defined $s2) {
+  SKIP: {
+    skip "HOLO source moves on the sky", 1 if ($id eq 'HOLO');
     my $d = $s1->coords->distance( $s2->coords);
     ok( $d->arcsec < 0.1, "Check coordinates $id");
+  }
   SKIP: {
       skip "Only Equatorial coordinates have velocity", 3
         unless $s1->coords->type eq 'RADEC';
