@@ -291,11 +291,11 @@ sub _read_catalog {
   # USNO-A2, 2MASS, Bright Star Catalogues and SuperCOSMOS. Maps the
   # Astro::Catalog::Star methods to different columns names
   my %datadict = (
-		  field => [ qw/ field /, qw/ fldno / ],
-		  quality => [ qw/ qual /, qw/ qflg /, qw/ quality / ],
-		  distance => [ "d'" ],
-		  posangle => [ qw/ pa /, qw/ _r / ],
-		 );
+                  field => [ qw/ field /, qw/ fldno / ],
+                  quality => [ qw/ qual /, qw/ qflg /, qw/ quality / ],
+                  distance => [ "d'" ],
+                  posangle => [ qw/ pa /, qw/ _r / ],
+                 );
 
 
   # precalculate EQUINOX (type for Astro::Coords at the moment

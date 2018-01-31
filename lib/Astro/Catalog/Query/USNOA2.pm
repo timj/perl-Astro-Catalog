@@ -92,16 +92,16 @@ by the remote system (and to be included in the query).
 sub _get_allowed_options {
   my $self = shift;
   return (
-	  ra => 'ra',
-	  dec => 'dec',
-	  object => 'object',
-	  radmax => 'radmax',
-	  magbright => 'magbright',
-	  magfaint => 'magfaint',
-	  sort => 'sort',
-	  nout => 'nout',
-	  format => 'format',
-	 );
+          ra => 'ra',
+          dec => 'dec',
+          object => 'object',
+          radmax => 'radmax',
+          magbright => 'magbright',
+          magfaint => 'magfaint',
+          sort => 'sort',
+          nout => 'nout',
+          format => 'format',
+         );
 }
 
 
@@ -113,17 +113,17 @@ Get the default query state.
 
 sub _get_default_options {
   return (
-	  ra => undef,
-	  dec => undef,
-	  object => undef,
+          ra => undef,
+          dec => undef,
+          object => undef,
 
-	  radmax => 5,
-	  magbright => 0,
-	  magfaint => 100,
-	  format => 1,
-	  sort => 'RA',
-	  nout => 2000,
-	 );
+          radmax => 5,
+          magbright => 0,
+          magfaint => 100,
+          format => 1,
+          sort => 'RA',
+          nout => 2000,
+         );
 }
 
 =item B<_parse_query>
@@ -228,11 +228,11 @@ sub _parse_query {
               # answers due to the bogus answers its getting from SLALIB.
               unless ( $separated[7] == 60 || $separated[4] == 60 ) {
                   $star->coords( new Astro::Coords(  ra => $objra,
-		   			             dec => $objdec,
-					             units => 'sex',
-					             type => 'J2000',
-					             name => $star->id(),
-					          ) );
+                                                     dec => $objdec,
+                                                     units => 'sex',
+                                                     type => 'J2000',
+                                                     name => $star->id(),
+                                                  ) );
               }
 
               # R Magnitude
@@ -316,16 +316,16 @@ sub _parse_query {
 
           $star->fluxes( new Astro::Fluxes(
             new Astro::Flux(
-	       new Number::Uncertainty( Value => $separated[8],
-	                                Error => $delta_r ),'mag', "R" ),
+               new Number::Uncertainty( Value => $separated[8],
+                                        Error => $delta_r ),'mag', "R" ),
             new Astro::Flux(
-	       new Number::Uncertainty( Value => $separated[9],
-	                                Error => $delta_b),'mag', "B" ),
+               new Number::Uncertainty( Value => $separated[9],
+                                        Error => $delta_b),'mag', "B" ),
             new Astro::FluxColor( lower => "R", upper => "B",
-	                          quantity => new Number::Uncertainty(
-	                                Value => $b_minus_r,
-	                                Error => $delta_bmr) ),
-			));
+                                  quantity => new Number::Uncertainty(
+                                        Value => $b_minus_r,
+                                        Error => $delta_bmr) ),
+                        ));
 
            # Push the star into the catalog
            # ------------------------------

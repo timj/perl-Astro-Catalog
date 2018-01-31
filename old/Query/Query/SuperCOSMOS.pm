@@ -102,11 +102,11 @@ These methods are for internal use only.
 sub _get_allowed_options {
   my $self = shift;
   return (
-	  ra => "RA",
-	  dec => "Dec",
-	  radmax => 'Radius',
-	  band => 'Band',
-	 );
+          ra => "RA",
+          dec => "Dec",
+          radmax => 'Radius',
+          band => 'Band',
+         );
 }
 
 =item B<_get_default_options>
@@ -117,12 +117,12 @@ Get the default query state.
 
 sub _get_default_options {
   return (
-	  ra => undef,
-	  dec => undef,
+          ra => undef,
+          dec => undef,
 
-	  radmax => 10,
-	  band => "UKST Blue",
-	 );
+          radmax => 10,
+          band => "UKST Blue",
+         );
 }
 
 =item B<_make_query>
@@ -274,11 +274,11 @@ sub _parse_query {
 
      #print "6: $dec_deg $dec_min $dec_sec\n\n";
      $star->coords( new Astro::Coords( ra =>  "$ra_deg $ra_min $ra_sec",
-				       dec => "$dec_deg $dec_min $dec_sec",
-				       type => 'J2000',
-				       units => 'sex',
-				       name => $star->id,
-				     ));
+                                       dec => "$dec_deg $dec_min $dec_sec",
+                                       type => 'J2000',
+                                       units => 'sex',
+                                       name => $star->id,
+                                     ));
 
      # Magnitudes
      $star->magnitudes( {Bj => $line[10]} );
@@ -411,10 +411,10 @@ sub _translate_one_to_one {
   my $self = shift;
   # convert to a hash-list
   return ($self->SUPER::_translate_one_to_one,
-	  map { $_, undef }(qw/
-			    band
-			    /)
-	 );
+          map { $_, undef }(qw/
+                            band
+                            /)
+         );
 }
 
 =back

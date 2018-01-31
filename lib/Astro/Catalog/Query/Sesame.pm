@@ -140,8 +140,8 @@ by the remote system (and to be included in the query).
 sub _get_allowed_options {
   my $self = shift;
   return (
-	  object => 'object'
-	 );
+          object => 'object'
+         );
 }
 
 =item B<_get_supported_init>
@@ -160,8 +160,8 @@ Set the default query state.
 
 sub _set_default_options {
   return (
-	  object => undef,
-	 );
+          object => undef,
+         );
 }
 
 

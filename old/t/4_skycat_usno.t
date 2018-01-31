@@ -60,11 +60,11 @@ foreach my $line ( 0 .. $#buffer ) {
        my $objdec = "$separated[6] $separated[7] $separated[8]";
 
        $star->coords( new Astro::Coords( name => $id,
-					 ra => $objra,
-					 dec => $objdec,
-					 units => 'sex',
-					 type => 'J2000',
-				       ));
+                                         ra => $objra,
+                                         dec => $objdec,
+                                         units => 'sex',
+                                         type => 'J2000',
+                                       ));
 
        # R Magnitude
        my %r_mag = ( R => $separated[9] );
@@ -147,10 +147,10 @@ $catalog_data->fieldcentre( RA => '01 10 12.9', Dec => '+60 04 35.9', Radius => 
 # --------------------------------------------
 
 my $usno_byname = new Astro::Catalog::Query::SkyCat( #Target => 'HT Cas',
-						    Catalog => 'usno',
-						    RA => '01 10 12.9',
-						    Dec => '+60 04 35.9',
-						    Radius => '1' );
+                                                    Catalog => 'usno',
+                                                    RA => '01 10 12.9',
+                                                    Dec => '+60 04 35.9',
+                                                    Radius => '1' );
 
 print "# Connecting to ESO/ST-ECF USNO-A2 Catalogue\n";
 my $catalog_byname = $usno_byname->querydb();

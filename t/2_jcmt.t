@@ -37,8 +37,8 @@ for (@results) {
 
 # search by radius
 my $refcoords = new Astro::Coords( ra => "23:14:00",
-				   dec => "61:27:00",
-				   type => "J2000");
+                                   dec => "61:27:00",
+                                   type => "J2000");
 
 # 10 arcmin
 $cat->reset_list;
@@ -153,9 +153,9 @@ sub form_hash {
       my $c1 = $s->coords;
       my $c2 = $hash{$id}->coords;
       if ($c1->distance( $c2 ) == 0) {
-	# fine. The same coordinate
+        # fine. The same coordinate
       } else {
-	warn "ID matches $id but coords differ\n";
+        warn "ID matches $id but coords differ\n";
       }
     } else {
       $hash{$id} = $s;

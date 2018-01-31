@@ -65,11 +65,11 @@ foreach my $line ( 0 .. $#buffer ) {
        my $objdec = "$separated[6] $separated[7] $separated[8]";
 
        $star->coords( new Astro::Coords( name => $id,
-					 ra => $objra,
-					 dec => $objdec,
-					 units => 'sex',
-					 type => 'J2000',
-				       ));
+                                         ra => $objra,
+                                         dec => $objdec,
+                                         units => 'sex',
+                                         type => 'J2000',
+                                       ));
 
        # B Magnitude
        #my %b_mag = ( R => $separated[10] );
@@ -80,8 +80,8 @@ foreach my $line ( 0 .. $#buffer ) {
        #$star->magerr( \%mag_errors );
 
        $star->fluxes( new Astro::Fluxes( new Astro::Flux(
-	               new Number::Uncertainty( Value => $separated[10] ),
-			'mag', "R" )));              
+                       new Number::Uncertainty( Value => $separated[10] ),
+                        'mag', "R" )));              
        # Quality
        my $quality = $separated[13];
        $star->quality( undef );
@@ -122,11 +122,11 @@ my $file = File::Spec->catfile( '.', 'etc', 'skycat.cfg' );
 Astro::Catalog::Query::SkyCat->cfg_file( $file );
 
 my $gsc_byname = new Astro::Catalog::Query::SkyCat( # Target => 'HT Cas',
-						    RA => '01 10 12.9',
-						   Dec => '+60 04 35.9',
-						    Radius => '5',
-						    Catalog => 'gsc@eso',
-						  );
+                                                    RA => '01 10 12.9',
+                                                   Dec => '+60 04 35.9',
+                                                    Radius => '5',
+                                                    Catalog => 'gsc@eso',
+                                                  );
 
 SKIP: {
     print "# Connecting to ESO/ST-ECF GSC Catalogue\n";

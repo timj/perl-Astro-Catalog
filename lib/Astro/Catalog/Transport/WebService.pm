@@ -50,11 +50,11 @@ Create a new instance from a hash of options
 
   $q = new Astro::Catalog::Transport::WebService(
                                             Coords    => new Astro::Coords(),
-				            Radius    => $radius,
-				            Bright    => $magbright,
-				            Faint     => $magfaint,
-				            Sort      => $sort_type,
-				            Number    => $number_out );
+                                            Radius    => $radius,
+                                            Bright    => $magbright,
+                                            Faint     => $magfaint,
+                                            Sort      => $sort_type,
+                                            Number    => $number_out );
 
 returns a reference to an query object. Must only called from
 sub-classed constructors.
@@ -71,7 +71,7 @@ sub new {
 
   # bless the query hash into the class
   my $block = bless { OPTIONS   => {},
-		      COORDS    => undef,
+                      COORDS    => undef,
                       URN       => undef,
                       ENDPOINT  => undef,
                       SERVICE   => undef,

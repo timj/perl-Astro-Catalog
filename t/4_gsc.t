@@ -64,11 +64,11 @@ foreach my $line ( 0 .. $#buffer ) {
        my $objdec = "$separated[6] $separated[7] $separated[8]";
 
        $star->coords( new Astro::Coords( name => $id,
-					 ra => $objra,
-					 dec => $objdec,
-					 units => 'sex',
-					 type => 'J2000',
-				       ));
+                                         ra => $objra,
+                                         dec => $objdec,
+                                         units => 'sex',
+                                         type => 'J2000',
+                                       ));
 
        # B Magnitude
        #my %b_mag = ( B => $separated[10] );
@@ -79,10 +79,10 @@ foreach my $line ( 0 .. $#buffer ) {
        #$star->magerr( \%mag_errors );
        
        $star->fluxes( new Astro::Fluxes( new Astro::Flux(
-        	new Number::Uncertainty( Value => $separated[10],
-	 				 Error => $separated[11] ),
-	 	 'mag', "B" )));
-		 	      
+                new Number::Uncertainty( Value => $separated[10],
+                                         Error => $separated[11] ),
+                 'mag', "B" )));
+                               
        # Quality
        my $quality = $separated[13];
        $star->quality( $quality );

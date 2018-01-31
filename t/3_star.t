@@ -17,21 +17,21 @@ use Data::Dumper;
 # magnitude and colour hashes
 my $flux1 = new Astro::Flux( new Number::Uncertainty ( Value => 16.1,
                                                        Error => 0.1 ),  
-			     'mag', 'R' );
+                             'mag', 'R' );
 my $flux2 = new Astro::Flux( new Number::Uncertainty ( Value => 16.4,
                                                        Error => 0.4 ),  
-			     'mag', 'B' );
+                             'mag', 'B' );
 my $flux3 = new Astro::Flux( new Number::Uncertainty ( Value => 16.3,
                                                        Error => 0.3 ),  
-			     'mag', 'V' );
+                             'mag', 'V' );
 my $col1 = new Astro::FluxColor( upper => 'B', lower => 'V',
                      quantity => new Number::Uncertainty ( Value => 0.1,
-                                                           Error => 0.02 ) );  			     
+                                                           Error => 0.02 ) );                               
 my $col2 = new Astro::FluxColor( upper => 'B', lower => 'R',
                      quantity => new Number::Uncertainty ( Value => 0.3,
                                                            Error => 0.05 ) );
-my $fluxes = new Astro::Fluxes( $flux1, $flux2, $flux3, $col1, $col2 );	
-						    
+my $fluxes = new Astro::Fluxes( $flux1, $flux2, $flux3, $col1, $col2 );        
+                                                    
 # create a star
 my $star = new Astro::Catalog::Star( ID         => 'U1500_01194794',
                                      RA         => '17.55398',

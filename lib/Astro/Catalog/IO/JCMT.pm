@@ -321,9 +321,9 @@ sub _write_catalog {
       # Create stringified form of previous coordinate with same name
       # and current coordinate
       my $prevcoords = join(" ",@{$previous->{long}},@{$previous->{lat}},
-			    $previous->{rv}, $previous->{vdefn}, $previous->{vframe});
+                            $previous->{rv}, $previous->{vdefn}, $previous->{vframe});
       my $curcoords = join(" ",@{$srcdata{long}},@{$srcdata{lat}},
-			    $srcdata{rv}, $srcdata{vdefn}, $srcdata{vframe});
+                            $srcdata{rv}, $srcdata{vdefn}, $srcdata{vframe});
 
       if ($prevcoords eq $curcoords) {
         # This is the same target so we can ignore it

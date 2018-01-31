@@ -96,10 +96,10 @@ sub _read_catalog {
     }
 
     my $c = new Astro::Coords( $ctype1 => $c1,
-			       $ctype2 => $c2,
-			       type => $system,
-			       name => $name,
-			     );
+                               $ctype2 => $c2,
+                               type => $system,
+                               name => $name,
+                             );
     $c->telescope($tel) if defined $tel;
     $c->comment($comment) if (defined $comment && $comment =~ /\w/);
 
@@ -108,9 +108,9 @@ sub _read_catalog {
 
     # now need the Item
     my $item = new Astro::Catalog::Item( id => $name,
-					 field => $field,
-					 coords => $c,
-					 comment => $comment );
+                                         field => $field,
+                                         coords => $c,
+                                         comment => $comment );
     push(@stars, $item);
 
   }

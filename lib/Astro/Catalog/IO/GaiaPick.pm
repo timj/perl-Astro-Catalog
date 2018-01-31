@@ -113,25 +113,25 @@ sub _read_catalog {
 
     # Coordinate object
     my $c = new Astro::Coords( name => $currid,
-			       ra => $chunks[RA],
-			       dec => $chunks[DEC],
-			       type => $chunks[EQUINOX],
-			       units => 'sex',
-			     );
+                               ra => $chunks[RA],
+                               dec => $chunks[DEC],
+                               type => $chunks[EQUINOX],
+                               units => 'sex',
+                             );
 
     my $star = new Astro::Catalog::Star( ID => $currid,
-					 Field => $chunks[0],
-					 Coords => $c,
-					 X => $chunks[XPIX],
-					 Y => $chunks[YPIX],
-				       );
+                                         Field => $chunks[0],
+                                         Coords => $c,
+                                         X => $chunks[XPIX],
+                                         Y => $chunks[YPIX],
+                                       );
 
     push(@stars, $star);
   }
 
   my $cat = new Astro::Catalog( Stars => \@stars,
-				Origin => 'GaiaPick',
-			      );
+                                Origin => 'GaiaPick',
+                              );
 
 }
 

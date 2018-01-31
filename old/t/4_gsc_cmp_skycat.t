@@ -23,17 +23,17 @@ do $p."helper.pl" or die "Error reading test functions: $!";
 
 
 my $skycat_q = new Astro::Catalog::Query::SkyCat( # Target => 'HT Cas',
-						 RA => '01 10 12.9',
-						 Dec => '+60 04 35.9',
-						 Radius => '5',
-						 Catalog => 'gsc',
-						);
+                                                 RA => '01 10 12.9',
+                                                 Dec => '+60 04 35.9',
+                                                 Radius => '5',
+                                                 Catalog => 'gsc',
+                                                );
 
 my $gsc_q = new Astro::Catalog::Query::GSC( # Target => 'HT Cas',
-					   RA => '01 10 12.9',
-					   Dec => '+60 04 35.9',
-					   Radius => '5',
-					  );
+                                           RA => '01 10 12.9',
+                                           Dec => '+60 04 35.9',
+                                           Radius => '5',
+                                          );
 
 my $gsc_cat = $gsc_q->querydb();
 my $skycat_cat = $skycat_q->querydb();
