@@ -29,7 +29,7 @@ my $sss = new Astro::Catalog::Query::SuperCOSMOS( RA     => "15 16 06.9",
                                                   Dec    => "-60 57 26.1",
                                                   Radius => "1" );
 
-                                                  
+
 print "# Connecting to ROE\n";
 my $catalog = $sss->querydb();
 print "\n# file = $catalog\n#\n\n";

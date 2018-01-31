@@ -124,7 +124,7 @@ foreach my $line ( 0 .. $#buffer ) {
     # calcuate B-R colour and error
     # -----------------------------
 
-    my $b_minus_r = $star->get_magnitude( 'B' ) - 
+    my $b_minus_r = $star->get_magnitude( 'B' ) -
                     $star->get_magnitude( 'R' );
 
     my %colours = ( 'B-R' => $b_minus_r );

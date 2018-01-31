@@ -10,9 +10,9 @@ my $Cat = new Tk::AstroCatalog( $MW,
                               -addCmd => sub {
                                 my $arr = shift;
                                 my $c = $arr->[-1];
-                                
+
                                 print $c->status;
-                                
+
                               },
                               -upDate=> sub {print "Updated"},
                               -transient => 0);

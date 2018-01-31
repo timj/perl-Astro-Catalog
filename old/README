@@ -7,17 +7,17 @@ implementations that I want to keep around just in case I need them again.
     The SuperCOSMOS catalogue is now retrieved by a custom interface into
     SkyCat. This code was the older interface that used Astro::Aladin to
     retrieve the catalogue. It's useful, we should keep it.
- 
+
  t/4_supercos.t
- 
+
     The test suite that went with the older SuperCOSMOS module.
 
  t/4_skycat_usno.t
- 
+
     Due to problems with the SkyCat module this test suite doesn't work,
     need to resolve these problems and drop this module back into the
     distribution as soon as possible.
-    
+
  t/4_gsc_cmp_skycat.t
 
     The current Astro::Catalog::Query::SkyCat module doesn't work properly
@@ -27,7 +27,7 @@ implementations that I want to keep around just in case I need them again.
     until they do and it becomes useful again.
 
  test.pl
- 
-    A simple test script which resolves a target using the 
+
+    A simple test script which resolves a target using the
     Astro::Catalog::Query::SIMBAD module, then retrieves a small cone
     search around the target.
