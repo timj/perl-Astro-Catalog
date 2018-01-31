@@ -117,18 +117,25 @@ $catalog_data->fieldcentre( RA => '01 10 12.9',
 # Grab comparison from ESO/ST-ECF Archive Site
 # --------------------------------------------
 
-print "# Reseting \$cfg_file to local copy in ./etc \n";
-my $file = File::Spec->catfile( '.', 'etc', 'skycat.cfg' );
-Astro::Catalog::Query::SkyCat->cfg_file( $file );
-
-my $gsc_byname = new Astro::Catalog::Query::SkyCat( # Target => 'HT Cas',
-                                                    RA => '01 10 12.9',
-                                                   Dec => '+60 04 35.9',
-                                                    Radius => '5',
-                                                    Catalog => 'gsc@eso',
-                                                  );
-
 SKIP: {
+    print "# Reseting \$cfg_file to local copy in ./etc \n";
+    my $file = File::Spec->catfile( '.', 'etc', 'skycat.cfg' );
+    Astro::Catalog::Query::SkyCat->cfg_file( $file );
+
+    my $gsc_byname = eval {
+        new Astro::Catalog::Query::SkyCat( # Target => 'HT Cas',
+                                           RA => '01 10 12.9',
+                                           Dec => '+60 04 35.9',
+                                           Radius => '5',
+                                           Catalog => 'gsc@eso',
+                                         );
+    };
+
+    unless (defined $gsc_byname) {
+        diag('Can not construct Skycat client: '. $@);
+        skip 'Cannot construct client', 147;
+    }
+
     print "# Connecting to ESO/ST-ECF GSC Catalogue\n";
     my $catalog_byname = eval {
         $gsc_byname->querydb();
