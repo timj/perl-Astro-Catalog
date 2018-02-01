@@ -28,7 +28,7 @@ use File::Spec;
 use base qw/ Astro::Catalog::Transport::REST /;
 
 
-$VERSION = '4.31';
+$VERSION = '4.32';
 $DEBUG = 0;
 
 # Controls whether we follow 'directory' config entries and recursively

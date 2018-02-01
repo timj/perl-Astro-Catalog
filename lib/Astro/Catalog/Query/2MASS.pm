@@ -48,7 +48,7 @@ use Carp;
 use Astro::Catalog;
 use Astro::Catalog::Star;
 
-$VERSION = "4.31";
+$VERSION = "4.32";
 
 =head1 REVISION
 

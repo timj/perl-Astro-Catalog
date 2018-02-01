@@ -32,7 +32,7 @@ use base qw/ Astro::Catalog::IO::ASCII /;
 
 use vars qw/ $VERSION /;
 
-$VERSION = '4.31';
+$VERSION = '4.32';
 
 =over 4
 
