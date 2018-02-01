@@ -44,10 +44,6 @@ $VERSION = "4.32";
 
 # C O N S T R U C T O R ----------------------------------------------------
 
-=head1 REVISION
-
-$Id: VOTable.pm,v 1.10 2005/06/15 19:03:42 aa Exp $
-
 =begin __PRIVATE_METHODS__
 
 =head1 Private methods

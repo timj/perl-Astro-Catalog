@@ -18,9 +18,6 @@ package Astro::Catalog;
 #  Authors:
 #    Alasdair Allan (aa@astro.ex.ac.uk)
 
-#  Revision:
-#     $Id: Catalog.pm,v 1.59 2007/10/31 22:10:48 cavanagh Exp $
-
 #  Copyright:
 #     Copyright (C) 2002 University of Exeter. All Rights Reserved.
 

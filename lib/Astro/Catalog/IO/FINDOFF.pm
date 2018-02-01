@@ -151,10 +151,6 @@ sub _write_catalog {
 
 =back
 
-=head1 REVISION
-
- $Id: FINDOFF.pm,v 1.5 2007/05/31 01:42:34 cavanagh Exp $
-
 =head1 SEE ALSO
 
 L<Astro::Catalog>, L<Astro::Catalog::IO::Simple>

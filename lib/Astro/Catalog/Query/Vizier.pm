@@ -50,10 +50,6 @@ use Astro::Catalog::Star;
 
 $VERSION = "4.32";
 
-=head1 REVISION
-
-$Id: Vizier.pm,v 1.1 2003/08/04 10:52:28 timj Exp $
-
 =begin __PRIVATE_METHODS__
 
 =head2 Private methods

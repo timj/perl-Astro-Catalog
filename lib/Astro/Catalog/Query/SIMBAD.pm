@@ -348,10 +348,6 @@ sub _translate_one_to_one {
 
 =end __PRIVATE_METHODS__
 
-=head1 REVISION
-
- $Id: SIMBAD.pm,v 1.2 2003/09/25 11:38:50 aa Exp $
-
 =head1 SEE ALSO
 
   L<Astro::Catalog>, L<Astro::Catalog::Star>, L<Astro::Catalog::Query>.

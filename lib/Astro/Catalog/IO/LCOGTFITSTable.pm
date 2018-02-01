@@ -845,10 +845,6 @@ sub _write_catalog {
 
 =back
 
-=head1 REVISION
-
-  $Id: LCOGTFITSTable.pm 5687 2012-05-16 16:43:56Z tlister $
-
 =head1 SEE ALSO
 
 L<Astro::Catalog>

@@ -33,10 +33,6 @@ use Astro::Catalog::Star;
 
 $VERSION = "4.32";
 
-=head1 REVISION
-
-$Id: Sesame.pm,v 1.9 2005/07/25 07:45:49 aa Exp $
-
 =head1 METHODS
 
 =head2 Constructor

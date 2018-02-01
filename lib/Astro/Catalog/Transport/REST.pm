@@ -36,10 +36,6 @@ use Astro::Catalog::Star;
 
 $VERSION = "4.32";
 
-=head1 REVISION
-
-$Id: REST.pm,v 1.7 2004/03/03 00:50:15 cavanagh Exp $
-
 =head1 METHODS
 
 =head2 Constructor

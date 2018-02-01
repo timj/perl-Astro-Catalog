@@ -154,10 +154,6 @@ sub _write_catalog {
 
 =back
 
-=head1 REVISION
-
- $Id: Astrom.pm,v 1.9 2006/03/11 00:01:41 cavanagh Exp $
-
 =head1 SEE ALSO
 
 L<Astro::Catalog>, L<Astro::Catalog::IO::Simple>

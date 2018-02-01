@@ -53,10 +53,6 @@ use Number::Uncertainty;
 
 $VERSION = "4.32";
 
-=head1 REVISION
-
-$Id: USNOA2.pm,v 1.8 2005/06/16 01:57:35 aa Exp $
-
 =begin __PRIVATE_METHODS__
 
 =head2 Private methods

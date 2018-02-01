@@ -33,10 +33,6 @@ $VERSION = "4.32";
 
 # C O N S T R U C T O R ----------------------------------------------------
 
-=head1 REVISION
-
-$Id: Query.pm,v 1.8 2003/09/25 21:27:50 aa Exp $
-
 =head1 METHODS
 
 =head2 Constructor

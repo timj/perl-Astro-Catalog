@@ -47,10 +47,6 @@ $VERSION = "4.32";
 
 # C O N S T R U C T O R ----------------------------------------------------
 
-=head1 REVISION
-
-$Id: Cluster.pm,v 1.19 2006/01/18 01:29:33 cavanagh Exp $
-
 =begin __PRIVATE_METHODS__
 
 =head1 Private methods

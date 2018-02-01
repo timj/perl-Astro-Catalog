@@ -124,10 +124,6 @@ sub read_catalog {
 
 =back
 
-=head1 REVISION
-
-  $Id: ASCII.pm,v 1.2 2005/08/05 03:36:17 timj Exp $
-
 =head1 SEE ALSO
 
 L<Astro::Catalog>

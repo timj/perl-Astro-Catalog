@@ -18,9 +18,6 @@ package Astro::Catalog::Item;
 #  Authors:
 #    Alasdair Allan (aa@astro.ex.ac.uk)
 
-#  Revision:
-#     $Id: Item.pm,v 1.13 2007/09/25 23:23:43 cavanagh Exp $
-
 #  Copyright:
 #     Copyright (C) 2002 University of Exeter. All Rights Reserved.
 
@@ -229,10 +226,6 @@ my %STAR_TYPE_LOOKUP = (
 
 
 # C O N S T R U C T O R ----------------------------------------------------
-
-=head1 REVISION
-
-$Id: Item.pm,v 1.13 2007/09/25 23:23:43 cavanagh Exp $
 
 =head1 METHODS
 

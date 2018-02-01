@@ -34,10 +34,6 @@ use Astro::Catalog::Star;
 
 $VERSION = "4.32";
 
-=head1 REVISION
-
-$Id: WebService.pm,v 1.4 2003/08/03 06:18:35 timj Exp $
-
 =head1 METHODS
 
 =head2 Constructor

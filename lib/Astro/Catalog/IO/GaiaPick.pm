@@ -139,10 +139,6 @@ sub _read_catalog {
 
 =end __PRIVATE_METHODS__
 
-=head1 REVISION
-
- $Id: GaiaPick.pm,v 1.2 2005/03/31 01:24:53 cavanagh Exp $
-
 =head1 FORMAT
 
 The GaiaPick format is extremely simple. First there is an informational

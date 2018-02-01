@@ -49,13 +49,9 @@ use Astro::Catalog::Star;
 # aladin stuff
 use Astro::Aladin;
 
-'$Revision: 1.1 $ ' =~ /.*:\s(.*)\s\$/ && ($VERSION = $1);
+$VERSION = '1.1';
 
 # C O N S T R U C T O R ----------------------------------------------------
-
-=head1 REVISION
-
-$Id: SuperCOSMOS.pm,v 1.1 2003/09/25 22:29:56 aa Exp $
 
 =head1 METHODS
 

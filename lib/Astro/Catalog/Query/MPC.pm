@@ -54,10 +54,6 @@ use Number::Uncertainty;
 
 $VERSION = "4.32";
 
-=head1 REVISION
-
-$Id: MPC.pm,v 1.2 2005/06/16 01:57:35 aa Exp $
-
 =begin __PRIVATE_METHODS__
 
 =head2 Private Methods

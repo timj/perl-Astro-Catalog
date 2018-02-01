@@ -669,10 +669,6 @@ sub _write_catalog {
 
 =back
 
-=head1 REVISION
-
-  $Id: FITSTable.pm,v 1.9 2006/05/02 21:39:10 cavanagh Exp $
-
 =head1 SEE ALSO
 
 L<Astro::Catalog>

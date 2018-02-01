@@ -566,10 +566,6 @@ sub _parse_line {
 
 =end __PRIVATE_METHODS__
 
-=head1 REVISION
-
- $Id: TST.pm,v 1.14 2006/03/16 00:15:13 cavanagh Exp $
-
 =head1 FORMAT
 
 The TST format is specified in a number of documents. For example

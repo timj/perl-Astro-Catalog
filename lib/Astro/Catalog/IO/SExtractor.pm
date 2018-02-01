@@ -812,10 +812,6 @@ sub _write_catalog {
 
 =back
 
-=head1 REVISION
-
-  $Id: SExtractor.pm,v 1.19 2006/06/05 21:02:49 cavanagh Exp $
-
 =head1 FORMAT
 
 The SExtractor ASCII_HEAD format consists of a header block and a

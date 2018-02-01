@@ -84,10 +84,6 @@ my $CFG_FILE;
 # this has the advantage of removing duplicates
 my %CONFIG;
 
-=head1 REVISION
-
-$Id: SuperCOSMOS.pm,v 1.11 2005/06/16 03:11:11 aa Exp $
-
 =head1 METHODS
 
 =head2 Constructor
