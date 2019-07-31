@@ -246,6 +246,8 @@ a service specified by a WSDL file
 
   $bool = $q->_is_service();
 
+=back
+
 =cut
 
 sub _is_service {
