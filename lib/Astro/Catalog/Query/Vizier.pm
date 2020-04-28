@@ -39,7 +39,7 @@ use 5.006;
 use strict;
 use warnings;
 use base qw/ Astro::Catalog::Transport::REST /;
-use vars qw/ $VERSION /;
+use vars qw/ $VERSION $DEBUG /;
 
 use File::Spec;
 use Carp;
@@ -49,6 +49,7 @@ use Astro::Catalog;
 use Astro::Catalog::Star;
 
 $VERSION = "4.34";
+$DEBUG = 0;
 
 =begin __PRIVATE_METHODS__
 
@@ -142,7 +143,7 @@ make and parse the results.
 sub _parse_query {
   my $self = shift;
 
-  print $self->{BUFFER};
+  print $self->{BUFFER} if $DEBUG;
   return new Astro::Catalog( Format => 'TST', Data => $self->{BUFFER},
                              Origin => 'Vizier',
                              ReadOpt => {
