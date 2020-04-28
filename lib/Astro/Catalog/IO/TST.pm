@@ -418,7 +418,7 @@ sub _read_catalog {
 
       # if the filter starts with e_ then it is probably an
       # error in the magnitude
-      if ($filter =~ /^E_(\w)$/i) {
+      if ($filter =~ /^E_(\w+)$/i) {
         # error in magnitude
         my $err = $1;
         $construct{magerr}->{$err} = $star->{$key}
