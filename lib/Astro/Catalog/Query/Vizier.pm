@@ -94,8 +94,8 @@ sub _get_allowed_options {
   return (
           ra => '-c.ra',
           dec => '-c.dec',
-          radmax => '-c.rm.max',
-          radmin => '-c.rm.min',
+          radmax => '-c.rm',
+          radmin => '-c.rm.min',  # _from_radmin combines this into c.rm: no c.rm.min parameter
           nout => '-out.max',
 #         sort => '-sort',
           object => '-c.obj',
@@ -130,6 +130,26 @@ sub _get_default_options {
 
 #         outcols => '', # need to check
          );
+}
+
+# Combine radmax and radmin into c.rm parameter.
+
+sub _from_radmax {
+  my $self = shift;
+  my $radmax = $self->query_options('radmax');
+  my $radmin = $self->query_options('radmin');
+  my %allow = $self->_get_allowed_options();
+
+  my $param = $radmin ? (join '+', $radmin, $radmax) : $radmax;
+
+  return ($allow{'radmax'}, $param);
+}
+
+# (Note: this just sets radmax again...)
+
+sub _from_radmin {
+  my $self = shift;
+  return $self->_from_radmax;
 }
 
 =item B<_parse_query>
