@@ -1511,6 +1511,7 @@ sub _load_io_plugin {
   $format = 'FITSTable' if $format eq 'Fitstable';
   $format = 'LCOGTFITSTable' if $format eq 'Lcogtfitstable';
   $format = 'RITMatch' if $format eq 'Ritmatch';
+  $format = 'VEX' if $format eq 'Vex';
   $format = 'XY' if $format eq 'Xy';
   $format = 'ASSM' if $format eq 'Assm';
 
