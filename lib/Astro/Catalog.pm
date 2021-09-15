@@ -1501,6 +1501,7 @@ sub _load_io_plugin {
   # Getting out of hand - maybe we should special case Cluster
   # and assume uppercase elsewhere.
   $format = 'JCMT' if $format eq 'Jcmt';
+  $format = 'JCMT_OT_SC' if $format eq 'Jcmt_ot_sc';
   $format = 'TST'  if $format eq 'Tst';
   $format = 'VOTable' if $format eq 'Votable';
   $format = 'STL'  if $format eq 'Stl';
