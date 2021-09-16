@@ -11,6 +11,7 @@ use warnings::register;
 use Carp;
 use strict;
 
+use Text::CSV;
 use Astro::Telescope;
 use Astro::Coords;
 use Astro::Catalog;
@@ -58,21 +59,27 @@ sub _read_catalog {
     my $pattern_decimal = qr/^[-+]?\d*(?:\.\d*)?$/;
     my $pattern_sexagesimal = qr/^[-+]?[\d.:]+$/;
 
+    # Ideally would sniff the CSV format from the first line, allowing ' \t,;'
+    # delimiters but for now use default settings.
+    my $csv = _get_csv_parser();
+
     my @items;
     foreach my $line (@$lines) {
         $line =~ s/^\s*//;
         $line =~ s/\s*$//;
         next unless $line;
 
-        # TODO: handle CSV format -- Hedwig sniffs the format of the first
-        # line allowing ' \t,;' delimiters.
+        $csv->parse($line)
+            or croak "Unable to parse CSV line '$line'";
 
-        # TODO: read extra columns (time, priority, note).
-        my ($name, $x, $y, $system, @extra) = split /[ ,]+/, $line;
+        my ($name, $x, $y, $system, $time, $priority, $comment)
+            = $csv->fields();
 
         my %opt = (
             name => $name,
         );
+
+        my %misc = ();
 
         # Detect units: decimal or sexagesimal.
 
@@ -115,6 +122,13 @@ sub _read_catalog {
             die "Did not recognize coordinate system '$system'";
         }
 
+        if (defined $priority) {
+            $misc{'priority'} = 0 + $priority;
+        }
+        if (defined $time) {
+            $misc{'time_hours'} = 0.0 + $time;
+        }
+
         my $c = new Astro::Coords(%opt);
 
         $c->telescope($tel) if defined $tel;
@@ -122,6 +136,8 @@ sub _read_catalog {
         push @items, new Astro::Catalog::Item(
             id => $name,
             coords => $c,
+            misc => \%misc,
+            comment => $comment,
         );
     }
 
@@ -139,6 +155,8 @@ Write the catalog to an array of lines.
 sub _write_catalog {
     my $class = shift;
     my $cat = shift;
+
+    my $csv = _get_csv_parser();
 
     my @lines;
     for my $item ($cat->stars) {
@@ -164,13 +182,40 @@ sub _write_catalog {
                 $y =~ s/0+$// if $y =~ /\./; $y =~ s/\.$//;
             }
 
+            my @extra = ();
+            my $comment = $item->comment();
+            if (defined $comment) {
+                unshift @extra, $comment;
+            }
+
+            my $misc = $item->misc();
+            if (defined $misc) {
+                if (exists $misc->{'priority'} and defined $misc->{'priority'}) {
+                    unshift @extra, $misc->{'priority'};
+                }
+                elsif (@extra) {
+                    unshift @extra, undef;
+                }
+                if (exists $misc->{'time_hours'} and defined $misc->{'time_hours'}) {
+                    unshift @extra, $misc->{'time_hours'};
+                }
+                elsif (@extra) {
+                    unshift @extra, undef;
+                }
+            }
+
             # Remove excess spaces because Hedwig format (CSV-based)
             # forbids duplicated separators.
             $x =~ s/^\s//;
             $y =~ s/^\s//;
 
-            # TODO: remove separators from name ( \t,;) or quote.
-            push @lines, join ' ', $name, $x, $y, $type;
+            # Remove problematic characters from name.
+            $name =~ s/[^- !#$%&'()*+.\/0-9:;<=>?\@A-Z[\]^_`a-z{|}~]/_/g;
+
+            $csv->combine($name, $x, $y, $type, @extra)
+                or croak "Unable to prepare CSV line for '$name'";
+
+            push @lines, $csv->string();
         }
         else {
             warnings::warnif "Coordinate of type '$type' for target '$name' not currently supported\n";
@@ -180,6 +225,20 @@ sub _write_catalog {
     return \@lines;
 }
 
+=item B<_get_csv_parser>
+
+Constructs an instance of the Text::CSV class.
+
+=cut
+
+sub _get_csv_parser {
+    return new Text::CSV({
+        sep_char => ' ',
+        quote_char => '"',
+        blank_is_undef => 1,
+        empty_is_undef => 1,
+    });
+}
 
 1;
 
