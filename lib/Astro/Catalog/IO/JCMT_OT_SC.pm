@@ -21,6 +21,8 @@ use parent qw/Astro::Catalog::IO::ASCII/;
 
 our $VERSION = '4.35';
 
+our $BASE_TAG = 'SCIENCE';
+
 =head1 METHODS
 
 =over 4
@@ -38,6 +40,10 @@ Options:
 =item telescope
 
 Name of telescope to associate with each entry. [Default: JCMT]
+
+=item tag
+
+Only read targets with the given tag, e.g. SCIENCE.  [Default: read all tags]
 
 =back
 
@@ -60,23 +66,36 @@ sub _read_catalog {
     $tel = new Astro::Telescope($options{'telescope'})
         if defined $options{'telescope'};
 
+    my $selected_tag = undef;
+    if (exists $options{'tag'} and defined $options{'tag'}) {
+        $selected_tag = $options{'tag'};
+    }
+
     my @items;
+    my %cat_misc = ();
+
     foreach my $line (@$lines) {
         $line =~ s/^\s+//;
         $line =~ s/\s+$//;
         next unless $line;
 
         if ($line =~ /^SURVEY_?ID/) {
+            my (undef, $survey_id) = split /[:=]/, $line, 2;
+            $survey_id =~ s/^\s+//;
+
+            $cat_misc{'survey_id'} = $survey_id if $survey_id;
+
             next;
         }
 
-        # TODO: read extra columns: position in tile (e.g. -1 dummy value),
-        # observations remaining and priority.
-
-        my ($tag, $name, $x, $y, $coord_sys, @extra) = split /[ ,;]+/, $line;
+        my ($tag, $name, $x, $y, $coord_sys, $pos_in_tile,
+            $remaining, $priority, @extra) = split /[ ,;]+/, $line;
 
         my %opt = (
             name => $name,
+        );
+        my %misc = (
+            tag => $tag,
         );
 
         my @dec_units;
@@ -102,10 +121,6 @@ sub _read_catalog {
             die "Did not recognize coordinate system '$coord_sys'";
         }
 
-        # TODO: check this matches the OT's unit handling -- currently assume
-        # TCS-like handling, but no need to worry about ' ' as sexagesimal
-        # separator as it is used here as the field separator.
-        # (OT uses SpTelescopePos.setXYFromString)
         $opt{'units'} = [
             (($x =~ /:/) ? 'sexagesimal' : $dec_units[0]),
             (($y =~ /:/) ? 'sexagesimal' : $dec_units[1])];
@@ -114,18 +129,29 @@ sub _read_catalog {
 
         $c->telescope($tel) if defined $tel;
 
-        if ($tag =~ /^SCIENCE$/i) {
+        # The OT only processes the extra columns for base positions.
+        if ($tag eq $BASE_TAG) {
+            if (defined $pos_in_tile) {
+                $misc{'position_in_tile'} = 0 + $pos_in_tile;
+            }
+            if (defined $priority) {
+                $misc{'priority'} = 0 + $priority;
+            }
+            if (defined $remaining) {
+                $misc{'remaining'} = 0 + $remaining;
+            }
+        }
+
+        if ((not defined $selected_tag) or ($tag eq $selected_tag)) {
             push @items, new Astro::Catalog::Item(
                 id => $name,
                 coords => $c,
+                misc => \%misc,
             );
-        }
-        else {
-            warnings::warnif "Skipping tag '$tag' ($name $x $y $coord_sys)\n";
         }
     }
 
-    return new Astro::Catalog(Stars => \@items);
+    return new Astro::Catalog(Stars => \@items, Misc => \%cat_misc);
 }
 
 =item B<_write_catalog>
@@ -141,10 +167,20 @@ sub _write_catalog {
     my $cat = shift;
 
     my @lines;
+
+    my $cat_misc = $cat->misc;
+    if (defined $cat_misc) {
+        if (exists $cat_misc->{'survey_id'} and defined $cat_misc->{'survey_id'}) {
+            push @lines, sprintf 'SURVEYID = %s', $cat_misc->{'survey_id'};
+        }
+    }
+
     for my $item ($cat->stars) {
         my $coords = $item->coords;
         my $name = $coords->name;
         my $type = $coords->type;
+        my $misc = $item->misc;
+        $misc = {} unless defined $misc;
 
         if ($type eq 'RADEC') {
             my ($x, $y, $type);
@@ -163,8 +199,32 @@ sub _write_catalog {
             $x =~ s/^\s//;
             $y =~ s/^\s//;
 
-            # TODO: remove separators from name ( ,;)
-            push @lines, join ' ', 'SCIENCE', $name, $x, $y, $type;
+            my $tag = (exists $misc->{'tag'} and defined $misc->{'tag'})
+                ? $misc->{'tag'} : 'SCIENCE';
+
+            # Fill in extra columns right to left, so that we can set defaults
+            # for any undefined values in columns to the left of defined ones.
+            my @extra = ();
+            if (exists $misc->{'priority'} and defined $misc->{'priority'}) {
+                unshift @extra, $misc->{'priority'};
+            }
+            if (exists $misc->{'remaining'} and defined $misc->{'remaining'}) {
+                unshift @extra, $misc->{'remaining'};
+            }
+            elsif (@extra) {
+                unshift @extra, 1;
+            }
+            if (exists $misc->{'position_in_tile'} and defined $misc->{'position_in_tile'}) {
+                unshift @extra, $misc->{'position_in_tile'};
+            }
+            elsif (@extra) {
+                unshift @extra, -1;
+            }
+
+            # Remove separators ( ,;) and other possibly problematic characters from name.
+            $name =~ s/[^-()+.0-9:=A-Z_a-z]/_/g;
+
+            push @lines, join ' ', $tag, $name, $x, $y, $type, @extra;
         }
         else {
             warnings::warnif "Coordinate of type '$type' for target '$name' not currently supported\n";
