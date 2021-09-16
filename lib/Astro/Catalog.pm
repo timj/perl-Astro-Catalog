@@ -111,6 +111,7 @@ sub new {
                       AUTO_OBSERVE => 0,
                       PREFERRED_MAG_TYPE => undef,
                       IDS => {},
+                      MISC => undef,
                     }, $class;
 
   # If we have arguments configure the object
@@ -822,6 +823,21 @@ sub auto_filter_observability {
   return $self->{AUTO_OBSERVE};
 }
 
+=item B<misc>
+
+Method to contain information not handled by other methods.
+This is analogous to the Astro::Catalog::Item::misc method,
+and should also typically be used to store a hash reference.
+
+=cut
+
+sub misc {
+  my $self = shift;
+  if( @_ ) {
+    $self->{'MISC'} = shift;
+  }
+  return $self->{'MISC'};
+}
 
 # C O N F I G U R E -------------------------------------------------------
 
