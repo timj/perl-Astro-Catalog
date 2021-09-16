@@ -28,9 +28,20 @@ corresponding formats must be specified.
 
 The format of the input catalog.
 
+=item B<--inopt>
+
+Input reading options.  This is a comma-separated list of key=value
+pairs.  E.g.:
+
+    telecope=ARECIBO,tag=SCIENCE
+
 =item B<--outfmt>
 
 The format in which to write the catalog.
+
+=item B<--outopt>
+
+Output writing options, formatted as for input options.
 
 =item B<--clobber>
 
@@ -97,12 +108,15 @@ use Pod::Usage;
 
 use Astro::Catalog;
 
-my ($option_help, $option_clobber, $option_infmt, $option_outfmt);
+my ($option_help, $option_clobber, $option_infmt, $option_inopt,
+    $option_outfmt, $option_outopt);
 GetOptions(
     'help' => \$option_help,
     'clobber' => \$option_clobber,
     'infmt=s' => \$option_infmt,
+    'inopt=s' => \$option_inopt,
     'outfmt=s' => \$option_outfmt,
+    'outopt=s' => \$option_outopt,
 ) or pod2usage(-verbose => 0);
 
 pod2usage(-verbose => 2) if $option_help;
@@ -164,12 +178,13 @@ else {
 
 
 # Determine read and write options.
-my %in_opt = (exists $FORMAT{$in_format} and exists $FORMAT{$in_format}->{'read_options'})
-    ? %{$FORMAT{$in_format}->{'read_options'}} : ();
+my %in_opt = (((exists $FORMAT{$in_format} and exists $FORMAT{$in_format}->{'read_options'})
+    ? %{$FORMAT{$in_format}->{'read_options'}} : ()),
+    _parse_options($option_inopt));
 
-my %out_opt = (exists $FORMAT{$out_format} and exists $FORMAT{$out_format}->{'write_options'})
-    ? %{$FORMAT{$out_format}->{'write_options'}} : ();
-
+my %out_opt = (((exists $FORMAT{$out_format} and exists $FORMAT{$out_format}->{'write_options'})
+    ? %{$FORMAT{$out_format}->{'write_options'}} : ()),
+    _parse_options($option_outopt));
 
 # Read and re-write catalog.
 my $cat = new Astro::Catalog(%in_param, Format => $in_format, ReadOpt => \%in_opt);
@@ -190,6 +205,13 @@ sub _infer_format {
     }
 
     die "Could not infer format of file '$filename'";
+}
+
+sub _parse_options {
+    my $value = shift;
+    return () unless defined $value;
+
+    return map {split '=', $_, 2} split ',', $value;
 }
 
 __END__
