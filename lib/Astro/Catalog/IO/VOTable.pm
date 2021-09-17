@@ -22,7 +22,7 @@ use warnings::register;
 use Carp;
 
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 use Astro::Coords;
 use Astro::Flux;
 use Astro::FluxColor;
@@ -150,7 +150,7 @@ sub _read_catalog {
 
             # okay we either have a magnitude or a colour, why did I ever
             # make these two different things? Maybe I should re-engineer
-            # the Astro::Catalog::Star so that it hides the difference in
+            # the Astro::Catalog::Item so that it hides the difference in
             # some sort of meta API for both? Oh God this is so yuck...
 
             # colours
@@ -203,7 +203,7 @@ sub _read_catalog {
         );
 
         # create a star
-        my $star = new Astro::Catalog::Star(
+        my $star = new Astro::Catalog::Item(
             id  => $row[$contents{"id"}],
             coords => $coords,
             #magnitudes => \%mags,

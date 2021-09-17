@@ -23,7 +23,7 @@ use Carp;
 use strict;
 
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 use Astro::Coords;
 
 use base qw/Astro::Catalog::IO::ASCII/;

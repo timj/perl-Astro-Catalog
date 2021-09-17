@@ -57,7 +57,7 @@ use Carp;
 
 # generic catalog objects
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 
 use Astro::Flux;
 use Astro::FluxColor;

@@ -9,7 +9,7 @@ use Data::Dumper;
 
 # Load modules.
 require_ok("Astro::Catalog");
-require_ok("Astro::Catalog::Star");
+require_ok("Astro::Catalog::Item");
 
 my $tempfile = File::Temp->new();
 
@@ -22,7 +22,7 @@ my $star = $cat->popstarbyid( 2 );
 $star = $star->[0];
 $cat->pushstar($star);
 
-isa_ok($star, "Astro::Catalog::Star");
+isa_ok($star, "Astro::Catalog::Item");
 
 is($star->id, 2, "Check star ID");
 is($star->x, 25.4, "Check star X location");

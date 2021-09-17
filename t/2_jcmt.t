@@ -10,7 +10,7 @@ use strict;
 use warnings;
 use Test::More tests => 1772;
 
-require_ok('Astro::Catalog::Star');
+require_ok('Astro::Catalog::Item');
 require_ok('Astro::Catalog');
 
 # Create a new catalogue from the DATA handle
@@ -21,9 +21,9 @@ isa_ok($cat, "Astro::Catalog");
 my $total = 353;
 is($cat->sizeof, $total, "count number of sources [inc planets]");
 
-# check that we are using Astro::Coords and Astro::Catalog::Star
+# check that we are using Astro::Coords and Astro::Catalog::Item
 
-isa_ok($cat->allstars->[0], "Astro::Catalog::Star");
+isa_ok($cat->allstars->[0], "Astro::Catalog::Item");
 isa_ok($cat->allstars->[0]->coords, "Astro::Coords");
 
 # The remaining tests actually test the catalog filtering

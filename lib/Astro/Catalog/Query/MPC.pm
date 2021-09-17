@@ -45,7 +45,7 @@ use Time::Piece ':override';
 use Carp;
 
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 
 use Astro::Flux;
 use Astro::Fluxes;
@@ -206,7 +206,7 @@ sub _parse_query {
                     = unpack("A24A11A10A6A7A7A7A7A6A*", $buffer[$counter]);
 
                 if (defined $ra) {
-                    $star = new Astro::Catalog::Star();
+                    $star = new Astro::Catalog::Item();
 
                     $name =~ s/^\s+//;
                     $star->id( $name );

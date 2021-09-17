@@ -21,7 +21,7 @@ use strict;
 use Math::Trig qw/pi/;
 use Carp;
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 use Astro::Coords 0.12;
 use Tk;
 use Tk::FileSelect;
@@ -1176,7 +1176,7 @@ __END__
 
 =head1 SEE ALSO
 
-L<Astro::Catalog>, L<Astro::Catalog::Star>, L<Astro::Coords>
+L<Astro::Catalog>, L<Astro::Catalog::Item>, L<Astro::Coords>
 
 =head1 COPYRIGHT
 

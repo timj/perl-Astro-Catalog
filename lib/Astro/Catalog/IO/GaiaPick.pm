@@ -25,7 +25,7 @@ use Carp;
 use Data::Dumper;
 
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 use Astro::Coords;
 
 use base qw/Astro::Catalog::IO::ASCII/;
@@ -95,7 +95,7 @@ sub _read_catalog {
 
         # Parse the time stamp. Need to work out where to put the
         # time since this is not an observation date (epoch).
-        # Think of a concept for Astro::Catalog::Star
+        # Think of a concept for Astro::Catalog::Item
         # catalogDate ??
 
         # Parse the actual star information. Split on space.
@@ -117,7 +117,7 @@ sub _read_catalog {
             units => 'sex',
         );
 
-        my $star = new Astro::Catalog::Star(
+        my $star = new Astro::Catalog::Item(
             ID => $currid,
             Field => $chunks[0],
             Coords => $c,

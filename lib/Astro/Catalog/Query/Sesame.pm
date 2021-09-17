@@ -26,7 +26,7 @@ use POSIX qw/ceil/;
 
 use Astro::Coords;
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 
 our $VERSION = '4.35';
 our $DEBUG = 0;
@@ -182,7 +182,7 @@ sub _parse_query {
     my $catalog = new Astro::Catalog();
 
     # create a temporary object to hold stars
-    my $star = new Astro::Catalog::Star();
+    my $star = new Astro::Catalog::Item();
 
     # get a local copy of the current BUFFER
     my @result = $self->_dump_raw();

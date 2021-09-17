@@ -15,7 +15,7 @@ use Number::Uncertainty;
 
 BEGIN {
   # load modules
-  use_ok("Astro::Catalog::Star");
+  use_ok("Astro::Catalog::Item");
   use_ok("Astro::Catalog");
   use_ok("Astro::Catalog::Query::USNOA2");
 }
@@ -43,7 +43,7 @@ foreach my $line (0 .. $#buffer) {
    # check that there is something on the line
    if (defined $separated[0]) {
        # create a temporary place holder object
-       $star = new Astro::Catalog::Star();
+       $star = new Astro::Catalog::Item();
 
        # ID
        my $id = $separated[2];

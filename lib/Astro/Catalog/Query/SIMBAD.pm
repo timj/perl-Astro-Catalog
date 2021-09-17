@@ -38,7 +38,7 @@ use Carp;
 
 use Astro::Coords;
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 
 our $VERSION = '4.35';
 
@@ -200,7 +200,7 @@ sub _parse_query {
     # ...and stuff the contents into Object objects
     foreach my $line (@target) {
         # create a temporary place holder object
-        my $star = new Astro::Catalog::Star();
+        my $star = new Astro::Catalog::Item();
 
         # split each line using the "pipe" symbol separating
         # the table columns
@@ -288,7 +288,7 @@ sub _parse_query {
         # push it into the object
         $star->spectype($spectral);
 
-        # Add the target object to the Astro::Catalog::Star object
+        # Add the target object to the Astro::Catalog::Item object
         $catalog->pushstar( $star );
         }
 
@@ -336,7 +336,7 @@ __END__
 
 =head1 SEE ALSO
 
-L<Astro::Catalog>, L<Astro::Catalog::Star>, L<Astro::Catalog::Query>.
+L<Astro::Catalog>, L<Astro::Catalog::Item>, L<Astro::Catalog::Query>.
 
 Derived from L<Astro::SIMBAD> on CPAN.
 

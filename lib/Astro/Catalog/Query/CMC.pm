@@ -42,7 +42,7 @@ use File::Spec;
 use Carp;
 
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 
 our $VERSION = '4.35';
 our $DEBUG = 0;

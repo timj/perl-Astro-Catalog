@@ -27,7 +27,7 @@ use strict;
 use Astro::Telescope;
 use Astro::Coords;
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 
 use base qw/Astro::Catalog::IO::ASCII/;
 

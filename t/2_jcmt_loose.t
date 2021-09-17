@@ -8,7 +8,7 @@ use strict;
 use Test::More tests => 13;
 
 require_ok('Astro::Coords');
-require_ok('Astro::Catalog::Star');
+require_ok('Astro::Catalog::Item');
 require_ok('Astro::Catalog');
 
 # test sources

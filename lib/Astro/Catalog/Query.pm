@@ -24,7 +24,7 @@ use Carp;
 
 use Astro::Coords;
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 
 our $VERSION = '4.35';
 

@@ -25,7 +25,7 @@ use Carp;
 use Data::Dumper;
 
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 use Astro::Coords;
 
 use base qw/Astro::Catalog::IO::ASCII/;
@@ -285,7 +285,7 @@ sub _read_catalog {
 
     # This is a back-of-the-envelope data dictionary from looking at
     # USNO-A2, 2MASS, Bright Star Catalogues and SuperCOSMOS. Maps the
-    # Astro::Catalog::Star methods to different columns names
+    # Astro::Catalog::Item methods to different columns names
     my %datadict = (
         field => [ qw/ field /, qw/ fldno / ],
         quality => [ qw/ qual /, qw/ qflg /, qw/ quality / ],
@@ -483,7 +483,7 @@ sub _read_catalog {
         print Dumper(\%construct) . "\n" if $DEBUG;
 
         # Modify the array in place
-        $star = new Astro::Catalog::Star( id => $star->{id}, %construct );
+        $star = new Astro::Catalog::Item( id => $star->{id}, %construct );
     }
 
     return new Astro::Catalog(Stars => \@stars);

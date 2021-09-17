@@ -14,12 +14,12 @@ Astro::Coords::Angle->NDP(2);
 Astro::Coords::Angle::Hour->NDP(3);
 
 require_ok("Astro::Catalog");
-require_ok("Astro::Catalog::Star");
+require_ok("Astro::Catalog::Item");
 require_ok("Astro::Coords");
 
 # Create some stars with x, y, RA, Dec.
 my @stararray;
-my $star1 = new Astro::Catalog::Star(
+my $star1 = new Astro::Catalog::Item(
         Coords => new Astro::Coords(
             ra => '18:56:39.426',
             dec => '-63:25:13.23',
@@ -28,7 +28,7 @@ my $star1 = new Astro::Catalog::Star(
         X => 44.791,
         Y => 85.643);
 push @stararray, $star1;
-my $star2 = new Astro::Catalog::Star(
+my $star2 = new Astro::Catalog::Item(
         Coords => new Astro::Coords(
             ra => '19:11:53.909',
             dec => '-63:17:57.57',
@@ -37,7 +37,7 @@ my $star2 = new Astro::Catalog::Star(
         X => -46.266,
         Y => 92.337 );
 push @stararray, $star2;
-my $star3 = new Astro::Catalog::Star(
+my $star3 = new Astro::Catalog::Item(
         Coords => new Astro::Coords(
             ra => '19:01:13.606',
             dec => '-63:49:14.84',
@@ -46,7 +46,7 @@ my $star3 = new Astro::Catalog::Star(
         X => 17.246,
         Y => 64.945 );
 push @stararray, $star3;
-my $star4 = new Astro::Catalog::Star(
+my $star4 = new Astro::Catalog::Item(
         Coords => new Astro::Coords(
             ra => '19:08:29.088',
             dec => '-63:57:42.79',

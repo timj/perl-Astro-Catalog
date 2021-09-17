@@ -5,7 +5,7 @@ use strict;
 use Test::More tests => 17;
 
 BEGIN {
-    use_ok("Astro::Catalog::Star")
+    use_ok("Astro::Catalog::Item")
 };
 use Data::Dumper;
 
@@ -38,7 +38,7 @@ my $col2 = new Astro::FluxColor(
 my $fluxes = new Astro::Fluxes($flux1, $flux2, $flux3, $col1, $col2);
 
 # create a star
-my $star = new Astro::Catalog::Star(
+my $star = new Astro::Catalog::Item(
         ID         => 'U1500_01194794',
         RA         => '17.55398',
         Dec        => '60.07673',
@@ -49,7 +49,7 @@ my $star = new Astro::Catalog::Star(
         PosAngle   => '50.69',
         Field      => '00080');
 
-isa_ok($star, "Astro::Catalog::Star");
+isa_ok($star, "Astro::Catalog::Item");
 
 # Filters
 

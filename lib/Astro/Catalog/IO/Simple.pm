@@ -13,7 +13,7 @@ Astro::Catalog::IO::Simple - Simple Input/Output format
 =head1 DESCRIPTION
 
 Performs simple IO, reading or writing "id_string hh mm ss.s +dd mm ss.s"
-formated strings for each Astro::Catalog::Star object in the catalog.
+formated strings for each Astro::Catalog::Item object in the catalog.
 
 =cut
 
@@ -23,7 +23,7 @@ use warnings::register;
 use Carp;
 
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 use Astro::Coords;
 
 use base qw/Astro::Catalog::IO::ASCII/;
@@ -68,7 +68,7 @@ sub _read_catalog {
         next if ($lines[$i] =~ /^\s*$/);
 
         # temporary star object
-        my $star = new Astro::Catalog::Star();
+        my $star = new Astro::Catalog::Item();
 
         # Use a pattern match parser
         my @match = ( $lines[$i] =~ m/
@@ -163,7 +163,7 @@ sub _read_catalog {
         croak "Error creating coordinate object from $ra / $dec "
             unless defined $coords;
 
-        # and push it into the Astro::Catalog::Star object
+        # and push it into the Astro::Catalog::Item object
         $star->coords($coords);
 
         # push it onto the stack

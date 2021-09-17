@@ -8,7 +8,7 @@ use File::Spec;
 use Data::Dumper;
 
 BEGIN {
-    use_ok("Astro::Catalog::Star");
+    use_ok("Astro::Catalog::Item");
     use_ok("Astro::Catalog::Query::Sesame");
 }
 use Astro::Coords;
@@ -38,7 +38,7 @@ SKIP: {
     }
 
     # reference star
-    my $star = new Astro::Catalog::Star(
+    my $star = new Astro::Catalog::Item(
             id => 'EX Hya',
             coords => new Astro::Coords(
                 ra => '12 52 24.22',
@@ -66,7 +66,7 @@ SKIP: {
         skip 'Not items retrieved', 13;
     }
 
-    my $star2 = new Astro::Catalog::Star(
+    my $star2 = new Astro::Catalog::Item(
             id => 'V* HT Cas',
             coords => new Astro::Coords(
                 ra => '01 10 13.12',

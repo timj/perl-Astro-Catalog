@@ -24,7 +24,7 @@ use Carp;
 use strict;
 
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 
 use base qw/Astro::Catalog::IO::ASCII/;
 
@@ -70,8 +70,8 @@ sub _read_catalog {
         my $y = $3;
         my $comment = $4;
 
-        # Create the Astro::Catalog::Star object.
-        my $star = new Astro::Catalog::Star(
+        # Create the Astro::Catalog::Item object.
+        my $star = new Astro::Catalog::Item(
             ID => $id,
             X => $x,
             Y => $y,

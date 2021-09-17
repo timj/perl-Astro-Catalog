@@ -12,7 +12,7 @@ use Number::Uncertainty;
 
 # Catalog modules need to be loaded first
 BEGIN {
-    use_ok( "Astro::Catalog::Star");
+    use_ok( "Astro::Catalog::Item");
     use_ok( "Astro::Catalog");
     use_ok( "Astro::Catalog::Query::MPC");
 }
@@ -41,7 +41,7 @@ foreach my $line (0 .. $#buffer) {
             $comment) = unpack("A24A11A10A6A7A7A7A7A6A*", $buffer[$line]);
 
     if (defined $ra) {
-        $star = new Astro::Catalog::Star();
+        $star = new Astro::Catalog::Item();
 
         $name =~ s/^\s+//;
         $star->id( $name );

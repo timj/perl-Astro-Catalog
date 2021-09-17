@@ -41,7 +41,7 @@ use File::Spec;
 use Carp;
 
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 use Astro::Flux;
 use Astro::Fluxes;
 use Number::Uncertainty;
@@ -190,7 +190,7 @@ sub _parse_query {
                 # check that there is something on the line
                 if (defined $separated[0]) {
                     # create a temporary place holder object
-                    $star = new Astro::Catalog::Star();
+                    $star = new Astro::Catalog::Item();
 
                     # ID
                     my $id = $separated[2];

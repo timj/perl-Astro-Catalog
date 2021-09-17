@@ -27,7 +27,7 @@ use strict;
 use Astro::Telescope;
 use Astro::Coords;
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 
 use base qw/Astro::Catalog::IO::ASCII/;
 
@@ -163,7 +163,7 @@ sub _read_catalog {
         }
 
         # And create the star objects
-        push(@stars, map {new Astro::Catalog::Star(
+        push(@stars, map {new Astro::Catalog::Item(
             field => 'JCMT',
             id => $_->name,
             coords => $_,
@@ -452,7 +452,7 @@ sub _write_catalog {
 =item B<_parse_line>
 
 Parse a line from a JCMT format catalogue and return a corresponding
-C<Astro::Catalog::Star> object. Returns empty list if the line can not
+C<Astro::Catalog::Item> object. Returns empty list if the line can not
 be parsed or refers to a comment line (so that map can be used in the
 caller).
 
@@ -604,7 +604,7 @@ sub _parse_line {
     print "Created a new source in _parse_line: $target in field $field\n" if $DEBUG;
 
     # Now create the star object
-    return new Astro::Catalog::Star(
+    return new Astro::Catalog::Item(
         id => $target,
         coords => $source,
         field => $field,
@@ -622,7 +622,7 @@ __END__
 =head1 NOTES
 
 Coordinates are stored as C<Astro::Coords> objects inside
-C<Astro::Catalog::Star> objects.
+C<Astro::Catalog::Item> objects.
 
 =head1 GLOBAL VARIABLES
 

@@ -25,7 +25,7 @@ use Carp;
 use strict;
 
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 
 use base qw/Astro::Catalog::IO::ASCII/;
 
@@ -76,7 +76,7 @@ sub _read_catalog {
             units => 'r',
         );
 
-        my $s = new Astro::Catalog::Star(
+        my $s = new Astro::Catalog::Item(
             coords => $c,
             id =>  $bs,
             spectype => $type,

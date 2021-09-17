@@ -7,7 +7,7 @@ use Test::More tests => 3;
 use Data::Dumper;
 
 BEGIN {
-    use_ok("Astro::Catalog::Star");
+    use_ok("Astro::Catalog::Item");
     use_ok("Astro::Catalog");
     use_ok("Astro::Catalog::Query::CMC");
 }

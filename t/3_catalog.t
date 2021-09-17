@@ -8,7 +8,7 @@ use Data::Dumper;
 
 BEGIN {
     use_ok "Astro::Catalog";
-    use_ok "Astro::Catalog::Star";
+    use_ok "Astro::Catalog::Item";
 }
 
 my @star;
@@ -44,7 +44,7 @@ my $col2 = new Astro::FluxColor(
 my $fluxes1 = new Astro::Fluxes($flux1, $flux2, $flux3, $col1, $col2);
 
 # create a star
-$star[0] = new Astro::Catalog::Star(
+$star[0] = new Astro::Catalog::Item(
         ID         => 'U1500_01194794',
         RA         => '09 55 39',
         Dec        => '+60 07 23.6',
@@ -86,7 +86,7 @@ my $col4 = new Astro::FluxColor(
 my $fluxes2 = new Astro::Fluxes($flux4, $flux5, $flux6, $col3, $col4);
 
 # create a star
-$star[1] = new Astro::Catalog::Star(
+$star[1] = new Astro::Catalog::Item(
         ID         => 'U1500_01194795',
         RA         => '10 44 57',
         Dec        => '+12 34 53.5',
@@ -97,7 +97,7 @@ $star[1] = new Astro::Catalog::Star(
         PosAngle   => '12.567',
         Field      => '00081');
 
-isa_ok($star[1], "Astro::Catalog::Star");
+isa_ok($star[1], "Astro::Catalog::Item");
 
 # Create Catalog Object
 my $catalog = new Astro::Catalog(

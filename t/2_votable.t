@@ -26,7 +26,7 @@ Astro::Coords::Angle::Hour->NDP(3);
 
 # load modules
 require_ok("Astro::Catalog");
-require_ok("Astro::Catalog::Star");
+require_ok("Astro::Catalog::Item");
 require_ok("Astro::VO::VOTable");
 
 # Load the generic test code
@@ -69,7 +69,7 @@ my $fluxes1 = new Astro::Fluxes($flux1, $flux2, $flux3, $col1, $col2);
 
 
 # create a star
-$star[0] = new Astro::Catalog::Star(
+$star[0] = new Astro::Catalog::Item(
         ID         => 'U1500_01194794',
         RA         => '09 55 39',
         Dec        => '+60 07 23.6',
@@ -80,7 +80,7 @@ $star[0] = new Astro::Catalog::Star(
         PosAngle   => '50.69',
         Field      => '00080');
 
-isa_ok($star[0], "Astro::Catalog::Star");
+isa_ok($star[0], "Astro::Catalog::Item");
 
 # STAR 2
 
@@ -113,7 +113,7 @@ my $col4 = new Astro::FluxColor(
 my $fluxes2 = new Astro::Fluxes($flux4, $flux5, $flux6, $col3, $col4);
 
 # create a star
-$star[1] = new Astro::Catalog::Star(
+$star[1] = new Astro::Catalog::Item(
         ID         => 'U1500_01194795',
         RA         => '10 44 57',
         Dec        => '+12 34 53.5',
@@ -124,7 +124,7 @@ $star[1] = new Astro::Catalog::Star(
         PosAngle   => '12.567',
         Field      => '00081');
 
-isa_ok($star[1], "Astro::Catalog::Star");
+isa_ok($star[1], "Astro::Catalog::Item");
 
 # Create Catalog Object
 
@@ -201,13 +201,13 @@ my $col6 = new Astro::FluxColor(
 my $fluxes3 = new Astro::Fluxes($flux7, $flux8, $flux9, $col5, $col6);
 
 # create a star
-$star2[0] = new Astro::Catalog::Star(
+$star2[0] = new Astro::Catalog::Item(
         ID         => 'U1500_01194794',
         RA         => '09 55 39',
         Dec        => '+60 07 23.6',
         Fluxes     => $fluxes3,
         Quality    => '0' );
-isa_ok($star2[0], "Astro::Catalog::Star");
+isa_ok($star2[0], "Astro::Catalog::Item");
 
 # STAR 4
 
@@ -235,14 +235,14 @@ my $col8 = new Astro::FluxColor(
 my $fluxes4 = new Astro::Fluxes($flux10, $flux11, $flux12, $col7, $col8);
 
 # create a star
-$star2[1] = new Astro::Catalog::Star(
+$star2[1] = new Astro::Catalog::Item(
         ID         => 'U1500_01194795',
         RA         => '10 44 57',
         Dec        => '+12 34 53.5',
         Fluxes     => $fluxes4,
         Quality    => '0');
 
-isa_ok($star2[1], "Astro::Catalog::Star");
+isa_ok($star2[1], "Astro::Catalog::Item");
 
 # Create Catalog Object
 

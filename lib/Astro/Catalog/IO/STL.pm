@@ -23,7 +23,7 @@ use Carp;
 use strict;
 
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 use Astro::Coords;
 
 use base qw/Astro::Catalog::IO::ASCII/;
@@ -159,8 +159,8 @@ sub _read_catalog {
             $name = $id;
         }
 
-        # Create a temporary Astro::Catalog::Star object.
-        my $star = new Astro::Catalog::Star();
+        # Create a temporary Astro::Catalog::Item object.
+        my $star = new Astro::Catalog::Item();
 
         # Do RA/Dec conversions to radians, if necessary.
         my $ra = Astro::Coords::Angle::Hour->new(
@@ -179,7 +179,7 @@ sub _read_catalog {
             units => 'radians',
         );
 
-        # And push it into the Astro::Catalog::Star object.
+        # And push it into the Astro::Catalog::Item object.
         $star->coords($coords);
 
         # Set default "good" quality.

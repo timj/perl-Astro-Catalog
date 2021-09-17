@@ -24,7 +24,7 @@ use Scalar::Util;
 use Carp;
 
 use Astro::Catalog;
-use Astro::Catalog::Star;
+use Astro::Catalog::Item;
 use Astro::Coords;
 
 use Astro::FluxColor;
@@ -98,7 +98,7 @@ sub _read_catalog {
             dec   => $objdec,
             name  => $star->id());
 
-        # and push it into the Astro::Catalog::Star object
+        # and push it into the Astro::Catalog::Item object
         $star->coords($coords);
 
         # x & y
