@@ -1,0 +1,12 @@
+^MYMETA\.
+^\.git
+~$
+^\..*\.swp$
+^_build
+^blib
+^Build$
+^MANIFEST\.SKIP$
+^MANIFEST\.SKIP\.bak$
+^MANIFEST\.bak$
+^Astro-Catalog-
+^old

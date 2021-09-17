@@ -71,6 +71,9 @@ my $build = Module::Build->new(
     build_requires => {
         'Test::More' => 0,
     },
+    script_files => [
+        'bin/catalog_convert',
+    ],
     etc_files => {
         'etc/skycat.cfg' => 'etc/skycat.cfg',
         'etc/sss.cfg' => 'etc/sss.cfg',

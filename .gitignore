@@ -1,8 +1,10 @@
 .#*
 *~
 .*.swp
+*.bak
 /Build
 /_build
 /blib
 /pm_to_blib
 /*META.*
+/Astro-Catalog-*
