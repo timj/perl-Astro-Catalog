@@ -48,7 +48,7 @@ use Astro::Fluxes;
 use Astro::FluxColor;
 use Number::Uncertainty;
 
-our $VERSION = '4.35';
+our $VERSION = '4.36';
 
 =begin __PRIVATE_METHODS__
 

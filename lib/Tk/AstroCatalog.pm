@@ -33,7 +33,7 @@ my @COLOR_LIST = (
     '#ff00ff', '#ffffff', '#ff5555', '#55ff55', '#55ffff', '#ffff55');
 my $COLOR_INDEX = 0;
 
-our $VERSION = '4.35';
+our $VERSION = '4.36';
 
 # Kluge - this is the format of the catalog to be read
 # Needs to be given as an option on the FileSelect widget.

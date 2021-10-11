@@ -32,7 +32,7 @@ use DateTime::Format::ISO8601;
 use POSIX qw/log10/;
 use base qw/Astro::Catalog::IO::Binary/;
 
-our $VERSION = '4.35';
+our $VERSION = '4.36';
 our $DEBUG = 0;
 
 =begin __PUBLIC_METHODS__

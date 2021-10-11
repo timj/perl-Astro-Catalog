@@ -25,7 +25,7 @@ use Astro::Catalog::Item;
 
 use parent qw/Astro::Catalog::IO::ASCII/;
 
-our $VERSION = '4.35';
+our $VERSION = '4.36';
 
 =head1 METHODS
 

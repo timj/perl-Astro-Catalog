@@ -29,7 +29,7 @@ use Carp;
 use Astro::Catalog;
 use Astro::Catalog::Item;
 
-our $VERSION = '4.35';
+our $VERSION = '4.36';
 
 =head1 METHODS
 

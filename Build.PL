@@ -33,7 +33,7 @@ my $build = Module::Build->new(
         'Alasdair Allan <aa@astro.ex.ac.uk>',
         'Tim Jenness <tjenness@cpan.org>',
     ],
-    dist_version => '4.35',
+    dist_version => '4.36',
     meta_merge => {
         resources =>  {
             repository => "git://github.com/timj/perl-Astro-Catalog.git",
@@ -63,6 +63,8 @@ my $build = Module::Build->new(
     recommends => {
         'Astro::FITS::CFITSIO'=> 1.03,
         'Astro::VO::VOTable' => 0.90,
+        'Astro::VEX' => 0,
+        'Text::CSV' => 0,
         'Tk' => 804.029,
     },
     configure_requires => {

@@ -27,7 +27,7 @@ use Astro::Catalog::Item;
 
 use base qw/Astro::Catalog::IO::ASCII/;
 
-our $VERSION = '4.35';
+our $VERSION = '4.36';
 our $DEBUG = 0;
 
 =begin __PRIVATE_METHODS__
