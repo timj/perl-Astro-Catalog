@@ -18,6 +18,7 @@ use Astro::VEX;
 use Astro::VEX::Block;
 use Astro::VEX::Def;
 use Astro::VEX::Param;
+use Astro::VEX::Param::String;
 
 use Astro::Catalog;
 use Astro::Catalog::Item;
@@ -65,7 +66,17 @@ sub _read_catalog {
 
     my @items;
     foreach my $source ($vex->block('SOURCE')->items) {
-        my $name = $source->name;
+        my $key_name = $source->name;
+        my $name = eval {$source->param('source_name')->value;};
+        if (defined $name) {
+            warnings::warnif 'WARNING: source_name ' . $name. ' does not match keyword ' . $key_name . "\n"
+                unless $name eq $source->name;
+        }
+        else {
+            $name = $key_name;
+            warnings::warnif 'WARNING: source_name missing, using keyword ' . $key_name . "\n"
+        }
+
         my $ra_str = $source->param('ra')->value;
         die "Did not understand RA '$ra_str' for '$name'" unless $ra_str =~ /^(\d+)h(\d+)m(\d+\.\d+)s$/;
         my $ra = "$1:$2:$3";
@@ -73,9 +84,6 @@ sub _read_catalog {
         die "Did not understand Dec '$dec_str' for '$name'" unless $dec_str =~ /^(-?\d+)d(\d+)'(\d+.\d+)"$/;
         my $dec = "$1:$2:$3";
         die 'Coordinate system not J2000' unless $source->param('ref_coord_frame')->value eq 'J2000';
-
-        warnings::warnif 'WARNING: source names do not match for ' . $name ."\n"
-            unless $name eq $source->param('source_name')->value;
 
         my $coords = new Astro::Coords(
             name => $name,
@@ -87,7 +95,7 @@ sub _read_catalog {
         $coords->telescope($tel) if defined $tel;
 
         push @items, new Astro::Catalog::Item(
-            id => $source->name,
+            id => $name,
             coords => $coords,
         );
     }
@@ -113,6 +121,9 @@ sub _write_catalog {
         my $name = $coords->name;
         my $type = $coords->type;
 
+        # Remove problematic characters from name.
+        $name =~ s/[^-!#%'()+,\.\/0-9<>?\@A-Z\[\\\]^_`a-z{|}~]/_/g;
+
         if ($type eq 'RADEC') {
             my $ra = $coords->ra->components(7);
             die 'RA array not in expected format' unless $ra->[0] eq '+' && 4 == scalar @$ra;
@@ -122,10 +133,10 @@ sub _write_catalog {
             $dec->[0] = '' if $dec->[0] eq '+';
 
             push @sources, new Astro::VEX::Def($name, [
-                new Astro::VEX::Param('source_name', [$name]),
-                new Astro::VEX::Param('ra', [sprintf('%02dh%02dm%010.7fs', @$ra)]),
-                new Astro::VEX::Param('dec', [sprintf('%s%02dd%02d\'%09.6f"', @$dec)]),
-                new Astro::VEX::Param('ref_coord_frame', ['J2000']),
+                new Astro::VEX::Param('source_name', [new Astro::VEX::Param::String($name)]),
+                new Astro::VEX::Param('ra', [new Astro::VEX::Param::String(sprintf('%02dh%02dm%010.7fs', @$ra))]),
+                new Astro::VEX::Param('dec', [new Astro::VEX::Param::String(sprintf('%s%02dd%02d\'%09.6f"', @$dec))]),
+                new Astro::VEX::Param('ref_coord_frame', [new Astro::VEX::Param::String('J2000')]),
             ]);
         }
         else {
