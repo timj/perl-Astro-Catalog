@@ -192,6 +192,10 @@ Supported options (with defaults) are:
 
 =over 4
 
+=item incheader
+
+Add a comment header to the start of the catalog.  [default: true]
+
 =item removeduplicates
 
 Check for duplicates.  Remove if the coordinates match.  Add suffix
@@ -207,6 +211,7 @@ sub _write_catalog {
 
     # Default options
     my %defaults = (
+        incheader => 1,
         removeduplicates => 1,
     );
 
@@ -411,12 +416,14 @@ sub _write_catalog {
     # Output array for new catalog lines
     my @lines;
 
-    # Write a header
-    push @lines, "*\n";
-    push @lines, "* Catalog written automatically by class ". __PACKAGE__ ."\n";
-    push @lines, "* on date " . gmtime . "UT\n";
-    push @lines, "* Origin of catalogue: ". $cat->origin ."\n";
-    push @lines, "*\n";
+    if ($options{'incheader'}) {
+        # Write a header
+        push @lines, "*\n";
+        push @lines, "* Catalog written automatically by class ". __PACKAGE__ ."\n";
+        push @lines, "* on date " . gmtime . "UT\n";
+        push @lines, "* Origin of catalogue: ". $cat->origin ."\n";
+        push @lines, "*\n";
+    }
 
     # Now need to go through the targets and write them to disk
     for my $src (@processed) {
