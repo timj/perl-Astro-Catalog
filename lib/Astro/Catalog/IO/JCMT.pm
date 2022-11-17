@@ -346,10 +346,7 @@ sub _write_catalog {
                 # This is the same target so we can ignore it
             }
             else {
-                # Make up a new name. Use the unknown counter for this since
-                # we probably have not used it before. Probably not the best
-                # approach and might have problems in edge cases but good
-                # enough for now
+                # Make up a new name. Use a counter for this.
                 my $oldname = $srcdata{name};
 
                 # loop for 100 times
@@ -358,19 +355,14 @@ sub _write_catalog {
                     # protection loop
                     $count++;
 
-                    # Try to construct a new name based on a global counter
-                    # rather than a counter that starts at 1 for each root
-                    my $suffix = "_$unk";
-
-                    # increment $unk for next try
-                    $unk++;
+                    # Try to construct a new name based on the counter.
+                    my $suffix = "_$count";
 
                     # Abort if we have gone round too many times
-                    # Making sure that $unk is incremented first
                     if ($count > 100) {
                         $srcdata{name} = substr($oldname, 0, int(MAX_SRC_LENGTH / 2)) .
                             int(rand(10000) + 1000);
-                        warn "Uncontrollable looping (or unfeasibly large number of duplicate sources with different coordinates). Panicked and generated random source name of $srcdata{name}.\n";
+                        warn "Uncontrollable looping (or unfeasibly large number of duplicate sources with different coordinates). Panicked and generated random source name of $srcdata{name}\n";
                         last;
                     }
 
@@ -391,15 +383,15 @@ sub _write_catalog {
                     my $newname = $root . $suffix;
 
                     # check to see if this name is in the existing target list
-                    next if exists $allnames{$newname};
-
-                    # Store it in the targets array and exit loop
-                    $srcdata{name} = $newname;
-                    last;
+                    unless ((exists $allnames{$newname}) or (exists $targets{$newname})) {
+                        # Store it in the targets array and exit loop
+                        $srcdata{name} = $newname;
+                        last;
+                    }
                 }
 
                 # different target
-                warn "Found target with the same name [$oldname] but with different coordinates, renaming it to $srcdata{name}!\n";
+                warn "Found target with the same name [$oldname] but with different coordinates, renaming it to $srcdata{name}\n";
 
                 $targets{$srcdata{name}} = \%srcdata;
 
