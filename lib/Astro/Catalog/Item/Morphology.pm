@@ -2,7 +2,7 @@ package Astro::Catalog::Item::Morphology;
 
 =head1 NAME
 
-Astro::Catalog::Item::Morphology - Information about a star's morphology.
+Astro::Catalog::Item::Morphology - Information about a star's morphology
 
 =head1 SYNOPSIS
 

@@ -2,7 +2,7 @@ package Astro::Catalog::IO::ASCII;
 
 =head1 NAME
 
-Astro::Catalog::IO::ASCII - base class for ASCII-based catalogs.
+Astro::Catalog::IO::ASCII - base class for ASCII-based catalogs
 
 =head1 SYNOPSIS
 

@@ -2,7 +2,7 @@ package Astro::Catalog::Item;
 
 =head1 NAME
 
-Astro::Catalog::Item - A generic star object in a stellar catalog.
+Astro::Catalog::Item - A generic star object in a stellar catalog
 
 =head1 SYNOPSIS
 
