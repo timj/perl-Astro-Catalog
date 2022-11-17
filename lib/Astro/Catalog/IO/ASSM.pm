@@ -43,7 +43,7 @@ call them from outside that module.
 
 =item B<_read_catalog>
 
-Parses a reference to an array containing a simply formatted catalogue
+Parses a reference to an array containing a simply formatted catalog
 
     $catalog = Astro::Catalog::IO::ASSM->_read_catalog(\@lines);
 

@@ -27,7 +27,7 @@ use Config;
 # Set it up.
 my $build = Module::Build->new(
     module_name => 'Astro::Catalog',
-    dist_abstract => "A generic astronomical catalogue class",
+    dist_abstract => "A generic astronomical catalog class",
     license  => 'gpl2',
     author => [
         'Alasdair Allan <aa@astro.ex.ac.uk>',

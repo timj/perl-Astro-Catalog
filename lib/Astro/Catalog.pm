@@ -2,7 +2,7 @@ package Astro::Catalog;
 
 =head1 NAME
 
-Astro::Catalog - A generic API for stellar catalogues
+Astro::Catalog - A generic API for stellar catalogs
 
 =head1 SYNOPSIS
 
@@ -14,16 +14,16 @@ Astro::Catalog - A generic API for stellar catalogues
 
 =head1 DESCRIPTION
 
-Stores generic meta-data about an astronomical catalogue. Takes a hash
+Stores generic meta-data about an astronomical catalog. Takes a hash
 with an array reference as an argument. The array should contain a list
-of Astro::Catalog::Item objects. Alternatively it takes a catalogue
-format and either the name of a catalogue file or a reference to a
+of Astro::Catalog::Item objects. Alternatively it takes a catalog
+format and either the name of a catalog file or a reference to a
 scalar, glob or array.
 
 =head1 FORMATS
 
 For input the C<Astro::Catalog> module understands Cluster, Simple,
-JCMT, TST, STL, GaiaPick, the UKIRT internal Bright Star catalogue
+JCMT, TST, STL, GaiaPick, the UKIRT internal Bright Star catalog
 format and (a very simple parsing) of VOTable.
 
 The module can output all of these formats except TST (which is input only).
@@ -97,7 +97,7 @@ sub new {
 
 =item B<write_catalog>
 
-Will serialise the catalogue object in a variety of file formats using
+Will serialise the catalog object in a variety of file formats using
 pluggable IO, see the C<Astro::Catalog::IO> classes
 
     $catalog->write_catalog(
@@ -113,7 +113,7 @@ The File argument can refer to a file name on disk (simple scalar),
 a glob (eg \*STDOUT), an IO::Handle object (for example something
 returned by the File::Temp constructor) a reference to a scalar
 (\$content) or reference to an array. For the last two options,
-the contents of the catalogue file are stored in the scalar or in
+the contents of the catalog file are stored in the scalar or in
 the array (a line per array entry with no new lines).
 
 =cut
@@ -155,7 +155,7 @@ sub write_catalog {
 =item B<origin>
 
 Return (or set) the origin of the data. For example, USNOA2, GSC
-for catalogue queries, or 'JCMT' for the JCMT pointing catalogue.
+for catalog queries, or 'JCMT' for the JCMT pointing catalog.
 No constraint is placed on the content of this parameter.
 
     $catalog->origin('JCMT');
@@ -207,7 +207,7 @@ sub preferred_magnitude_type {
 
 =item B<sizeof>
 
-Return the number of stars in the catalogue (post filter).
+Return the number of stars in the catalog (post filter).
 
     $num = $catalog->sizeof();
 
@@ -220,7 +220,7 @@ sub sizeof {
 
 =item B<sizeoffull>
 
-Returns the total number of stars in the catalogue without filtering.
+Returns the total number of stars in the catalog without filtering.
 
 =cut
 
@@ -447,7 +447,7 @@ sub starbyindex {
 
 =item B<fieldcentre>
 
-Set the field centre and radius of the catalogue (if appropriate)
+Set the field centre and radius of the catalog (if appropriate)
 
     $catalog->fieldcentre(
         RA     => $ra,
@@ -533,7 +533,7 @@ sub get_coords {
 
 =item B<get_ra>
 
-Return the RA of the catalogue field centre in sexagesimal,
+Return the RA of the catalog field centre in sexagesimal,
 space-separated format. Returns undef if no coordinate supplied.
 
     $ra = $catalog->get_ra();
@@ -560,7 +560,7 @@ sub get_ra {
 
 =item B<get_dec>
 
-Return the Dec of the catalogue field centre in sexagesimal
+Return the Dec of the catalog field centre in sexagesimal
 space-separated format with leading sign.
 
     $dec = $catalog->get_dec();
@@ -591,7 +591,7 @@ sub get_dec {
 
 =item B<get_radius>
 
-Return the radius of the catalogue from the field centre
+Return the radius of the catalog from the field centre
 
     $radius = $catalog->get_radius();
 
@@ -771,13 +771,13 @@ are:
 
     Format => Format of supplied catalog
     File => File name for catalog on disk. Not used if 'Data' supplied.
-    Data => Contents of catalogue, either as a scalar variable,
+    Data => Contents of catalog, either as a scalar variable,
             reference to array of lines or reference to glob (file handle).
             This key is used in preference to 'File' if both are present
 
     Stars => Array of Astro::Catalog::Item objects. Supercedes all other options.
     ReadOpt => Reference to hash of options to be forwarded onto the
-               format specific catalogue reader. See the IO documentation
+               format specific catalog reader. See the IO documentation
                for details.
 
 If Format is supplied without any other options, a default file is requested
@@ -789,7 +789,7 @@ be supplying stars at a later time.
 
 The options are case-insensitive.
 
-Note that in some cases (when reading a catalogue) this method will
+Note that in some cases (when reading a catalog) this method will
 act as a constructor. In any case, always returns a catalog object
 (either the same one that went in or a modified one).
 
@@ -818,7 +818,7 @@ sub configure {
         $args{format} = 'Cluster';
     }
 
-    # Define the actual catalogue
+    # Define the actual catalog
 
     # Stars has priority
     if (defined $args{stars}) {
@@ -875,7 +875,7 @@ sub configure {
 
 =item B<reset_list>
 
-Forces the star list to return to the original unsorted, unfiltered catalogue
+Forces the star list to return to the original unsorted, unfiltered catalog
 list.
 
     $catalog->reset_list();
@@ -902,7 +902,7 @@ sub reset_list {
 
 Force the specified reference time into the coordinate object
 associated with each star (in the current list). This ensures that
-calculations on the catalogue entries are all calculated for the same
+calculations on the catalog entries are all calculated for the same
 time.
 
     $catalog->force_ref_time();
@@ -978,7 +978,7 @@ cumulative.
 
 =item B<filter_by_observability>
 
-Generate a filtered catalogue where only those targets that are
+Generate a filtered catalog where only those targets that are
 observable are present (assumes that the current state of the
 coordinate objects is correct but will use the reference time returned
 by C<reftime>).  ie the object is returned to its original state and
@@ -1115,10 +1115,10 @@ sub filter_by_cb {
 
 =head2 Sorting
 
-The following routines are available for sorting the star catalogue.
+The following routines are available for sorting the star catalog.
 The sort applies to the current source list and not the original source list.
 This is the case even if no filters have been applied (ie the original
-unsorted catalogue is always available).
+unsorted catalog is always available).
 
 =over 4
 

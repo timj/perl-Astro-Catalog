@@ -69,7 +69,7 @@ constructor.
 =item B<_read_catalog>
 
 Parses the binary FITS table and returns a new C<Astro::Catalog> object
-containing the catalogue entries.
+containing the catalog entries.
 
     $cat = Astro::Catalog::IO::FITSTable->_read_catalog($whatever);
 

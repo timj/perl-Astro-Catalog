@@ -589,7 +589,7 @@ sub makeCatalog {
             $catEnt->delete('0', 'end');
             $catEnt->insert('0', $file);
 
-            # Get the current catalogue properties [should be a sub]
+            # Get the current catalog properties [should be a sub]
             my $oldcat = $self->Catalog;
             my ($refc, $canobs);
             if (defined $oldcat) {
@@ -622,7 +622,7 @@ sub makeCatalog {
         -width => 37
     )->pack(-side => 'left', -padx => 10);
     $catEnt->bind('<KeyPress-Return>' => sub {
-        # Get the current catalogue properties [should be a sub]
+        # Get the current catalog properties [should be a sub]
         my $oldcat = $self->Catalog;
         my ($refc, $canobs);
         if (defined $oldcat) {

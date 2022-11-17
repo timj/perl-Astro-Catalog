@@ -2,7 +2,7 @@ package Astro::Catalog::IO::JCMT;
 
 =head1 NAME
 
-Astro::Catalog::IO::JCMT - JCMT catalogue I/O for Astro::Catalog
+Astro::Catalog::IO::JCMT - JCMT catalog I/O for Astro::Catalog
 
 =head1 SYNOPSIS
 
@@ -12,8 +12,8 @@ Astro::Catalog::IO::JCMT - JCMT catalogue I/O for Astro::Catalog
 
 =head1 DESCRIPTION
 
-This class provides read and write methods for catalogues in the JCMT
-pointing catalogue format. The methods are not public and should, in general,
+This class provides read and write methods for catalogs in the JCMT
+pointing catalog format. The methods are not public and should, in general,
 only be called from the C<Astro::Catalog> C<write_catalog> and C<read_catalog>
 methods.
 
@@ -40,7 +40,7 @@ use constant MAX_SRC_LENGTH => 15;
 # Default location for a JCMT catalog
 my $defaultCatalog = "/local/progs/etc/poi.dat";
 
-# Planets appended to the catalogue
+# Planets appended to the catalog
 my @PLANETS = qw/mercury mars uranus saturn jupiter venus neptune/;
 
 =over 4
@@ -51,9 +51,9 @@ Method to take a general target name and clean it up
 so that it is suitable for writing in a JCMT source catalog.
 This routine is used by the catalog writing code but can also
 be used publically in order to make sure that a target name
-to be written to the catalogue is guaranteed to match that used
+to be written to the catalog is guaranteed to match that used
 in another location (e.g. when writing an a document to accompany
-the catalogue which refers to targets within it).
+the catalog which refers to targets within it).
 
 The source name can be truncated.
 
@@ -89,9 +89,9 @@ sub clean_target_name {
 
 =item B<_default_file>
 
-Returns the location of the default JCMT pointing catalogue at the
+Returns the location of the default JCMT pointing catalog at the
 JCMT itself. This is purely for convenience of the caller when they
-are at the JCMT and wish to use the default catalogue without having
+are at the JCMT and wish to use the default catalog without having
 to know explicitly where it is.
 
     $filename = Astro::Catalog::IO::JCMT->_default_file();
@@ -112,7 +112,7 @@ sub _default_file {
 
 =item B<_read_catalog>
 
-Parses the catalogue lines and returns a new C<Astro::Catalog>
+Parses the catalog lines and returns a new C<Astro::Catalog>
 object containing the catalog entries.
 
     $cat = Astro::Catalog::IO::JCMT->_read_catalog(\@lines, %options);
@@ -123,7 +123,7 @@ Supported options (with defaults) are:
                  (defaults to JCMT). If the telescope option is specified
                  but is undef or empty string, no telescope is used.
 
-    incplanets => Append planets to catalogue entries (default is true)
+    incplanets => Append planets to catalog entries (default is true)
 
 =cut
 
@@ -138,7 +138,7 @@ sub _read_catalog {
 
     my %options = (%defaults, @_);
 
-    croak "Must supply catalogue contents as a reference to an array"
+    croak "Must supply catalog contents as a reference to an array"
         unless ref($lines) eq 'ARRAY';
 
     # Create a new telescope to associate with this
@@ -330,7 +330,7 @@ sub _write_catalog {
         # See if we already have this source and that it is really the
         # same source Note that we do not see whether this name is the
         # same as one of the derived names. Eg if CRL618 is in the
-        # pointing catalogue 3 times with identical coords and we add a
+        # pointing catalog 3 times with identical coords and we add a
         # new CRL618 with different coords then we trigger 3 warning
         # messages rather than 1 because we do not check that CRL618_2 is
         # the same as CRL618_1
@@ -421,7 +421,7 @@ sub _write_catalog {
         push @lines, "*\n";
         push @lines, "* Catalog written automatically by class ". __PACKAGE__ ."\n";
         push @lines, "* on date " . gmtime . "UT\n";
-        push @lines, "* Origin of catalogue: ". $cat->origin ."\n";
+        push @lines, "* Origin of catalog: ". $cat->origin ."\n";
         push @lines, "*\n";
     }
 
@@ -468,7 +468,7 @@ sub _write_catalog {
 
 =item B<_parse_line>
 
-Parse a line from a JCMT format catalogue and return a corresponding
+Parse a line from a JCMT format catalog and return a corresponding
 C<Astro::Catalog::Item> object. Returns empty list if the line can not
 be parsed or refers to a comment line (so that map can be used in the
 caller).
@@ -662,7 +662,7 @@ The following constants are available for querying:
 
 =item MAX_SRC_LENGTH
 
-The maximum length of sourcenames writable to a JCMT source catalogue.
+The maximum length of sourcenames writable to a JCMT source catalog.
 
 =back
 

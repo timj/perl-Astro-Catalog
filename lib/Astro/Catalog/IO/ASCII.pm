@@ -2,7 +2,7 @@ package Astro::Catalog::IO::ASCII;
 
 =head1 NAME
 
-Astro::Catalog::IO::ASCII - base class for ASCII-based catalogues.
+Astro::Catalog::IO::ASCII - base class for ASCII-based catalogs.
 
 =head1 SYNOPSIS
 
@@ -10,7 +10,7 @@ Astro::Catalog::IO::ASCII - base class for ASCII-based catalogues.
 
 =head1 DESCRIPTION
 
-This class provides a wrapper for reading ASCII-based catalogues
+This class provides a wrapper for reading ASCII-based catalogs
 into C<Astro::Catalog> objects. The method should, in general, only
 be called from the C<Astro::Catalog> C<configure> method.
 
@@ -37,7 +37,7 @@ Read the catalog.
 Takes a hash as argument with the list of keywords. Supported options
 are:
 
-    Data => Contents of catalogue, either as a scalar variable,
+    Data => Contents of catalog, either as a scalar variable,
             reference to array of lines or reference to glob (file handle).
             This key is used in preference to 'File' if both are present.
 
@@ -46,7 +46,7 @@ are:
             for the class is used.
 
     ReadOpt => Reference to hash of options to be forwarded onto the
-               format specific catalogue reader. See the IO documentation
+               format specific catalog reader. See the IO documentation
                for details.
 
 The options are case-insensitive.
@@ -96,13 +96,13 @@ sub read_catalog {
         else {
             # Need to ask for the default file
             $file = $class->_default_file() if $class->can('_default_file');
-            croak "Unable to read catalogue since no file specified and no default known."
+            croak "Unable to read catalog since no file specified and no default known."
                 unless defined $file;
         }
 
         # Open the file
         my $CAT;
-        croak("Astro::Catalog - Cannot open catalogue file $file: $!")
+        croak("Astro::Catalog - Cannot open catalog file $file: $!")
             unless open($CAT, "< $file");
 
         # read from file
@@ -177,7 +177,7 @@ sub write_catalog {
             autoflush $file 1; # We need to make sure we write the lines
         }
         else {
-            croak "Can not write catalogue to reference of type ".
+            croak "Can not write catalog to reference of type ".
                 ref($file)."\n";
         }
     }

@@ -1,7 +1,7 @@
 #!perl
 
-# Make sure we can read a JCMT format catalogue. In this case
-# it is the pointing catalogue.
+# Make sure we can read a JCMT format catalog. In this case
+# it is the pointing catalog.
 
 # Author: Tim Jenness (tjenness@cpan.org)
 # Copyright (C) 2003-2005 Particle Physics and Astronomy Research Council
@@ -13,7 +13,7 @@ use Test::More tests => 1772;
 require_ok('Astro::Catalog::Item');
 require_ok('Astro::Catalog');
 
-# Create a new catalogue from the DATA handle
+# Create a new catalog from the DATA handle
 my $cat = new Astro::Catalog(Format => 'JCMT', Data => \*DATA);
 
 isa_ok($cat, "Astro::Catalog");
