@@ -148,6 +148,35 @@ sub read_catalog {
     return $catalog;
 }
 
+=item B<write_catalog>
+
+Write the catalog.
+
+    $ioclass->write_catalog($catalog, %args);
+
+Takes a hash as argument with the list of keywords. Supported options
+are:
+
+    File => File name for catalog on disk.
+
+The options are case-insensitive.  Other options are forwarded
+to the format-specific catalog writer.
+
+=cut
+
+sub write_catalog {
+    my $class = shift;
+    my $catalog = shift;
+
+    my %args = @_;
+    %args = Astro::Catalog::_normalize_hash(%args);
+
+    my $file = $args{file};
+    delete $args{file};
+
+    croak "Not yet implemented.";
+}
+
 1;
 
 __END__

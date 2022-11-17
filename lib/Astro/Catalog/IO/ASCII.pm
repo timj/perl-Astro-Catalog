@@ -122,6 +122,88 @@ sub read_catalog {
     return $catalog;
 }
 
+=item B<write_catalog>
+
+Write the catalog.
+
+    $ioclass->write_catalog($catalog, %args);
+
+Takes a hash as argument with the list of keywords. Supported options
+are:
+
+    File => File name for catalog on disk.
+
+The options are case-insensitive.  Other options are forwarded
+to the format-specific catalog writer.
+
+=cut
+
+sub write_catalog {
+    my $class = shift;
+    my $catalog = shift;
+
+    my %args = @_;
+    %args = Astro::Catalog::_normalize_hash(%args);
+
+    my $file = $args{file};
+    delete $args{file};
+
+    my $lines = $class->_write_catalog($catalog, %args);
+
+    # Play it defensively - make sure we add the newlines
+    chomp @$lines;
+
+    # If we have a reference then we do not need to open or close
+    # files - simpler to deal with each case in turn. This has the
+    # side effect of repeating the join() in 3 separate places.
+    # Probably better than creating a large scalar for the one time
+    # when we do not need it.
+
+    my $retval = 1;
+    if (ref($file)) {
+        # If we are storing in a reference to a scalar or reference
+        # to an array, just do the copy and return early. We do not
+        if (ref($file) eq 'SCALAR') {
+            # Copy single string to scalar
+            $$file = join("\n", @$lines) ."\n";
+        }
+        elsif (ref($file) eq 'ARRAY') {
+            # Just copy the lines into the output array
+            @$file = @$lines;
+        }
+        elsif (ref($file) eq 'GLOB' || $file->can("print") ) {
+            # GLOB - so print the full string to the file handle and flush
+            $retval = print $file join("\n", @$lines) ."\n";
+            autoflush $file 1; # We need to make sure we write the lines
+        }
+        else {
+            croak "Can not write catalogue to reference of type ".
+                ref($file)."\n";
+        }
+    }
+    else {
+        # A file name
+        my $status = open my $fh, ">$file";
+        unless ($status) {
+            $catalog->errstr(__PACKAGE__ .": Error creating catalog file $file: $!" );
+            return;
+        }
+
+        # write to file
+        $retval = print $fh join("\n", @$lines) ."\n";
+
+        # close file
+        $status = close($fh);
+        unless ($status) {
+            $catalog->errstr(__PACKAGE__.": Error closing catalog file $file: $!");
+            return;
+        }
+    }
+
+    # everything okay
+    return $retval;
+}
+
 1;
 
 __END__

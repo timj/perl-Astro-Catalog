@@ -128,12 +128,8 @@ sub write_catalog {
     %args = _normalize_hash(%args);
 
     # unless we have a Filename forget it...
-    my $file;
     unless($args{file}) {
         croak('Usage: _write_catalog( File => $catalog, Format => $format');
-    }
-    else {
-        $file = $args{file};
     }
 
     # default to cluster format if no filenames supplied
@@ -144,64 +140,10 @@ sub write_catalog {
     return unless defined $ioclass;
 
     # remove the two handled hash options and pass the rest
-    delete $args{file};
     delete $args{format};
 
-    # call the io plugin's _write_catalog function
-    my $lines = $ioclass->_write_catalog($self, %args);
-
-    # Play it defensively - make sure we add the newlines
-    chomp @$lines;
-
-    # If we have a reference then we do not need to open or close
-    # files - simpler to deal with each case in turn. This has the
-    # side effect of repeating the join() in 3 separate places.
-    # Probably better than creating a large scalar for the one time
-    # when we do not need it.
-
-    my $retval = 1;
-    if (ref($file)) {
-        # If we are storing in a reference to a scalar or reference
-        # to an array, just do the copy and return early. We do not
-        if (ref($file) eq 'SCALAR') {
-            # Copy single string to scalar
-            $$file = join("\n", @$lines) ."\n";
-        }
-        elsif (ref($file) eq 'ARRAY') {
-            # Just copy the lines into the output array
-            @$file = @$lines;
-        }
-        elsif (ref($file) eq 'GLOB' || $file->can("print") ) {
-            # GLOB - so print the full string to the file handle and flush
-            $retval = print $file join("\n", @$lines) ."\n";
-            autoflush $file 1; # We need to make sure we write the lines
-        }
-        else {
-            croak "Can not write catalogue to reference of type ".
-                ref($file)."\n";
-        }
-    }
-    else {
-        # A file name
-        my $status = open my $fh, ">$file";
-        unless ($status) {
-            $self->errstr(__PACKAGE__ .": Error creating catalog file $file: $!" );
-            return;
-        }
-
-        # write to file
-        $retval = print $fh join("\n", @$lines) ."\n";
-
-        # close file
-        $status = close($fh);
-        unless ($status) {
-            $self->errstr(__PACKAGE__.": Error closing catalog file $file: $!");
-            return;
-        }
-    }
-
-    # everything okay
-    return $retval;
+    # call the io plugin's write_catalog function
+    return $ioclass->write_catalog($self, %args);
 }
 
 =back
