@@ -183,16 +183,34 @@ sub _read_catalog {
 Write the catalog to an array and return it. Returning a reference to
 an array provides more flexibility to the caller.
 
-    $ref = Astro::Catalog::IO::JCMT->_write_catalog($cat);
+    $ref = Astro::Catalog::IO::JCMT->_write_catalog($cat, %options);
 
 Spaces are removed from source names. The contents of the catalog
 are sanity checked.
+
+Supported options (with defaults) are:
+
+=over 4
+
+=item removeduplicates
+
+Check for duplicates.  Remove if the coordinates match.  Add suffix
+to disambiguate otherwise.  [default: true]
+
+=back
 
 =cut
 
 sub _write_catalog {
     my $class = shift;
     my $cat = shift;
+
+    # Default options
+    my %defaults = (
+        removeduplicates => 1,
+    );
+
+    my %options = (%defaults, @_);
 
     # Would make more sense to use the array ref here
     my @sources = $cat->stars;
@@ -314,7 +332,7 @@ sub _write_catalog {
 
         # Note that velocity specification is included in this comparison
 
-        if (exists $targets{$srcdata{name}}) {
+        if ($options{'removeduplicates'} and exists $targets{$srcdata{name}}) {
             my $previous = $targets{$srcdata{name}};
 
             # Create stringified form of previous coordinate with same name
