@@ -125,6 +125,8 @@ Supported options (with defaults) are:
 
     incplanets => Append planets to catalog entries (default is true)
 
+    inccomments => Read comment lines into misc entries (default: false)
+
 =cut
 
 sub _read_catalog {
@@ -134,7 +136,9 @@ sub _read_catalog {
     # Default options
     my %defaults = (
         telescope => 'JCMT',
-        incplanets => 1);
+        incplanets => 1,
+        inccomments => 0,
+    );
 
     my %options = (%defaults, @_);
 
@@ -148,7 +152,13 @@ sub _read_catalog {
 
     # Go through each line and parse it
     # and store in the array if we had a successful read
-    my @stars = map {$class->_parse_line($_, $tel);} @$lines;
+    my $parse_buff = $options{'inccomments'} ? {} : undef;
+    my @stars = map {$class->_parse_line($_, $tel, $parse_buff);} @$lines;
+
+    $stars[-1]->misc->{'_jcmt_com_after'} = delete $parse_buff->{'comments'}
+        if ((defined $parse_buff)
+            and (scalar @stars)
+            and (exists $parse_buff->{'comments'}));
 
     # Add planets if required
     if ($options{incplanets}) {
@@ -275,6 +285,10 @@ sub _write_catalog {
         else {
             $srcdata{vrange} = "n/a";
             $srcdata{flux850} = "n/a";
+        }
+
+        foreach (qw/_jcmt_com_before _jcmt_com_after/) {
+            $srcdata{$_} = $misc->{$_} if exists $misc->{$_};
         }
 
         # Get the type of source
@@ -427,6 +441,10 @@ sub _write_catalog {
 
     # Now need to go through the targets and write them to disk
     for my $src (@processed) {
+        if (exists $src->{'_jcmt_com_before'}) {
+            push @lines, '*' . $_ foreach @{$src->{'_jcmt_com_before'}};
+        }
+
         my $name    = $src->{name};
         my $long    = $src->{long};
         my $lat     = $src->{lat};
@@ -461,6 +479,10 @@ sub _write_catalog {
         push @lines, sprintf(
             "%-" . MAX_SRC_LENGTH .  "s %02d %02d %06.3f %1s %02d %02d %05.2f %2s  %s %5s  %5s  %-4s %s %s\n",
             $name, @$long, @$lat, $system, $rv, $flux850, $vrange, $vframe, $vdefn, $comment);
+
+        if (exists $src->{'_jcmt_com_after'}) {
+            push @lines, '*' . $_ foreach @{$src->{'_jcmt_com_after'}};
+        }
     }
 
     return \@lines;
@@ -473,11 +495,14 @@ C<Astro::Catalog::Item> object. Returns empty list if the line can not
 be parsed or refers to a comment line (so that map can be used in the
 caller).
 
-    $star = Astro::Catalog::IO::JCMT->_parse_line($line, $tel);
+    $star = Astro::Catalog::IO::JCMT->_parse_line($line, $tel, \%status_buffer);
 
 where C<$line> is the line to be parsed and (optional) C<$tel>
 is an C<Astro::Telescope> object to be associated with the
 coordinate objects.
+
+A reference to a hash can be provided to track parsing status between lines.
+This is currently used to store comments read from the catalog.
 
 The line is parsed using a pattern match.
 
@@ -487,11 +512,15 @@ sub _parse_line {
     my $class = shift;
     my $line = shift;
     my $tel = shift;
+    my $parse_buff = shift;
     chomp $line;
 
     # Skip commented and blank lines
-    return if ($line =~ /^\s*[\*\%]/);
     return if ($line =~ /^\s*$/);
+    if ($line =~ s/^\s*[\*\%]//) {
+        push @{$parse_buff->{'comments'}}, $line if $parse_buff;
+        return;
+    }
 
     # Use a pattern match parser
     my @match = ($line =~ m/
@@ -617,6 +646,9 @@ sub _parse_line {
     if (defined $match[9] && $match[9] !~ /n\/a/) {
         $misc{'flux850'} = $match[9];
     }
+
+    $misc{'_jcmt_com_before'} = delete $parse_buff->{'comments'}
+        if exists $parse_buff->{'comments'};
 
     print "Created a new source in _parse_line: $target in field $field\n" if $DEBUG;
 
