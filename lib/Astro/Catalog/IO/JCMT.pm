@@ -460,16 +460,7 @@ sub _write_catalog {
 
         # Velocity can not easily be done with a sprintf since it can be either
         # a string or a 2 column number
-        if (lc($rv) eq 'n/a') {
-            $rv = '  n/a   ';
-        }
-        else {
-            my $sign = ($rv >= 0 ? '+' : '-');
-            my $val  = $rv;
-            $val =~ s/^\s*[+-]\s*//;
-            $val =~ s/\s*$//;
-            $rv = $sign . ' ' . sprintf('%6.1f',$val);
-        }
+        $rv  = _format_value($rv, '%6.1f', '  n/a   ', 1);
 
         # Name must be limited to MAX_SRC_LENGTH characters
         # [this should be taken care of by clean_target_name but
@@ -486,6 +477,29 @@ sub _write_catalog {
     }
 
     return \@lines;
+}
+
+=item B<_format_value>
+
+Format a value for inclusion in a JCMT format catalog.
+
+=cut
+
+sub _format_value {
+    my ($val, $fmt, $na, $signed) = @_;
+
+    if (lc($val) eq 'n/a') {
+        return $na;
+    }
+
+    my $sign = ($val >= 0 ? '+' : '-');
+    $val =~ s/^\s*[+-]\s*//;
+    $val =~ s/\s*$//;
+    unless ($signed) {
+        warnings::warnif "Unsigned value is negative" unless $sign eq '+';
+        return sprintf($fmt, $val);
+    }
+    return $sign . ' ' . sprintf($fmt, $val);
 }
 
 =item B<_parse_line>
