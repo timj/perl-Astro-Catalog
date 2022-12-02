@@ -272,6 +272,11 @@ sub _write_catalog {
         $srcdata{vdefn}  = 'RADIO';
         $srcdata{vframe} = 'LSR';
 
+        # Default proper motion and parallax.
+        $srcdata{'pm1'} = 'n/a';
+        $srcdata{'pm2'} = 'n/a';
+        $srcdata{'parallax'} = 'n/a';
+
         # Get the miscellaneous data.
         my $misc = $star->misc;
         if (defined $misc) {
@@ -297,8 +302,8 @@ sub _write_catalog {
             $srcdata{system} = "RJ";
 
             # Need to get the space separated RA/Dec and the sign
-            $srcdata{long} = $src->ra(format => 'array');
-            $srcdata{lat} = $src->dec(format => 'array');
+            $srcdata{long} = $src->ra2000(format => 'array');
+            $srcdata{lat} = $src->dec2000(format => 'array');
 
             # Get the velocity information
             my $rv = $src->rv;
@@ -310,6 +315,20 @@ sub _write_catalog {
                 # JCMT compatibility
                 $srcdata{vframe} = "LSR" if $srcdata{vframe} eq 'LSRK';
 
+            }
+
+            my $parallax = $src->parallax;
+            my @pm = $src->pm;
+            if (scalar @pm) {
+                if (not $parallax) {
+                    my $errname = (defined $srcdata{name} ? $srcdata{name} : "<undefined>");
+                    warnings::warnif "Proper motion for target $errname specified without parallax";
+                }
+                $srcdata{'pm1'} = $pm[0] * 1000.0;
+                $srcdata{'pm2'} = $pm[1] * 1000.0;
+            }
+            if ($parallax) {
+                $srcdata{'parallax'} = $parallax * 1000.0;
             }
 
         }
@@ -455,6 +474,9 @@ sub _write_catalog {
         my $vframe  = $src->{vframe};
         my $vrange  = $src->{vrange};
         my $flux850 = $src->{flux850};
+        my $pm1     = $src->{'pm1'};
+        my $pm2     = $src->{'pm2'};
+        my $px      = $src->{'parallax'};
 
         $comment = '' unless defined $comment;
 
@@ -462,14 +484,22 @@ sub _write_catalog {
         # a string or a 2 column number
         $rv  = _format_value($rv, '%6.1f', '  n/a   ', 1);
 
+        # Similarly format proper motion and parallax.
+        $pm1 = _format_value($pm1, '%8.3f', '   n/a    ', 1);
+        $pm2 = _format_value($pm2, '%8.3f', '   n/a    ', 1);
+        $px  = _format_value($px,  '%8.4f', '  n/a   ', 0);
+
         # Name must be limited to MAX_SRC_LENGTH characters
         # [this should be taken care of by clean_target_name but
         # if we have appended _X....
         $name = substr($name,0,MAX_SRC_LENGTH);
 
         push @lines, sprintf(
-            "%-" . MAX_SRC_LENGTH .  "s %02d %02d %06.3f %1s %02d %02d %05.2f %2s  %s %5s  %5s  %-4s %s %s\n",
-            $name, @$long, @$lat, $system, $rv, $flux850, $vrange, $vframe, $vdefn, $comment);
+            "%-" . MAX_SRC_LENGTH .  "s %02d %02d %06.3f %1s %02d %02d %05.2f %2s  %s %5s  %5s  %-4s %s %s %s %s %s\n",
+            $name, @$long, @$lat, $system,
+            $rv, $flux850, $vrange, $vframe, $vdefn,
+            $pm1, $pm2, $px,
+            $comment);
 
         if (exists $src->{'_jcmt_com_after'}) {
             push @lines, '*' . $_ foreach @{$src->{'_jcmt_com_after'}};
@@ -568,7 +598,13 @@ sub _parse_line {
         \s*
         ([\w\/]+)?               # vel defn [12]
         \s*
-        (.*)$                    # comment [13]
+        (n\/a|[+-]\s*\d+(?:\.\d*)?)?  # pm1 [13]
+        \s*
+        (n\/a|[+-]\s*\d+(?:\.\d*)?)?  # pm2 [14]
+        \s*
+        (n\/a|\d+(?:\.\d*)?)?    # parallax [15]
+        \s*
+        (.*)$                    # comment [16]
         /xi);
 
     # Abort if we do not have matches for the first 8 fields
@@ -615,7 +651,7 @@ sub _parse_line {
     }
 
     # catalog comments are space delimited
-    my $ccol = 13;
+    my $ccol = 16;
     my $cat_comm = (defined $match[$ccol] ? $match[$ccol] : '');
 
     # Replace multiple spaces in comment with single space
@@ -629,6 +665,19 @@ sub _parse_line {
         $coords{rv} = $match[8];
         $coords{vdefn} = $match[12];
         $coords{vframe} = $match[11];
+    }
+
+    if ((defined $match[13]) and (defined $match[14])
+            and ($match[13] !~ /n/) and ($match[14] !~ /n/)) {
+        $match[13] =~ s/\s//g; # remove spaces
+        $match[14] =~ s/\s//g; # remove spaces
+        # Convert components of proper motion from mas/year to arcsec/year.
+        $coords{'pm'} = [$match[13] / 1000.0, $match[14] / 1000.0];
+    }
+
+    if ((defined $match[15]) and ($match[15] !~ /n/)) {
+        # Convert parallax from mas to arcsec.
+        $coords{'parallax'} = $match[15] / 1000.0;
     }
 
     # create the source object
