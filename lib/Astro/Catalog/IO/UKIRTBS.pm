@@ -29,7 +29,7 @@ use Astro::Catalog::Item;
 
 use base qw/Astro::Catalog::IO::ASCII/;
 
-our $VERSION = '4.36';
+our $VERSION = '4.37';
 
 =over 4
 
