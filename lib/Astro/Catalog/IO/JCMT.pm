@@ -495,6 +495,10 @@ sub _write_catalog {
         # if we have appended _X....
         $name = substr($name,0,MAX_SRC_LENGTH);
 
+        # Maybe shift flux by 1 space to align decimal point in
+        # 1dp values with that in 2dp values and also middle of n/a.
+        $flux850 .= ' ' if $flux850 =~ /(?:\.\d|n\/a)$/ and 5 > length $flux850;
+
         push @lines, sprintf(
             "%-" . MAX_SRC_LENGTH .  "s %02d %02d %06.3f %1s %02d %02d %05.2f %2s  %s %5s  %5s  %-4s %s %s %s %s %s\n",
             $name, @$long, @$lat, $system,
