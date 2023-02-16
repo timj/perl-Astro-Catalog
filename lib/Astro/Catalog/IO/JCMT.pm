@@ -138,6 +138,7 @@ sub _read_catalog {
         telescope => 'JCMT',
         incplanets => 1,
         inccomments => 0,
+        respacecomments => 1,
     );
 
     my %options = (%defaults, @_);
@@ -153,7 +154,7 @@ sub _read_catalog {
     # Go through each line and parse it
     # and store in the array if we had a successful read
     my $parse_buff = $options{'inccomments'} ? {} : undef;
-    my @stars = map {$class->_parse_line($_, $tel, $parse_buff);} @$lines;
+    my @stars = map {$class->_parse_line($_, $tel, $parse_buff, \%options);} @$lines;
 
     $stars[-1]->misc->{'_jcmt_com_after'} = delete $parse_buff->{'comments'}
         if ((defined $parse_buff)
@@ -539,7 +540,7 @@ C<Astro::Catalog::Item> object. Returns empty list if the line can not
 be parsed or refers to a comment line (so that map can be used in the
 caller).
 
-    $star = Astro::Catalog::IO::JCMT->_parse_line($line, $tel, \%status_buffer);
+    $star = Astro::Catalog::IO::JCMT->_parse_line($line, $tel, \%status_buffer, \%options);
 
 where C<$line> is the line to be parsed and (optional) C<$tel>
 is an C<Astro::Telescope> object to be associated with the
@@ -557,6 +558,7 @@ sub _parse_line {
     my $line = shift;
     my $tel = shift;
     my $parse_buff = shift;
+    my $options = shift;
     chomp $line;
 
     # Skip commented and blank lines
@@ -655,7 +657,7 @@ sub _parse_line {
     my $cat_comm = (defined $match[$ccol] ? $match[$ccol] : '');
 
     # Replace multiple spaces in comment with single space
-    $cat_comm =~ s/\s+/ /g;
+    $cat_comm =~ s/\s+/ /g if $options->{'respacecomments'};
 
     # velocity
     $coords{vdefn} = "RADIO";
