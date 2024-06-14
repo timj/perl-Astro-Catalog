@@ -344,6 +344,13 @@ sub _write_catalog {
         # and parallax.
         my $coords = ${$stars}[$star]->coords;
 
+        my $name = $coords->name;
+        my $type = $coords->type;
+        unless ($coords->type eq 'RADEC') {
+            warnings::warnif "Coordinate of type '$type' for target '$name' not currently supported\n";
+            next;
+        }
+
         if (scalar $coords->pm) {
             push @field_names, "RA Proper Motion";
             push @field_names, "Dec Proper Motion";
