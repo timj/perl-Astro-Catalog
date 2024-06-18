@@ -1478,6 +1478,13 @@ sub configure {
         delete $check{dec};
     }
 
+    # If we have "coords", process this first, as some of the other
+    # accessors assign information to the coords object.
+    if (exists $check{'coords'}) {
+        $self->coords($check{'coords'});
+        delete $check{'coords'};
+    }
+
     # Loop over the allowed keys storing the values
     # in the object if they exist. Case insensitive.
     for my $key (keys %check) {
