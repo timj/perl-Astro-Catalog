@@ -89,7 +89,8 @@ sub _read_catalog {
         }
 
         my ($tag, $name, $x, $y, $coord_sys, $pos_in_tile,
-            $remaining, $priority, @extra) = split /[ ,;]+/, $line;
+            $remaining, $priority, $velocity, $veldefn,
+            @extra) = split /[ ,;]+/, $line;
 
         my %opt = (
             name => $name,
@@ -125,10 +126,6 @@ sub _read_catalog {
             (($x =~ /:/) ? 'sexagesimal' : $dec_units[0]),
             (($y =~ /:/) ? 'sexagesimal' : $dec_units[1])];
 
-        my $c = new Astro::Coords(%opt);
-
-        $c->telescope($tel) if defined $tel;
-
         # The OT only processes the extra columns for base positions.
         if ($tag eq $BASE_TAG) {
             if (defined $pos_in_tile) {
@@ -140,7 +137,32 @@ sub _read_catalog {
             if (defined $remaining) {
                 $misc{'remaining'} = 0 + $remaining;
             }
+
+            if (defined $velocity and defined $veldefn) {
+                if ($veldefn =~ /LSR/i or $veldefn =~ /RADIO/i) {
+                    $opt{'rv'} = 0.0 + $velocity;
+                    $opt{'vdefn'} = 'RADIO';
+                    $opt{'vframe'} = 'LSRK';
+                }
+                elsif ($veldefn =~ /RED/i) {
+                    # NOTE: Astro::Coords assumes HEL(iocentric) here
+                    # whereas the JCMT OT defaults to barycentric.
+                    $opt{'redshift'} = 0.0 + $velocity;
+                }
+                elsif ($veldefn =~ /OPT/i) {
+                    $opt{'rv'} = 0.0 + $velocity;
+                    $opt{'vdefn'} = 'OPTICAL';
+                    $opt{'vframe'} = 'HEL';
+                }
+                else {
+                    die "Did not recognize velocity definition '$veldefn'";
+                }
+            }
         }
+
+        my $c = new Astro::Coords(%opt);
+
+        $c->telescope($tel) if defined $tel;
 
         if ((not defined $selected_tag) or ($tag eq $selected_tag)) {
             push @items, new Astro::Catalog::Item(
@@ -205,15 +227,36 @@ sub _write_catalog {
             # Fill in extra columns right to left, so that we can set defaults
             # for any undefined values in columns to the left of defined ones.
             my @extra = ();
+
+            my $rv = $coords->rv;
+            if ($rv) {
+                # NOTE: currently does not check vframe
+                my $vdefn = $coords->vdefn;
+                if ($vdefn eq 'REDSHIFT') {
+                    unshift @extra, $coords->redshift, 'RED';
+                }
+                elsif ($vdefn eq 'RADIO') {
+                    unshift @extra, $rv, 'LSR';
+                }
+                elsif ($vdefn eq 'OPTICAL') {
+                    unshift @extra, $rv, 'OPT';
+                }
+            }
+
             if (exists $misc->{'priority'} and defined $misc->{'priority'}) {
                 unshift @extra, $misc->{'priority'};
             }
+            elsif (@extra) {
+                unshift @extra, 1;
+            }
+
             if (exists $misc->{'remaining'} and defined $misc->{'remaining'}) {
                 unshift @extra, $misc->{'remaining'};
             }
             elsif (@extra) {
                 unshift @extra, 1;
             }
+
             if (exists $misc->{'position_in_tile'} and defined $misc->{'position_in_tile'}) {
                 unshift @extra, $misc->{'position_in_tile'};
             }
