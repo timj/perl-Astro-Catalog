@@ -531,8 +531,8 @@ sub _format_value {
     }
 
     my $sign = ($val >= 0 ? '+' : '-');
-    $val =~ s/^\s*[+-]\s*//;
-    $val =~ s/\s*$//;
+    $val = abs($val);
+
     unless ($signed) {
         warnings::warnif "Unsigned value is negative" unless $sign eq '+';
         return sprintf($fmt, $val);
