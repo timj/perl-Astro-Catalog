@@ -484,9 +484,12 @@ sub _write_catalog {
 
         # Velocity can not easily be done with a sprintf since it can be either
         # a string or a 2 column number
-        $rv  = _format_value($rv,
-            ($vdefn eq 'REDSHIFT' ? '%6.4f' : '%6.1f'),
-            '  n/a   ', 1);
+        if ($vdefn ne 'REDSHIFT') {
+            $rv  = ' ' . _format_value($rv, '%6.1f', '  n/a   ', 1);
+        }
+        else {
+            $rv  = _format_value($rv, '%8.6f', '  n/a   ', 2);
+        }
 
         # Similarly format proper motion and parallax.
         $pm1 = _format_value($pm1, '%8.3f', '   n/a    ', 1);
@@ -503,7 +506,7 @@ sub _write_catalog {
         $flux850 .= ' ' if $flux850 =~ /(?:\.\d|n\/a)$/ and 5 > length $flux850;
 
         push @lines, sprintf(
-            "%-" . MAX_SRC_LENGTH .  "s %02d %02d %06.3f %1s %02d %02d %05.2f %2s  %s %5s  %5s  %-4s %5.5s %s %s %s %s\n",
+            "%-" . MAX_SRC_LENGTH .  "s %02d %02d %06.3f %1s %02d %02d %05.2f %2s %s %5s  %5s  %-4s %5.5s %s %s %s %s\n",
             $name, @$long, @$lat, $system,
             $rv, $flux850, $vrange, $vframe, $vdefn,
             $pm1, $pm2, $px,
@@ -521,6 +524,8 @@ sub _write_catalog {
 
 Format a value for inclusion in a JCMT format catalog.
 
+C<$signed> can be 1 (sign plus space) or 2 (sign and no space).
+
 =cut
 
 sub _format_value {
@@ -537,7 +542,7 @@ sub _format_value {
         warnings::warnif "Unsigned value is negative" unless $sign eq '+';
         return sprintf($fmt, $val);
     }
-    return $sign . ' ' . sprintf($fmt, $val);
+    return $sign . ($signed == 2 ? '' : ' ') . sprintf($fmt, $val);
 }
 
 =item B<_parse_line>
