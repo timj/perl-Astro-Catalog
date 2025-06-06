@@ -309,8 +309,9 @@ sub _write_catalog {
             # Get the velocity information
             my $rv = $src->rv;
             if ($rv) {
-                $srcdata{rv}    = $rv;
-                $srcdata{vdefn}  = $src->vdefn;
+                my $vdefn = $src->vdefn;
+                $srcdata{rv}    = ($vdefn eq 'REDSHIFT') ? $src->redshift : $rv;
+                $srcdata{vdefn}  = $vdefn;
                 $srcdata{vframe} = $src->vframe;
 
                 # JCMT compatibility
@@ -483,7 +484,9 @@ sub _write_catalog {
 
         # Velocity can not easily be done with a sprintf since it can be either
         # a string or a 2 column number
-        $rv  = _format_value($rv, '%6.1f', '  n/a   ', 1);
+        $rv  = _format_value($rv,
+            ($vdefn eq 'REDSHIFT' ? '%6.4f' : '%6.1f'),
+            '  n/a   ', 1);
 
         # Similarly format proper motion and parallax.
         $pm1 = _format_value($pm1, '%8.3f', '   n/a    ', 1);
@@ -500,7 +503,7 @@ sub _write_catalog {
         $flux850 .= ' ' if $flux850 =~ /(?:\.\d|n\/a)$/ and 5 > length $flux850;
 
         push @lines, sprintf(
-            "%-" . MAX_SRC_LENGTH .  "s %02d %02d %06.3f %1s %02d %02d %05.2f %2s  %s %5s  %5s  %-4s %s %s %s %s %s\n",
+            "%-" . MAX_SRC_LENGTH .  "s %02d %02d %06.3f %1s %02d %02d %05.2f %2s  %s %5s  %5s  %-4s %5.5s %s %s %s %s\n",
             $name, @$long, @$lat, $system,
             $rv, $flux850, $vrange, $vframe, $vdefn,
             $pm1, $pm2, $px,
@@ -668,9 +671,17 @@ sub _parse_line {
     $coords{vframe} = "LSR";
     if (defined $match[8] && $match[8] !~ /n/) {
         $match[8] =~ s/\s//g; # remove spaces
-        $coords{rv} = $match[8];
-        $coords{vdefn} = $match[12];
-        $coords{vframe} = $match[11];
+
+        my $vdefn = $match[12];
+
+        if (defined $vdefn and $vdefn =~ /^RED/i) {
+            $coords{redshift} = $match[8];
+        }
+        else {
+            $coords{rv} = $match[8];
+            $coords{vdefn} = $vdefn;
+            $coords{vframe} = $match[11];
+        }
     }
 
     if ((defined $match[13]) and (defined $match[14])
