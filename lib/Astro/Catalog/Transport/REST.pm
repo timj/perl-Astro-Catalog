@@ -214,8 +214,9 @@ sub query_url {
         return $self->{QUERY};
     }
     else {
-        return "http://". $self->url .
-            "/" . $self->_default_url_path;
+        return $self->_default_url_scheme
+            . '://'. $self->url
+            . '/' . $self->_default_url_path;
     }
 
     return $self->{QUERY};
@@ -251,7 +252,9 @@ sub url {
         $self->{URL} = $base_url;
         if (defined $base_url) {
             $self->query_url(
-                "http://$base_url/" .  $self->_default_url_path);
+                $self->_default_url_scheme
+                . '://' . $base_url
+                . '/' .  $self->_default_url_path);
         }
     }
 
@@ -300,6 +303,16 @@ Must be specified in a sub-class.
 
 sub _default_remote_host {
     croak "default remote host must be specified in subclass\n";
+}
+
+=item B<_default_url_scheme>
+
+The scheme information before the C<://> in the remote URL.
+
+=cut
+
+sub _default_url_scheme {
+    return 'http';
 }
 
 =item B<_default_url_path>
