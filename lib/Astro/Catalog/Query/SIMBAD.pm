@@ -55,7 +55,15 @@ These methods are for internal use only.
 =cut
 
 sub _default_remote_host {
-    return "simbad.u-strasbg.fr";
+    return 'simbad.cds.unistra.fr';
+}
+
+=item B<_default_url_scheme>
+
+=cut
+
+sub _default_url_scheme {
+    return 'https';
 }
 
 =item B<_default_url_path>
@@ -63,7 +71,7 @@ sub _default_remote_host {
 =cut
 
 sub _default_url_path {
-    return "sim-id.pl?";
+    return 'simbad/sim-id?';
 }
 
 =item B<_get_allowed_options>
