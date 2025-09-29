@@ -37,8 +37,10 @@ use base qw/Astro::Catalog::Transport::REST/;
 use Carp;
 
 use Astro::Coords;
+use Astro::Coords::Angle;
 use Astro::Catalog;
 use Astro::Catalog::Item;
+use URI::Escape;
 
 our $VERSION = '4.38';
 
@@ -71,7 +73,34 @@ sub _default_url_scheme {
 =cut
 
 sub _default_url_path {
-    return 'simbad/sim-id?';
+    return 'simbad/sim-script?';
+}
+
+# SIMBAD documentation:
+# Script queries: https://simbad.u-strasbg.fr/Pages/guide/sim-url.htx#script
+# Output format: https://simbad.cds.unistra.fr/guide/sim-fscript.htx#Formats
+
+our @_columns = qw/name type ra dec pmra pmdec plx spectype/;
+
+sub _translate_options {
+    my $self = shift;
+
+    my $script = <<"END_SCRIPT";
+output console=off script=off
+format object "%IDLIST(1) | %OTYPE | %COO(:;A;ICRS;;) | %COO(:;D;ICRS;;) | %PM(A) | %PM(D) | %PLX(V) | %SP(S)"
+END_SCRIPT
+
+    my $object = $self->query_options('object');
+    if (defined $object) {
+        $script .= "query id $object";
+    }
+    else {
+        die "No query options";
+    }
+
+    return (
+        script => uri_escape($script),
+    );
 }
 
 =item B<_get_allowed_options>
@@ -92,7 +121,6 @@ sub _get_allowed_options {
         nout => "output.max",
         bibyear1 => "Bibyear1",
         bibyear2 => "Bibyear2",
-        _protocol => "protocol",
         _nbident => "NbIdent",
         _catall => "o.catall",
         _mesdisp => "output.mesdisp",
@@ -135,7 +163,6 @@ sub _get_default_options {
         radunits => "arcmin", # For consistency
         nout => "all",
 
-        _protocol => "html",
         _coordepoch => "2000",
         _coordequi  => "2000",
         _coordframe => "FK5",
@@ -188,59 +215,31 @@ sub _parse_query {
     my $catalog = new Astro::Catalog();
 
     # loop round the returned buffer
-    my @target;       # raw HTML lines, one per object
-    foreach my $line (0 ... $#buffer) {
-        # NUMBER OF OBJECTS FOUND IN ERROR CIRCLE
-        if ($buffer[$line] =~ /(\d+)\s+objects: <\/b><pre>/i) {
-            # Number of objects found
-            my $number = $1;
-
-            # GRAB EACH OBJECT - starting from 2 lines after the
-            # current position (since that is the table header and
-            # table separator
-            @target = map {$buffer[$_]} ($line+2 ... $line+$number+1);
-
-            # DROP OUT OF FIRST LOOP
-            last;
-        }
-    }
-
     # ...and stuff the contents into Object objects
-    foreach my $line (@target) {
+    foreach my $line (@buffer) {
+        next unless $line;
+
         # create a temporary place holder object
         my $star = new Astro::Catalog::Item();
 
         # split each line using the "pipe" symbol separating
         # the table columns
-        my @separated = split /\|/, $line;
+        my @separated = split /\s*\|\s*/, $line;
+        my %column;  @column{@_columns} = map {/^~$/ ? undef : $_} @separated;
 
         # FRAME
-
         # grab the current co-ordinate frame from the query object itself
         # Assume J2000 for now.
 
-        # URL
-
-        # grab the url based on quotes around the string
-        my $start_index = index( $separated[0], q/"/ );
-        my $last_index = rindex( $separated[0], q/"/ );
-        my $url = substr( $separated[0], $start_index+1,
-                $last_index-$start_index-1);
-
-        # push it into the object
-        $star->moreinfo($url);
-
         # NAME
-
         # get the object name from the same section
-        my $final_index = rindex( $separated[0], "A" );
-        my $name = substr($separated[0],$last_index+2,$final_index-$last_index-4);
+        my $name = $column{'name'};
 
         # push it into the object
         $star->id($name);
 
         # TYPE
-        my $type = $separated[1];
+        my $type = $column{'type'};
 
         # dump leading spaces
         $type =~ s/^\s+//g;
@@ -249,32 +248,28 @@ sub _parse_query {
         $star->startype( $type );
 
         # RA
-
         # remove leading spaces
-        my $coords = $separated[2];
-        $coords =~ s/^\s+//g;
-
-        # split the RA and Dec line into an array elements
-        my @radec = split( /\s+/, $coords );
-
-        # ...and then rebuild it
-        my $ra;
-        unless ($radec[2] =~ '\+' || $radec[2] =~ '-') {
-            $ra = "$radec[0] $radec[1] $radec[2]";
-        }
-        else {
-            $ra = "$radec[0] $radec[1] 00.0";
-        }
+        my $ra = $column{'ra'};
+        $ra =~ s/^\s+//g;
 
         # DEC
+        my $dec = $column{'dec'};
 
-        # ...and rebuild the Dec
-        my $dec;
-        unless ($radec[2] =~ '\+' || $radec[2] =~ '-') {
-            $dec = "$radec[3] $radec[4] $radec[5]";
+        # PM & Parallax
+        my %extra = ();
+        if (defined $column{'pmra'} and defined $column{'pmdec'}) {
+            # Convert to arcseconds, with RA as coordinate angle.
+
+            my $decang = Astro::Coords::Angle->new($dec, units => 's');
+
+            $extra{'pm'} = [
+                $column{'pmra'} / (1000.0 * cos($decang->radians)),
+                $column{'pmdec'} / 1000.0,
+            ];
         }
-        else {
-            $dec = "$radec[2] $radec[3] 00.0";
+
+        if (defined $column{'plx'} ) {
+            $extra{'parallax'} = $column{'plx'} / 1000.0;
         }
 
         # Store the coordinates
@@ -284,10 +279,11 @@ sub _parse_query {
                 dec => $dec,
                 type => "J2000",
                 units => "s",
+                %extra,
         ));
 
         # SPECTRAL TYPE
-        my $spectral = $separated[4];
+        my $spectral = $column{'spectype'};
 
         # remove leading and trailing spaces
         $spectral =~ s/^\s+//g;
@@ -327,7 +323,7 @@ sub _translate_one_to_one {
     return ($self->SUPER::_translate_one_to_one,
             map { $_, undef }(qw/
                 bibyear1 bibyear2 radunits
-                _protocol _catall _mesdisp _nbident
+                _catall _mesdisp _nbident
                 _coordepoch _coordequi _coordframe
                 _epoch1 _frame1 _equi1
                 _epoch2 _frame2 _equi2
