@@ -114,7 +114,7 @@ sub query_options {
     return %{$self->{OPTIONS}};
 }
 
-=item B<RA>
+=item B<ra>
 
 Return (or set) the current target R.A. defined for the query
 
@@ -138,7 +138,7 @@ sub ra {
     return $self->query_options("ra");
 }
 
-=item B<Dec>
+=item B<dec>
 
 Return (or set) the current target Declination defined for the query
 
@@ -164,7 +164,7 @@ sub dec {
 }
 
 
-=item B<Target>
+=item B<target>
 
 Instead of querying by R.A. and Dec., you may also query it
 by object name. Return (or set) the current target object defined for
@@ -202,7 +202,7 @@ sub target {
     return $self->query_options("object");
 }
 
-=item B<Radius>
+=item B<radius>
 
 The radius to be searched for objects around the target R.A. and Dec in
 arc minutes, the radius defaults to 5 arc minutes.
@@ -222,7 +222,7 @@ sub radius {
     return $self->query_options("radmax");
 }
 
-=item B<Faint>
+=item B<faint>
 
 Set (or query) the faint magnitude limit for inclusion on the results
 
@@ -241,7 +241,7 @@ sub faint {
     return $self->query_options("magfaint");
 }
 
-=item B<Bright>
+=item B<bright>
 
 Set (or query) the bright magnitude limit for inclusion on the results
 
@@ -260,7 +260,7 @@ sub bright {
     return $self->query_options("magbright");
 }
 
-=item B<Sort>
+=item B<sort>
 
 Set or query the order in which the stars are listed in the catalog
 
@@ -284,7 +284,7 @@ sub sort {
     return $self->query_options("sort");
 }
 
-=item B<Number>
+=item B<number>
 
 The number of objects to return, defaults to 2000 which should hopefully
 be sufficent to return all objects of interest. This value should be increased
