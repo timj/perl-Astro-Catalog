@@ -302,36 +302,6 @@ sub _parse_query {
     return $catalog;
 }
 
-=item B<_translate_one_to_one>
-
-Return a list of internal options (as defined in C<_get_allowed_options>)
-that are known to support a one-to-one mapping of the internal value
-to the external value.
-
-    %one = $q->_translate_one_to_one();
-
-Returns a hash with keys and no values (this makes it easy to
-check for the option).
-
-This method also returns, the values from the parent class.
-
-=cut
-
-sub _translate_one_to_one {
-    my $self = shift;
-    # convert to a hash-list
-    return ($self->SUPER::_translate_one_to_one,
-            map { $_, undef }(qw/
-                bibyear1 bibyear2 radunits
-                _catall _mesdisp _nbident
-                _coordepoch _coordequi _coordframe
-                _epoch1 _frame1 _equi1
-                _epoch2 _frame2 _equi2
-                _epoch3 _frame3 _equi3
-                /)
-           );
-}
-
 1;
 
 __END__
