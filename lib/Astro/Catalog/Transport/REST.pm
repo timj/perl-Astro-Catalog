@@ -22,7 +22,6 @@ use warnings::register;
 use base qw/Astro::Catalog::Query/;
 
 use LWP::UserAgent;
-use Net::Domain qw/hostname hostdomain/;
 use File::Spec;
 use Carp;
 
@@ -331,7 +330,7 @@ sub _default_url_path {
 Default user agent ID used to declare the agent to the remote server.
 Default format is
 
-    __PACKAGE__/$VERSION ($HOST.$DOMAIN)
+    PACKAGE/VERSION
 
 This can be overridden in a subclass if necessary.
 
@@ -339,8 +338,6 @@ This can be overridden in a subclass if necessary.
 
 sub _default_useragent_id {
     my $self = shift;
-    my $HOST = hostname();
-    my $DOMAIN = hostdomain();
     my $package = ref($self);
     my $pack_version;
     {
@@ -349,7 +346,7 @@ sub _default_useragent_id {
         $pack_version = ${ $package."::VERSION" };
     }
     $pack_version = 'UNKNOWN' unless defined $pack_version;
-    return "Astro::Catalog::REST/$pack_version ($HOST.$DOMAIN)";
+    return "$package/$pack_version";
 }
 
 
