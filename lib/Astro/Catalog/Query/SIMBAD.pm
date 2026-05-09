@@ -80,7 +80,7 @@ sub _default_url_path {
 # Script queries: https://simbad.u-strasbg.fr/Pages/guide/sim-url.htx#script
 # Output format: https://simbad.cds.unistra.fr/guide/sim-fscript.htx#Formats
 
-our @_columns = qw/name type ra dec pmra pmdec plx spectype/;
+our @_columns = qw/name type ra dec pmra pmdec plx rvz spectype/;
 
 sub _translate_options {
     my $self = shift;
@@ -89,7 +89,7 @@ sub _translate_options {
 
     my @script = (
         'output console=off script=off',
-        'format object "%IDLIST(1) | %OTYPE | %COO(:;A;ICRS;;) | %COO(:;D;ICRS;;) | %PM(A) | %PM(D) | %PLX(V) | %SP(S)"',
+        'format object "%IDLIST(1) | %OTYPE | %COO(:;A;ICRS;;) | %COO(:;D;ICRS;;) | %PM(A) | %PM(D) | %PLX(V) | %RV(Z) | %SP(S)"',
     );
 
     foreach my $key (qw/nout/) {
@@ -270,6 +270,11 @@ sub _parse_query {
 
         if (defined $column{'plx'} ) {
             $extra{'parallax'} = $column{'plx'} / 1000.0;
+        }
+
+        # RV
+        if (defined $column{'rvz'}) {
+            $extra{'redshift'} = $column{'rvz'};
         }
 
         # Store the coordinates
