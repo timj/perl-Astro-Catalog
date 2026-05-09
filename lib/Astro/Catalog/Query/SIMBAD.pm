@@ -85,21 +85,62 @@ our @_columns = qw/name type ra dec pmra pmdec plx spectype/;
 sub _translate_options {
     my $self = shift;
 
-    my $script = <<"END_SCRIPT";
-output console=off script=off
-format object "%IDLIST(1) | %OTYPE | %COO(:;A;ICRS;;) | %COO(:;D;ICRS;;) | %PM(A) | %PM(D) | %PLX(V) | %SP(S)"
-END_SCRIPT
+    my %allow = $self->_get_allowed_options;
+
+    my @script = (
+        'output console=off script=off',
+        'format object "%IDLIST(1) | %OTYPE | %COO(:;A;ICRS;;) | %COO(:;D;ICRS;;) | %PM(A) | %PM(D) | %PLX(V) | %SP(S)"',
+    );
+
+    foreach my $key (qw/nout/) {
+        push @script, sprintf 'set %s %s',
+            $allow{$key},
+            $self->query_options($key);
+    }
 
     my $object = $self->query_options('object');
     if (defined $object) {
-        $script .= "query id $object";
+        push @script, sprintf 'query %s %s',
+            $allow{'object'},
+            $object;
     }
     else {
-        die "No query options";
+        my $ra = $self->query_options('ra');
+        my $dec = $self->query_options('dec');
+        if ((defined $ra) and (defined $dec)) {
+            my $epoch = $self->query_options('_coordepoch');
+            my $equinox = $self->query_options('_coordequi');
+            my $frame = $self->query_options('_coordframe');
+            my $rad = $self->query_options('radmax');
+            my $radunit = $self->query_options('radunits');
+            my $radsuffix = undef;
+            if ($radunit =~ /^(?:arc)?sec/i) {
+                $radsuffix = 's';
+            }
+            elsif ($radunit =~ /^(?:arc)?min/i) {
+                $radsuffix = 'm';
+            }
+            elsif ($radunit =~ /^deg/i) {
+                $radsuffix = 'd';
+            }
+            else {
+                die "Radius unit '$radunit' not recognized";
+            }
+
+            push @script, sprintf 'query %s %s %s %s=%s%s %s=%s %s=%s %s=%s',
+                'coo', $ra, $dec,
+                $allow{'radmax'}, $rad, $radsuffix,
+                $allow{'_coordframe'}, $frame,
+                $allow{'_coordequi'}, $equinox,
+                $allow{'_coordepoch'}, $epoch;
+        }
+        else {
+            die "Query options do not include target object or RA and Dec";
+        }
     }
 
     return (
-        script => uri_escape($script),
+        script => uri_escape(join "\n", @script),
     );
 }
 
@@ -116,34 +157,16 @@ sub _get_allowed_options {
     return (
         ra => 'ra',
         dec => 'dec',
-        object => 'Ident',
-        radmax => 'Radius',
-        nout => "output.max",
-        bibyear1 => "Bibyear1",
-        bibyear2 => "Bibyear2",
-        _nbident => "NbIdent",
-        _catall => "o.catall",
-        _mesdisp => "output.mesdisp",
-
-        radunits => "Radius.unit", # arcsec, arcmin or deg
+        object => 'id', # (Script mode query command for identifier query.)
+        radmax => 'radius',
+        radunits => undef, # arcsec, arcmin or deg
+        nout => 'limit',  # (Script mode set command.)
 
         # These should not be published
         # Since we need to switch to Astro::Coords
-        _coordframe => "CooFrame",  # FK5 or FK4
-        _coordepoch => "CooEpoch",  # 2000
-        _coordequi  => "CooEqui",   # 2000
-
-        _frame1 => "Frame1",
-        _equi1 => "Equi1",
-        _epoch1 => "Epoch1",
-
-        _frame2 => "Frame2",
-        _equi2 => "Equi2",
-        _epoch2 => "Epoch2",
-
-        _frame3 => "Frame3",
-        _equi3 => "Equi3",
-        _epoch3 => "Epoch3",
+        _coordframe => 'frame',  # ICRS|FK4|FK5|GAL|SGAL|ECL
+        _coordepoch => 'epoch',  # 2000
+        _coordequi  => 'equi',   # 2000
     );
 }
 
@@ -161,34 +184,11 @@ sub _get_default_options {
         object => undef,
         radmax => 0.1,
         radunits => "arcmin", # For consistency
-        nout => "all",
+        nout => 0, # (0 removes limitation)
 
         _coordepoch => "2000",
         _coordequi  => "2000",
         _coordframe => "FK5",
-        _nbident    => "around",
-        _nbident    => "around",
-        _catall     => "on",
-        _mesdisp    => "A",
-
-        bibyear1    => 1983,
-        bibyear2    => 2003,
-
-        # Frame 1, 2 and 3
-        # Frame 1 FK5 2000/2000
-        _frame1      => "FK5",
-        _equi1       => "2000.0",
-        _epoch1      => "2000.0",
-
-        # Frame 2 FK4 1950/1950
-        _frame2      => "FK4",
-        _equi2       => "1950.0",
-        _epoch2      => "1950.0",
-
-        # Frame 3 Galactic
-        _frame3      => "G",
-        _equi3       => "2000.0",
-        _epoch3      => "2000.0",
     );
 }
 
