@@ -291,7 +291,7 @@ be sufficent to return all objects of interest. This value should be increased
 if a (very) large sample radius is requested.
 
     $num = $query->number();
-    $query->nout(100);
+    $query->number(100);
 
 =cut
 
