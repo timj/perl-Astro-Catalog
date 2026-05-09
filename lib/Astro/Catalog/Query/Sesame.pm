@@ -60,9 +60,6 @@ sub querydb {
     # clean out buffer
     $self->_set_raw("");
 
-    my $endpoint = $self->endpoint();
-    my %options = $self->_translate_options();
-
     # return unless we haev a target, set it otherwise
     return undef unless $self->query_options("object");
 

@@ -66,10 +66,6 @@ sub _write_catalog {
     my $class = shift;
     my $catalog = shift;
 
-    # Get the number of stars, since if we have fewer than N we cannot
-    # do a fit without the field centre.
-    my $nstars = $catalog->sizeof();
-
     unless (defined $catalog->get_coords) {
         croak "Need catalog field centre to do astrometry correction";
     }

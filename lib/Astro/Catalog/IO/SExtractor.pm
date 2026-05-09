@@ -194,10 +194,6 @@ sub _read_catalog {
     my $fluxerr_aper1_column = -1;
     my $mag_aper1_column = -1;
     my $magerr_aper1_column = -1;
-    my $flux_aper2_column = -1;
-    my $fluxerr_aper2_column = -1;
-    my $mag_aper2_column = -1;
-    my $magerr_aper2_column = -1;
     my $flux_auto_column = -1;
     my $fluxerr_auto_column = -1;
     my $mag_auto_column = -1;

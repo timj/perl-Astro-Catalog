@@ -256,13 +256,6 @@ sub _write_catalog {
     my @mags = $catalog->starbyindex(0)->what_filters();
     my @cols = $catalog->starbyindex(0)->what_colours();
 
-    # number of stars in catalog
-    my $number = $catalog->sizeof();
-
-    # number of filters & colours
-    my $num_mags = $catalog->starbyindex(0)->what_filters();
-    my $num_cols = $catalog->starbyindex(0)->what_colours();
-
     # reference to the $self->{STARS} array in Astro::Catalog
     my $stars = $catalog->stars();
 

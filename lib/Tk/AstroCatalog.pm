@@ -423,7 +423,6 @@ sub makeCatalog {
 
     print "made the catalog window\n" if $locateBug;
 
-    my @Sources;
     my $topFrame = $Top->Frame(
         -relief => 'groove',
         -borderwidth => 2,
@@ -431,7 +430,7 @@ sub makeCatalog {
     )->grid(-column => 0, -row => 0, -padx => 3, -pady => 3, -sticky => 'nsew');
 
     # create the header
-    my $headFrame = $topFrame->Frame(
+    $topFrame->Frame(
         -relief => 'flat',
         -borderwidth => 2
     )->grid(-row => 0, -sticky => 'nsew');
@@ -466,7 +465,7 @@ sub makeCatalog {
     print "just before creating the done button\n" if $locateBug;
 
     # KLUGE with a global reference label for now
-    my $RefLabel = $topFrame->Label(
+    $topFrame->Label(
         -textvariable => $self->RefLabel, -width => 64,
     )->grid(-sticky=>'nsew',-row=>2);
 
@@ -479,14 +478,14 @@ sub makeCatalog {
 
     # create the Done button if we are not transient
     unless ($self->Transient) {
-        my $dBut = $buttonF->Button(
+        $buttonF->Button(
             -text         => 'Done',
             -command      => sub{ $self->destroy }
         )->pack(-side=>'right');
     }
 
     # create the Add button
-    my $addBut = $buttonF->Button(
+    $buttonF->Button(
         -text=>'Add',
         -relief => 'raised',
         -width => 7,
@@ -521,7 +520,7 @@ sub makeCatalog {
     my $catEnt;
 
     # create the Rescan button
-    my $rescanBut = $buttonF->Button(
+    $buttonF->Button(
         -text=>'Rescan',
         -relief => 'raised',
         -width => 7,
@@ -726,7 +725,6 @@ sub fillWithSourceList {
     my $selected = $self->Selected;
     my $task = shift;
     my $index = shift;
-    my @entered = ();
     my ($line, $itag);
 
     # Retrieve the objects

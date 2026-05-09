@@ -128,7 +128,7 @@ sub _read_catalog {
         push @stars, $star;
     }
 
-    my $cat = new Astro::Catalog(
+    return new Astro::Catalog(
         Stars => \@stars,
         Origin => 'GaiaPick',
     );

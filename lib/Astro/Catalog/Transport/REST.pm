@@ -426,9 +426,6 @@ sub _build_query {
     my $URL = $self->query_url;
     my $options = "";
 
-    # loop round all the options keys and build the query
-    my %allow = $self->_get_allowed_options;
-
     # Translate options
     my %translated = $self->_translate_options();
 

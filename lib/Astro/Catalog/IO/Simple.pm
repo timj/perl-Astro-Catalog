@@ -191,7 +191,6 @@ sub _write_catalog {
 
     # write header
     my @output;
-    my $output_line;
 
     push (@output, "# Catalog written automatically by class ". __PACKAGE__ ."\n");
     push (@output, "# on date " . gmtime . "UT\n" );

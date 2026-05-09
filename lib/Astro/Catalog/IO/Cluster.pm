@@ -209,9 +209,6 @@ sub _write_catalog {
     my @filters = $catalog->starbyindex(0)->what_filters();
     my @colours = $catalog->starbyindex(0)->what_colours();
 
-    # number of stars in catalog
-    my $number = $catalog->sizeof();
-
     # number of filters & colours
     my $num_mags = $catalog->starbyindex(0)->what_filters();
     my $num_cols = $catalog->starbyindex(0)->what_colours();

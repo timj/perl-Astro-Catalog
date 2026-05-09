@@ -447,7 +447,6 @@ sub _load_config {
     }
 
     unless (-e $cfg) {
-        my $xcfg = (defined $cfg ? $cfg : "<undefined>" );
         return;
     }
 

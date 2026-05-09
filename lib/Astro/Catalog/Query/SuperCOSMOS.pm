@@ -71,11 +71,6 @@ our $DEBUG = 0;
 # expand those. Default to false at the moment.
 our $FOLLOW_DIRS = 0;
 
-# This is the name of the config file that was used to generate
-# the content in %CONFIG. Can be different to the contents ofg_file
-# if that
-my $CFG_FILE;
-
 # This is the content of the config file
 # organized as a hash indexed by remote server shortname
 # this has the advantage of removing duplicates
@@ -596,7 +591,6 @@ sub _load_config {
     }
 
     unless (-e $cfg) {
-        my $xcfg = (defined $cfg ? $cfg : "<undefined>");
         return;
     }
 

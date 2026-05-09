@@ -329,7 +329,6 @@ sub popstarbyid {
 
     my @matched;
     my @unmatched;
-    my $matched;
     my @stars = $self->stars;
     while (@stars) {
         my $item = pop @stars;
