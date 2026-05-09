@@ -291,8 +291,10 @@ sub _parse_query {
         my $spectral = $column{'spectype'};
 
         # remove leading and trailing spaces
-        $spectral =~ s/^\s+//g;
-        $spectral =~ s/\s+$//g;
+        if (defined $spectral) {
+            $spectral =~ s/^\s+//g;
+            $spectral =~ s/\s+$//g;
+        }
 
         # push it into the object
         $star->spectype($spectral);
