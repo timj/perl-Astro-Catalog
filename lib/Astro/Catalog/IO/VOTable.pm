@@ -327,24 +327,15 @@ sub _write_catalog {
     push @field_sizes, "*";
     push @field_sizes, "*";
 
-    # generate the data table
-    my @data;
-
+    # Check to see if we should be writing out the proper motions
+    # and parallax.
+    my $have_pm = 0;
+    my $have_plx = 0;
     foreach my $star (0 .. $#$stars) {
-        my @row;
-
-        # Check to see if we should be writing out the proper motions
-        # and parallax.
         my $coords = ${$stars}[$star]->coords;
 
-        my $name = $coords->name;
-        my $type = $coords->type;
-        unless ($coords->type eq 'RADEC') {
-            warnings::warnif "Coordinate of type '$type' for target '$name' not currently supported\n";
-            next;
-        }
-
-        if (scalar $coords->pm) {
+        if ((not $have_pm) and (scalar $coords->pm)) {
+            $have_pm = 1;
             push @field_names, "RA Proper Motion";
             push @field_names, "Dec Proper Motion";
             push @field_ucds, "POS_EQ_PMRA";
@@ -354,11 +345,28 @@ sub _write_catalog {
             push @field_units, "arcsec/yr";
             push @field_units, "arcsec/yr";
         }
-        if (defined $coords->parallax) {
+        if ((not $have_plx) and (defined $coords->parallax)) {
+            $have_plx = 1;
             push @field_names, "Parallax";
             push @field_ucds, "POS_EQ_PLX_FACTOR";
             push @field_datatypes, "double";
             push @field_units, "arcsec";
+        }
+    }
+
+    # generate the data table
+    my @data;
+
+    foreach my $star (0 .. $#$stars) {
+        my @row;
+
+        my $coords = ${$stars}[$star]->coords;
+
+        my $name = $coords->name;
+        my $type = $coords->type;
+        unless ($coords->type eq 'RADEC') {
+            warnings::warnif "Coordinate of type '$type' for target '$name' not currently supported\n";
+            next;
         }
 
         # id
@@ -414,11 +422,12 @@ sub _write_catalog {
         }
 
         # Proper motions and parallax
-        if (defined ${$stars}[$star]->coords) {
-            my $coords = ${$stars}[$star]->coords;
+        if ($have_pm) {
             my @pm = $coords->pm;
             push @row, $pm[0];
             push @row, $pm[1];
+        }
+        if ($have_plx) {
             push @row, $coords->parallax;
         }
 
