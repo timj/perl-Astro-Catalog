@@ -326,32 +326,59 @@ sub _write_catalog {
     push @field_sizes, "*";
     push @field_sizes, "*";
     push @field_sizes, "*";
+    foreach my $i (0 .. $#mags) {
+        push @field_sizes, undef;
+    }
+    foreach my $i (0 .. $#cols) {
+        push @field_sizes, undef;
+    }
+    push @field_sizes, undef;
 
     # Check to see if we should be writing out the proper motions
     # and parallax.
     my $have_pm = 0;
     my $have_plx = 0;
+    my $have_comment = 0;
     foreach my $star (0 .. $#$stars) {
-        my $coords = ${$stars}[$star]->coords;
+        my $item = $stars->[$star];
+        my $coords = $item->coords;
 
-        if ((not $have_pm) and (scalar $coords->pm)) {
+        if (scalar $coords->pm) {
             $have_pm = 1;
-            push @field_names, "RA Proper Motion";
-            push @field_names, "Dec Proper Motion";
-            push @field_ucds, "POS_EQ_PMRA";
-            push @field_ucds, "POS_EQ_PMDEC";
-            push @field_datatypes, "double";
-            push @field_datatypes, "double";
-            push @field_units, "arcsec/yr";
-            push @field_units, "arcsec/yr";
         }
-        if ((not $have_plx) and (defined $coords->parallax)) {
+        if (defined $coords->parallax) {
             $have_plx = 1;
-            push @field_names, "Parallax";
-            push @field_ucds, "POS_EQ_PLX_FACTOR";
-            push @field_datatypes, "double";
-            push @field_units, "arcsec";
         }
+        if (defined $item->comment) {
+            $have_comment = 1;
+        }
+    }
+
+    if ($have_pm) {
+        push @field_names, "RA Proper Motion";
+        push @field_names, "Dec Proper Motion";
+        push @field_ucds, "POS_EQ_PMRA";
+        push @field_ucds, "POS_EQ_PMDEC";
+        push @field_datatypes, "double";
+        push @field_datatypes, "double";
+        push @field_units, "arcsec/yr";
+        push @field_units, "arcsec/yr";
+        push @field_sizes, undef;
+        push @field_sizes, undef;
+    }
+    if ($have_plx) {
+        push @field_names, "Parallax";
+        push @field_ucds, "POS_EQ_PLX_FACTOR";
+        push @field_datatypes, "double";
+        push @field_units, "arcsec";
+        push @field_sizes, undef;
+    }
+    if ($have_comment) {
+        push @field_names, 'Comment';
+        push @field_ucds, 'NOTES';  # (guessed UCD1 value, UCD1+ would be: 'meta.note')
+        push @field_datatypes, 'char';
+        push @field_units, undef;
+        push @field_sizes, '*';
     }
 
     # generate the data table
@@ -360,7 +387,8 @@ sub _write_catalog {
     foreach my $star (0 .. $#$stars) {
         my @row;
 
-        my $coords = ${$stars}[$star]->coords;
+        my $item = $stars->[$star];
+        my $coords = $item->coords;
 
         my $name = $coords->name;
         my $type = $coords->type;
@@ -431,6 +459,11 @@ sub _write_catalog {
             push @row, $coords->parallax;
         }
 
+        # Comment
+        if ($have_comment) {
+            push @row, $item->comment;
+        }
+
         # push a reference to the row into the data
         push @data, \@row;
     }
@@ -479,7 +512,7 @@ sub _write_catalog {
         $field->set_name($field_names[$i]);
         $field->set_ucd($field_ucds[$i]);
         $field->set_datatype($field_datatypes[$i]);
-        $field->set_unit($field_units[$i]);
+        $field->set_unit($field_units[$i]) if defined $field_units[$i];
         $field->set_arraysize($field_sizes[$i]) if defined $field_sizes[$i];
         $table->append_FIELD($field);
     }
