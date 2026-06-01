@@ -148,6 +148,7 @@ sub _read_catalog {
         $contents{"parallax"} = $i if $field_ucds[$i] =~ "POS_EQ_PLX_FACTOR";
         $contents{"pm_dec"} = $i if $field_ucds[$i] =~ "POS_EQ_PMDEC";
         $contents{"pm_ra"} = $i if $field_ucds[$i] =~ "POS_EQ_PMRA";
+        $contents{'comment'} = $i if $field_ucds[$i] =~ /NOTES/;  # UCD1+ meta.note
     }
 
     # loop over each row in the TABLEDATA (ie each star)
@@ -210,6 +211,14 @@ sub _read_catalog {
             }
         }
 
+        my $comment = '';
+        if ((exists $contents{'comment'}) && (defined $contents{'comment'})) {
+            my $value = $row[$contents{'comment'}];
+            if (defined $value) {
+                $comment = $value;
+            }
+        }
+
         # Create an Astro::Coords object for the star.
         my $coords = new Astro::Coords(
             ra => $row[$contents{"ra"}],
@@ -220,6 +229,8 @@ sub _read_catalog {
             %coords,
         );
 
+        $coords->comment($comment);
+
         # create a star
         my $star = new Astro::Catalog::Item(
             id  => $row[$contents{"id"}],
@@ -227,7 +238,9 @@ sub _read_catalog {
             #magnitudes => \%mags,
             #colours => \%colours,
             fluxes => $fluxes,
-            quality => $row[$contents{"quality"}]);
+            quality => $row[$contents{"quality"}],
+            comment => $comment,
+        );
 
         # push the star onto the catalog
         $catalog->pushstar( $star );
