@@ -190,22 +190,25 @@ sub _read_catalog {
         my $fluxes = new Astro::Fluxes(@fluxes, @colours);
 
         # Set defaults for the proper motions and parallax.
-        my $pm_dec = ((exists $contents{"pm_dec"}) && (defined $contents{"pm_dec"})
-            ? $row[$contents{"pm_dec"}]
-            : undef);
-        my $pm_ra = ((exists $contents{"pm_ra"}) && (defined $contents{"pm_ra"})
-            ? $row[$contents{"pm_ra"}]
-            : undef);
-        my @pm;
-        if (! defined($pm_dec) && ! defined($pm_ra)) {
-            @pm = ();
+        my %coords;
+
+        if ((exists $contents{"pm_dec"}) && (defined $contents{"pm_dec"})
+                && (exists $contents{"pm_ra"}) && (defined $contents{"pm_ra"})) {
+            my $pm_dec = $row[$contents{"pm_dec"}];
+            my $pm_ra = $row[$contents{"pm_ra"}];
+
+            if ((defined $pm_dec) && (defined $pm_ra)
+                    && ($pm_dec ne '') && ($pm_ra ne '')) {
+                $coords{'pm'} = [$pm_ra, $pm_dec];
+            }
         }
-        else {
-            @pm = ($pm_ra, $pm_dec);
+
+        if ((exists $contents{"parallax"}) && (defined $contents{"parallax"})) {
+            my $parallax = $row[$contents{"parallax"}];
+            if ((defined $parallax) && ($parallax ne '')) {
+                $coords{'parallax'} = $parallax;
+            }
         }
-        my $parallax = ((exists $contents{"parallax"}) && (defined $contents{"parallax"})
-            ? $row[$contents{"parallax"}]
-            : undef);
 
         # Create an Astro::Coords object for the star.
         my $coords = new Astro::Coords(
@@ -213,9 +216,8 @@ sub _read_catalog {
             dec => $row[$contents{"dec"}],
             type => $equinox,
             epoch => $epoch,
-            pm => \@pm,
-            parallax => $parallax,
             units => $units,
+            %coords,
         );
 
         # create a star
